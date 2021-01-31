@@ -98,9 +98,10 @@ float Util::squaredDistance(const glm::vec2 vecA, const glm::vec2 vecB)
 */
 float Util::magnitude(const glm::vec2 vec)
 {
-	const auto x = vec.x;
+	return sqrt(vec.x * vec.x + vec.y * vec.y);
+	/*const auto x = vec.x;
 	const auto y = vec.y;
-	return sqrt((x * x) + (y * y));
+	return sqrt((x * x) + (y * y));*/
 }
 
 /**

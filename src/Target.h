@@ -14,10 +14,18 @@ public:
 	virtual void update() override;
 	virtual void clean() override;
 
+	void moveLeft();
+	void moveRight();
+	void moveUp();
+	void moveDown();
+	void stopMovingY();
+	void stopMovingX();
+
 private:
-	void m_move();
 	void m_checkBounds();
 	void m_reset();
+	const float ACCELERATION = 10.0f;
+	glm::vec2 m_direction;
 };
 
 

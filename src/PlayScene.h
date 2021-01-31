@@ -6,7 +6,7 @@
 #include "Button.h"
 #include "Label.h"
 #include "Obstacle.h"
-#include "SpaceShip.h"
+#include "eTurret.h"
 #include "Target.h"
 
 class PlayScene : public Scene
@@ -29,7 +29,7 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	SpaceShip* m_pSpaceShip;
+	eTurret* m_pETurret;
 	Target* m_pTarget;
 	Obstacle* m_pObstacle;
 	

@@ -1,14 +1,14 @@
-#include "SpaceShip.h"
+#include "eTurret.h"
 
 
 #include "Game.h"
 #include "Util.h"
 
-SpaceShip::SpaceShip()
+eTurret::eTurret()
 {
-	TextureManager::Instance()->load("../Assets/textures/spaceship.png", "spaceship");
+	TextureManager::Instance()->load("../Assets/textures/Turret.png", "turret");
 
-	auto size = TextureManager::Instance()->getTextureSize("spaceship");
+	auto size = TextureManager::Instance()->getTextureSize("turret");
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -24,67 +24,67 @@ SpaceShip::SpaceShip()
 	setTurnRate(10.0f);
 }
 
-SpaceShip::~SpaceShip()
+eTurret::~eTurret()
 = default;
 
-void SpaceShip::draw()
+void eTurret::draw()
 {
-	TextureManager::Instance()->draw("spaceship", 
+	TextureManager::Instance()->draw("turret", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
 	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f) );
 }
 
-void SpaceShip::update()
+void eTurret::update()
 {
 	m_Move();
 }
 
-void SpaceShip::clean()
+void eTurret::clean()
 {
 }
 
-void SpaceShip::setDestination(const glm::vec2 destination)
+void eTurret::setDestination(const glm::vec2 destination)
 {
 	m_destination = destination;
 }
 
-void SpaceShip::setMaxSpeed(const float speed)
+void eTurret::setMaxSpeed(const float speed)
 {
 	m_maxSpeed = speed;
 }
 
-glm::vec2 SpaceShip::getOrientation() const
+glm::vec2 eTurret::getOrientation() const
 {
 	return m_orientation;
 }
 
-float SpaceShip::getTurnRate() const
+float eTurret::getTurnRate() const
 {
 	return m_turnRate;
 }
 
-void SpaceShip::setTurnRate(const float rate)
+void eTurret::setTurnRate(const float rate)
 {
 	m_turnRate = rate;
 }
 
-float SpaceShip::getAccelerationRate() const
+float eTurret::getAccelerationRate() const
 {
 	return m_accelerationRate;
 }
 
-void SpaceShip::setAccelerationRate(const float rate)
+void eTurret::setAccelerationRate(const float rate)
 {
 	m_accelerationRate = rate;
 }
 
-void SpaceShip::setOrientation(const glm::vec2 orientation)
+void eTurret::setOrientation(const glm::vec2 orientation)
 {
 	m_orientation = orientation;
 }
 
-void SpaceShip::setRotation(const float angle)
+void eTurret::setRotation(const float angle)
 {
 	m_rotationAngle = angle;
 
@@ -98,12 +98,12 @@ void SpaceShip::setRotation(const float angle)
 	setOrientation(glm::vec2(x, y));
 }
 
-float SpaceShip::getRotation() const
+float eTurret::getRotation() const
 {
 	return m_rotationAngle;
 }
 
-void SpaceShip::m_Move()
+void eTurret::m_Move()
 {
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 
@@ -129,13 +129,13 @@ void SpaceShip::m_Move()
 		}
 	}
 	
-	getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+	/*getRigidBody()->acceleration = getOrientation() * getAccelerationRate();*/
 
 	// using the formula pf = pi + vi*t + 0.5ai*t^2
-	getRigidBody()->velocity += getOrientation() * (deltaTime)+
+	/*getRigidBody()->velocity += getOrientation() * (deltaTime)+
 		0.5f * getRigidBody()->acceleration * (deltaTime);
 
-	getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+	getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);*/
 
-	getTransform()->position += getRigidBody()->velocity;
+	//getTransform()->position += getRigidBody()->velocity;
 }

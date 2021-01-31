@@ -31,7 +31,10 @@ void PlayScene::update()
 {
 	updateDisplayList();
 
-	CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
+	// set the destination to the player once this code is gucci
+	m_pETurret->setDestination(m_pTarget->getTransform()->position);
+
+	//CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
 }
 
 void PlayScene::clean()
@@ -47,6 +50,32 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance()->quit();
 	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
+	{
+		m_pTarget->moveLeft();
+	}
+	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
+	{
+		m_pTarget->moveRight();
+	}
+	else {
+		m_pTarget->stopMovingX();
+	}
+
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
+	{
+		m_pTarget->moveUp();
+	}
+	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
+	{
+		m_pTarget->moveDown();
+	}
+	else {
+		m_pTarget->stopMovingY();
+	}
+
+
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
@@ -68,16 +97,16 @@ void PlayScene::start()
 	m_pTarget->getTransform()->position = glm::vec2(700.0f, 300.0f);
 	addChild(m_pTarget);
 
-	m_pObstacle = new Obstacle();
+	/*m_pObstacle = new Obstacle();
 	m_pObstacle->getTransform()->position = glm::vec2(500.0f, 300.0f);
-	addChild(m_pObstacle);
+	addChild(m_pObstacle);*/
 
 	// instantiating spaceship
-	m_pSpaceShip = new SpaceShip();
-	m_pSpaceShip->getTransform()->position = glm::vec2(100.0f, 300.0f);
-	m_pSpaceShip->setEnabled(false);
-	m_pSpaceShip->setDestination(m_pTarget->getTransform()->position);
-	addChild(m_pSpaceShip);
+	m_pETurret = new eTurret();
+	m_pETurret->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	//m_pSpaceShip->setEnabled(false);
+	
+	addChild(m_pETurret);
 }
 
 void PlayScene::GUI_Function() const
@@ -93,44 +122,44 @@ void PlayScene::GUI_Function() const
 	static float speed = 10.0f;
 	if(ImGui::SliderFloat("MaxSpeed", &speed, 0.0f, 100.0f))
 	{
-		m_pSpaceShip->setMaxSpeed(speed);
+		m_pETurret->setMaxSpeed(speed);
 	}
 
 	static float acceleration_rate = 2.0f;
 	if(ImGui::SliderFloat("Acceleration Rate", &acceleration_rate, 0.0f, 50.0f))
 	{
-		m_pSpaceShip->setAccelerationRate(acceleration_rate);
+		m_pETurret->setAccelerationRate(acceleration_rate);
 	}
 
-	static float angleInRadians = m_pSpaceShip->getRotation();
+	static float angleInRadians = m_pETurret->getRotation();
 	if(ImGui::SliderAngle("Orientation Angle", &angleInRadians))
 	{
-		m_pSpaceShip->setRotation(angleInRadians * Util::Rad2Deg);
+		m_pETurret->setRotation(angleInRadians * Util::Rad2Deg);
 	}
 
 	static float turn_rate = 5.0f;
 	if(ImGui::SliderFloat("Turn Rate", &turn_rate, 0.0f, 20.0f))
 	{
-		m_pSpaceShip->setTurnRate(turn_rate);
+		m_pETurret->setTurnRate(turn_rate);
 	}
 	
 	if(ImGui::Button("Start"))
 	{
-		m_pSpaceShip->setEnabled(true);
+		m_pETurret->setEnabled(true);
 	}
 
 	ImGui::SameLine();
 	
 	if (ImGui::Button("Reset"))
 	{
-		m_pSpaceShip->getTransform()->position = glm::vec2(100.0f, 100.0f);
-		m_pSpaceShip->setEnabled(false);
-		m_pSpaceShip->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		m_pSpaceShip->setRotation(0.0f); // set Angle to 0 degrees
+		m_pETurret->getTransform()->position = glm::vec2(100.0f, 100.0f);
+		m_pETurret->setEnabled(false);
+		m_pETurret->getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+		m_pETurret->setRotation(0.0f); // set Angle to 0 degrees
 		turn_rate = 5.0f;
 		acceleration_rate = 2.0f;
 		speed = 10.0f;
-		angleInRadians = m_pSpaceShip->getRotation();
+		angleInRadians = m_pETurret->getRotation();
 	}
 
 	ImGui::Separator();
@@ -139,7 +168,7 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat2("Target", targetPosition, 0.0f, 800.0f))
 	{
 		m_pTarget->getTransform()->position = glm::vec2(targetPosition[0], targetPosition[1]);
-		m_pSpaceShip->setDestination(m_pTarget->getTransform()->position);
+		m_pETurret->setDestination(m_pTarget->getTransform()->position);
 	}
 
 	ImGui::End();
