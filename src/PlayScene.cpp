@@ -34,6 +34,9 @@ void PlayScene::update()
 	// set the destination to the player once this code is gucci
 	m_pETurret->setDestination(m_pTarget->getTransform()->position);
 
+
+	//binds the turret with the tank body
+	m_pETurret->getTransform()->position = m_pEnemyTank->getTransform()->position;
 	//CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
 }
 
@@ -97,9 +100,9 @@ void PlayScene::start()
 	m_pTarget->getTransform()->position = glm::vec2(700.0f, 300.0f);
 	addChild(m_pTarget);
 
-	/*m_pObstacle = new Obstacle();
-	m_pObstacle->getTransform()->position = glm::vec2(500.0f, 300.0f);
-	addChild(m_pObstacle);*/
+	m_pEnemyTank = new Tank();
+	m_pEnemyTank->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pEnemyTank);
 
 	// instantiating spaceship
 	m_pETurret = new eTurret();

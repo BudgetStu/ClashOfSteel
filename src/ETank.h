@@ -1,23 +1,24 @@
 #pragma once
-#ifndef __OBSTACLE__
-#define __OBSTACLE__
+#ifndef __ETANK__
+#define __ETANK__
 #include "DisplayObject.h"
 
-class Obstacle final : public DisplayObject
+class Tank final : public DisplayObject
 {
 public:
 	// constructors
-	Obstacle();
+	Tank();
 	
 	// destructor
-	~Obstacle();
+	~Tank();
 	
 	// life cycle functions
 	void draw() override;
 	void update() override;
 	void clean() override;
 private:
-	
+	bool moveRight = true;
+	const float speed = 2.0f;
 };
 
 #endif /* defined (__OBSTACLE__) */

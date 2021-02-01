@@ -123,10 +123,10 @@
     <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Obstacle.cpp">
+    <ClCompile Include="..\src\eTurret.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\eTurret.cpp">
+    <ClCompile Include="..\src\ETank.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -263,10 +263,10 @@
     <ClInclude Include="..\include\IMGUI\imstb_truetype.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Obstacle.h">
+    <ClInclude Include="..\src\eTurret.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\eTurret.h">
+    <ClInclude Include="..\src\ETank.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

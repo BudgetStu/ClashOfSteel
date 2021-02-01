@@ -5,7 +5,7 @@
 #include "Scene.h"
 #include "Button.h"
 #include "Label.h"
-#include "Obstacle.h"
+#include "ETank.h"
 #include "eTurret.h"
 #include "Target.h"
 
@@ -31,7 +31,7 @@ private:
 
 	eTurret* m_pETurret;
 	Target* m_pTarget;
-	Obstacle* m_pObstacle;
+	Tank* m_pEnemyTank;
 	
 	// UI Items
 	

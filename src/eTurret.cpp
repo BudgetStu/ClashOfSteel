@@ -1,6 +1,5 @@
 #include "eTurret.h"
 
-
 #include "Game.h"
 #include "Util.h"
 
@@ -16,7 +15,7 @@ eTurret::eTurret()
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
-	setType(SPACE_SHIP);
+	setType(ETURRET);
 	setMaxSpeed(10.0f);
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
@@ -129,6 +128,8 @@ void eTurret::m_Move()
 		}
 	}
 	
+	//getTransform()->position = m_pEnemyTank->getTransform()->position;
+
 	/*getRigidBody()->acceleration = getOrientation() * getAccelerationRate();*/
 
 	// using the formula pf = pi + vi*t + 0.5ai*t^2
