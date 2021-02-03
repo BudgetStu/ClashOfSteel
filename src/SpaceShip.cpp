@@ -20,8 +20,8 @@ SpaceShip::SpaceShip()
 	setMaxSpeed(10.0f);
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
-	setAccelerationRate(10.0f);
-	setTurnRate(10.0f);
+	setAccelerationRate(0.0f);
+	setTurnRate(0.0f);
 }
 
 SpaceShip::~SpaceShip()

@@ -103,9 +103,10 @@ void PlayerTank::setAccelerationRate(float rate)
 void PlayerTank::m_Move()
 {
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
-
+	EventManager::Instance().update();
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
 	{
+		setAccelerationRate(5.0f);
 		getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
 
 		// using the formula pf = pi + vi*t + 0.5ai*t^2
@@ -120,13 +121,26 @@ void PlayerTank::m_Move()
 	{
 		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	}
-	EventManager::Instance().update();
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
+	{
+		setAccelerationRate(-50.0f);
+		getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+
+		// using the formula pf = pi + vi*t + 0.5ai*t^2
+		getRigidBody()->velocity += getOrientation() * (deltaTime)+
+			0.5f * -getRigidBody()->acceleration * (deltaTime);
+
+		getRigidBody()->velocity = -Util::clamp(getRigidBody()->velocity, -m_maxSpeed);
+
+		getTransform()->position += getRigidBody()->velocity;
+
+	}
+
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
 	{
 		setTurnRate(1.0f);
 		setRotation(getRotation()+ getTurnRate());
 	}
-
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
 	{
 		setTurnRate(-1.0f);
