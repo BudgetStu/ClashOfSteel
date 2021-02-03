@@ -165,6 +165,9 @@
     <ClCompile Include="..\src\CollisionManager.cpp" />
     <ClCompile Include="..\src\ETank.cpp" />
     <ClCompile Include="..\src\eTurret.cpp" />
+    <ClCompile Include="..\src\Obstacle.cpp" />
+    <ClCompile Include="..\src\PlayerTank.cpp" />
+    <ClCompile Include="..\src\SpaceShip.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\UIControl.cpp" />
     <ClCompile Include="..\src\DisplayObject.cpp" />
@@ -203,6 +206,8 @@
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\ETank.h" />
+    <ClInclude Include="..\src\Obstacle.h" />
+    <ClInclude Include="..\src\PlayerTank.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\eTurret.h" />
     <ClInclude Include="..\src\Sprite.h" />

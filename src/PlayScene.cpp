@@ -96,9 +96,6 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
-	m_pTarget = new Target();
-	m_pTarget->getTransform()->position = glm::vec2(700.0f, 300.0f);
-	addChild(m_pTarget);
 
 	m_pEnemyTank = new Tank();
 	m_pEnemyTank->getTransform()->position = glm::vec2(400.0f, 300.0f);
@@ -110,6 +107,11 @@ void PlayScene::start()
 	//m_pSpaceShip->setEnabled(false);
 	
 	addChild(m_pETurret);
+	m_pPlayerTank = new PlayerTank();
+	m_pPlayerTank->getTransform()->position = glm::vec2(100.0f, 300.0f);
+	m_pPlayerTank->setEnabled(true);
+	
+	addChild(m_pPlayerTank);
 }
 
 void PlayScene::GUI_Function() const
@@ -126,6 +128,7 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat("MaxSpeed", &speed, 0.0f, 100.0f))
 	{
 		m_pETurret->setMaxSpeed(speed);
+		
 	}
 
 	static float acceleration_rate = 2.0f;
@@ -144,11 +147,13 @@ void PlayScene::GUI_Function() const
 	if(ImGui::SliderFloat("Turn Rate", &turn_rate, 0.0f, 20.0f))
 	{
 		m_pETurret->setTurnRate(turn_rate);
+
 	}
 	
 	if(ImGui::Button("Start"))
 	{
 		m_pETurret->setEnabled(true);
+
 	}
 
 	ImGui::SameLine();
@@ -163,6 +168,9 @@ void PlayScene::GUI_Function() const
 		acceleration_rate = 2.0f;
 		speed = 10.0f;
 		angleInRadians = m_pETurret->getRotation();
+
+
+
 	}
 
 	ImGui::Separator();
@@ -173,6 +181,7 @@ void PlayScene::GUI_Function() const
 		m_pTarget->getTransform()->position = glm::vec2(targetPosition[0], targetPosition[1]);
 		m_pETurret->setDestination(m_pTarget->getTransform()->position);
 	}
+
 
 	ImGui::End();
 

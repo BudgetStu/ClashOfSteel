@@ -8,4 +8,12 @@
   <ContentFiles />
   <SatelliteDlls />
   <NonRecipeFileRefs />
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>C:\Users\nguye\source\repos\BudgetStu\ClashOfSteel\bin\Debug\Template.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
 </Project>

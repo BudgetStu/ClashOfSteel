@@ -8,6 +8,8 @@
 #include "ETank.h"
 #include "eTurret.h"
 #include "Target.h"
+#include "PlayerTank.h"
+
 
 class PlayScene : public Scene
 {
@@ -32,6 +34,8 @@ private:
 	eTurret* m_pETurret;
 	Target* m_pTarget;
 	Tank* m_pEnemyTank;
+	
+	PlayerTank* m_pPlayerTank;
 	
 	// UI Items
 	

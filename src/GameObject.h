@@ -20,7 +20,7 @@ public:
 
 	// Update the object
 	virtual void update() = 0;
-
+	
 	// remove anything that needs to be deleted
 	virtual void clean() = 0;
 
