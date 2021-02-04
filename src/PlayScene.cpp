@@ -55,13 +55,26 @@ void PlayScene::update()
 
 	//binds the turret with the tank body
 	m_pETurret[3]->getTransform()->position = m_pEnemyTank[3]->getTransform()->position;
-	//CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
 
 	//binds the turret with the tank body
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 
-	//m_pPlayerTurret->setDestination();
+	//m_pPlayerTurret->setDestination()
 
+	//Collision
+	//for (unsigned i = 0; i < 4;i++)
+	//{
+		if(CollisionManager::circleAABBCheck(m_pPlayerTank,m_pEnemyTank[1]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pEnemyTank[1]->speed = 0.0f;
+		}
+		else
+		{
+			m_pEnemyTank[1]->speed = 2.0f;
+		}
+	//}
+	
 	for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
 		m_bullet[i]->update();
 }

@@ -3,10 +3,11 @@
 
 #include "SoundManager.h"
 #include "TextureManager.h"
+#include "EventManager.h"
 
 Tank::Tank()
 {
-	TextureManager::Instance()->load("../Assets/textures/Tank.png", "etank");
+	TextureManager::Instance()->load("../Assets/textures/Tank2.png", "etank");
 
 	auto size = TextureManager::Instance()->getTextureSize("etank");
 	setWidth(size.x);
@@ -31,19 +32,18 @@ void Tank::draw()
 
 void Tank::update()
 {
-
-	if (moveRight == true) {
-		getTransform()->position.y += speed;
-		if (getTransform()->position.y == 500) {
-			moveRight = false;
+		if (moveRight == true) {
+			getTransform()->position.y += speed;
+			if (getTransform()->position.y == 500) {
+				moveRight = false;
+			}
 		}
-	}
-	else if (moveRight == false) {
-		getTransform()->position.y -= speed;
-		if (getTransform()->position.y == 100) {
-			moveRight = true;
+		else if (moveRight == false) {
+			getTransform()->position.y -= speed;
+			if (getTransform()->position.y == 100) {
+				moveRight = true;
+			}
 		}
-	}
 
 }
 

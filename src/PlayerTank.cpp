@@ -6,7 +6,7 @@
 
 PlayerTank::PlayerTank()
 {
-	TextureManager::Instance()->load("../Assets/textures/tiger.png", "Tiger");
+	TextureManager::Instance()->load("../Assets/textures/tiger1.png", "Tiger");
 
 	auto size = TextureManager::Instance()->getTextureSize("Tiger");
 

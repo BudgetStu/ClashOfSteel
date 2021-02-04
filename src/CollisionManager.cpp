@@ -222,12 +222,12 @@ bool CollisionManager::circleAABBCheck(GameObject* object1, GameObject* object2)
 {
 	// circle
 	const auto circleCentre = object1->getTransform()->position;
-	const int circleRadius = std::max(object1->getWidth() * 0.5f, object1->getHeight() * 0.5f);
+	const int circleRadius = std::max(object1->getWidth() * 0.25f, object1->getHeight() * 0.5f);
 	// aabb
 	const auto boxWidth = object2->getWidth();
-	int halfBoxWidth = boxWidth * 0.5f;
+	int halfBoxWidth = (boxWidth * 0.25f);
 	const auto boxHeight = object2->getHeight();
-	int halfBoxHeight = boxHeight * 0.5f;
+	int halfBoxHeight = (boxHeight * 0.5f);
 
 	const auto boxStart = object2->getTransform()->position - glm::vec2(boxWidth * 0.5f, boxHeight * 0.5f);
 
