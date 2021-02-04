@@ -85,13 +85,13 @@ void Target::moveDown() {
 	m_direction.y = 1;
 }
 
-void Target::stopMovingY() {
-	m_direction.y = 0;
-}
-
-void Target::stopMovingX() {
-	m_direction.x = 0;
-}
+//void Target::stopMovingY() {
+//	m_direction.y = 0;
+//}
+//
+//void Target::stopMovingX() {
+//	m_direction.x = 0;
+//}
 
 void Target::m_checkBounds()
 {

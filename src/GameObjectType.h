@@ -5,6 +5,8 @@ enum GameObjectType {
 	NONE = -1,
 	ETURRET,
 	ETANK,
+	PTURRET,
+	BULLET,
 	SHIP,
 	TARGET,
 	PLAYER,

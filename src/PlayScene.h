@@ -2,6 +2,7 @@
 #ifndef __PLAY_SCENE__
 #define __PLAY_SCENE__
 
+#include "Bullet.h"
 #include "Scene.h"
 #include "Button.h"
 #include "Label.h"
@@ -9,7 +10,11 @@
 #include "eTurret.h"
 #include "Target.h"
 #include "PlayerTank.h"
+#include "pTurret.h"
+#include <vector>
 
+
+class pTurret;
 
 class PlayScene : public Scene
 {
@@ -31,11 +36,14 @@ private:
 	
 	glm::vec2 m_mousePosition;
 
-	eTurret* m_pETurret;
+	eTurret* m_pETurret[4];
 	Target* m_pTarget;
-	Tank* m_pEnemyTank;
+	Tank* m_pEnemyTank[4];
 	
 	PlayerTank* m_pPlayerTank;
+	pTurret* m_pPlayerTurret;
+
+	std::pmr::vector<Bullet*> m_bullet;
 	
 	// UI Items
 	
