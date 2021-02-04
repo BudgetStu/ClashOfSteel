@@ -37,7 +37,7 @@ private:
 	glm::vec2 m_Position;
 	SDL_Point m_mousePosition;
 
-	Label* m_Inst;
+	Label* m_Inst[5];
 	
 	eTurret* m_pETurret[8];
 	//Target* m_pTarget;

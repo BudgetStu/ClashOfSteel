@@ -190,7 +190,23 @@ void PlayScene::start()
 	m_guiTitle = "Play Scene";
 
 	//Labels
-
+	const SDL_Color blue = { 0, 0, 255, 255 };
+	m_Inst[1] = new Label("Movement Tutorial Instructions:", "Consolas",
+		20, blue, glm::vec2(200.f, 500.f));
+	m_Inst[1]->setParent(this);
+	addChild(m_Inst[1]);
+	m_Inst[2] = new Label("Pass Through Enemies", "Consolas",
+		20, blue, glm::vec2(140.f, 520.f));
+	m_Inst[2]->setParent(this);
+	addChild(m_Inst[2]);
+	m_Inst[3] = new Label("Tank Movements:", "Consolas",
+		20, blue, glm::vec2(110.f, 540.f));
+	m_Inst[3]->setParent(this);
+	addChild(m_Inst[3]);
+	m_Inst[4] = new Label("W=Forward   S=Backwards   A=Rotate Left   D=Rotate Right", "Consolas",
+		20, blue, glm::vec2(340.f, 560.f));
+	m_Inst[4]->setParent(this);
+	addChild(m_Inst[4]);
 	
 	//Enemy Tank
 	m_pEnemyTank[1] = new Tank();
