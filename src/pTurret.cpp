@@ -1,10 +1,12 @@
 ﻿#include "pTurret.h"
+
+#include "EventManager.h"
 #include "Game.h"
 #include "Util.h"
 
 pTurret::pTurret()
 {
-	TextureManager::Instance()->load("../Assets/textures/TigerT.png", "turret");
+	TextureManager::Instance()->load("../Assets/textures/TigerT.png", "TigerT");
 
 	auto size = TextureManager::Instance()->getTextureSize("TigerT");
 	setWidth(size.x);
@@ -27,7 +29,7 @@ pTurret::~pTurret()
 
 void pTurret::draw()
 {
-	TextureManager::Instance()->draw("turret",
+	TextureManager::Instance()->draw("TigerT",
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
 	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));
@@ -103,6 +105,7 @@ float pTurret::getRotation() const
 
 void pTurret::m_Move()
 {
+	EventManager::Instance().update();
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 
 	// direction with magnitude
@@ -115,17 +118,17 @@ void pTurret::m_Move()
 
 	auto turn_sensitivity = 5.0f;
 
-	if (abs(target_rotation) > turn_sensitivity)
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_RIGHT))
 	{
-		if (target_rotation > 0.0f)
-		{
-			setRotation(getRotation() + getTurnRate());
-		}
-		else if (target_rotation < 0.0f)
-		{
-			setRotation(getRotation() - getTurnRate());
-		}
+		setTurnRate(1.0f);
+		setRotation(getRotation() + getTurnRate());
 	}
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_LEFT))
+	{
+		setTurnRate(-1.0f);
+		setRotation(getRotation() + getTurnRate());
+	}
+
 
 	//getTransform()->position = m_pEnemyTank->getTransform()->position;
 

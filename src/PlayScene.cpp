@@ -116,6 +116,43 @@ void PlayScene::handleEvents()
 		m_bullet.shrink_to_fit();
 		std::cout << "Created" << std::endl;
 	}
+
+
+	// set the destination to the player once this code is gucci
+	m_pETurret[1]->setDestination(m_pPlayerTurret->getTransform()->position);
+	// set the destination to the player once this code is gucci
+	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
+	// set the destination to the player once this code is gucci
+	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
+
+
+	//binds the turret with the tank body
+	m_pETurret[1]->getTransform()->position = m_pEnemyTank[1]->getTransform()->position;
+
+	// set the destination to the player once this code is gucci
+	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
+
+
+	//binds the turret with the tank body
+	m_pETurret[2]->getTransform()->position = m_pEnemyTank[2]->getTransform()->position;
+
+	// set the destination to the player once this code is gucci
+	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
+
+
+	//binds the turret with the tank body
+	m_pETurret[3]->getTransform()->position = m_pEnemyTank[3]->getTransform()->position;
+	//CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
+
+	//binds the turret with the tank body
+
+
+	//m_pPlayerTurret->setDestination();
+
+	//for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
+	//	m_bullet[i]->update();
+	
+	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	
 }
 
@@ -162,6 +199,7 @@ void PlayScene::start()
 
 	m_pPlayerTurret = new pTurret();
 	m_pPlayerTurret->getTransform()->position== glm::vec2(100.0f, 300.0f);
+	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret);
 }
 

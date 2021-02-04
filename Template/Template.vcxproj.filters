@@ -132,8 +132,10 @@
     <ClCompile Include="..\src\PlayerTank.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\pTurret.cpp" />
     <ClCompile Include="..\src\Bullet.cpp" />
+    <ClCompile Include="..\src\pTurret.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">

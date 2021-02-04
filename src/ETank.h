@@ -16,11 +16,9 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
-
-	float speed = 2.0f;
 private:
 	bool moveRight = true;
-	//const float speed = 2.0f;
+	const float speed = 2.0f;
 };
 
 #endif /* defined (__OBSTACLE__) */

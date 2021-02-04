@@ -20,7 +20,7 @@ eTurret::eTurret()
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
 	setAccelerationRate(0.0f);
-	setTurnRate(0.0f);
+	setTurnRate(2.0f);
 }
 
 eTurret::~eTurret()
