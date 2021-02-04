@@ -3,8 +3,10 @@
 #define __GAME_OBJECT_TYPE__
 enum GameObjectType {
 	NONE = -1,
-	SPACE_SHIP,
-	OBSTACLE,
+	ETURRET,
+	ETANK,
+	PTURRET,
+	BULLET,
 	SHIP,
 	TARGET,
 	PLAYER,

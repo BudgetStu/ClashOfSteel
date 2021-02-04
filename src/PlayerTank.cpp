@@ -9,6 +9,7 @@ PlayerTank::PlayerTank()
 	TextureManager::Instance()->load("../Assets/textures/tiger.png", "Tiger");
 
 	auto size = TextureManager::Instance()->getTextureSize("Tiger");
+
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -39,6 +40,11 @@ void PlayerTank::update()
 {
 	m_Move();
 
+}
+
+void PlayerTank::handleEvents()
+{
+	
 }
 
 

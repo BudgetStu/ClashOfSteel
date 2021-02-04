@@ -123,13 +123,17 @@
     <ClCompile Include="..\include\IMGUI\imgui_widgets.cpp">
       <Filter>IMGUI</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\SpaceShip.cpp">
+    <ClCompile Include="..\src\eTurret.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Obstacle.cpp">
+    <ClCompile Include="..\src\ETank.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\src\PlayerTank.cpp">
+      <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Bullet.cpp" />
+    <ClCompile Include="..\src\pTurret.cpp">
       <Filter>Game Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -266,13 +270,19 @@
     <ClInclude Include="..\include\IMGUI\imstb_truetype.h">
       <Filter>IMGUI</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\SpaceShip.h">
+    <ClInclude Include="..\src\eTurret.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\src\Obstacle.h">
+    <ClInclude Include="..\src\ETank.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PlayerTank.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\pTurret.h">
+      <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Bullet.h">
       <Filter>Game Objects</Filter>
     </ClInclude>
   </ItemGroup>

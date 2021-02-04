@@ -1,17 +1,17 @@
 #pragma once
-#ifndef __SPACE_SHIP__
-#define __SPACE_SHIP__
+#ifndef __ETURRET__
+#define __ETURRET__
 #include "DisplayObject.h"
 #include "TextureManager.h"
 
-class SpaceShip final : public DisplayObject
+class eTurret final : public DisplayObject
 {
 public:
 	// constructor(s)
-	SpaceShip();
+	eTurret();
 
 	// destructor
-	~SpaceShip();
+	~eTurret();
 	
 	// life-cycle methods inherited from DisplayObject
 	void draw() override;
