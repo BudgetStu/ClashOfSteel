@@ -16,8 +16,9 @@ public:
 	void draw() override;
 	void update() override;
 	void clean() override;
-private:
 	bool moveRight = true;
+private:
+
 	const float speed = 2.0f;
 };
 

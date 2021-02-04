@@ -34,16 +34,20 @@ private:
 	void GUI_Function() const;
 	std::string m_guiTitle;
 	
-	glm::vec2 m_mousePosition;
+	glm::vec2 m_Position;
+	SDL_Point m_mousePosition;
 
-	eTurret* m_pETurret[4];
-	Target* m_pTarget;
-	Tank* m_pEnemyTank[4];
+	Label* m_Inst;
+	
+	eTurret* m_pETurret[8];
+	//Target* m_pTarget;
+	Tank* m_pEnemyTank[8];
 	
 	PlayerTank* m_pPlayerTank;
 	pTurret* m_pPlayerTurret;
 
 	std::pmr::vector<Bullet*> m_bullet;
+	std::pmr::vector<PlayerTank*> PT;
 	
 	// UI Items
 	

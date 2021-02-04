@@ -26,7 +26,7 @@ public:
 	void setTurnRate(float rate);
 	float getAccelerationRate() const;
 	void setAccelerationRate(float rate);
-
+ 
 	glm::vec2 m_orientation;
 	float m_rotationAngle;
 
@@ -38,6 +38,7 @@ private:
 	float m_accelerationRate;
 
 	void m_Move();
+	
 };
 
 #endif

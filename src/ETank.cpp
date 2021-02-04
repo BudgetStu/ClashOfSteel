@@ -34,13 +34,13 @@ void Tank::update()
 {
 		if (moveRight == true) {
 			getTransform()->position.y += speed;
-			if (getTransform()->position.y == 500) {
+			if (getTransform()->position.y == 550) {
 				moveRight = false;
 			}
 		}
 		else if (moveRight == false) {
 			getTransform()->position.y -= speed;
-			if (getTransform()->position.y == 100) {
+			if (getTransform()->position.y == 50) {
 				moveRight = true;
 			}
 		}

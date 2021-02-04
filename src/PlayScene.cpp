@@ -11,6 +11,10 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+	SoundManager::Instance().load("../Assets/audio/Bgm.mp3", "Bgm", SOUND_MUSIC);
+	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
+	SoundManager::Instance().playMusic("Bgm", -1, 0);
 }
 
 PlayScene::~PlayScene()
@@ -23,6 +27,11 @@ void PlayScene::draw()
 		GUI_Function();
 	}
 
+	for (int i = 0; i <PT.size(); i++)
+	{
+		PT[i]->draw();
+	}
+	
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 }
@@ -31,52 +40,100 @@ void PlayScene::update()
 {
 	updateDisplayList();
 
-	// set the destination to the player once this code is gucci
+	//Set Enemy turret destination
 	m_pETurret[1]->setDestination(m_pPlayerTurret->getTransform()->position);
-	// set the destination to the player once this code is gucci
 	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
-	// set the destination to the player once this code is gucci
 	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
+	m_pETurret[4]->setDestination(m_pPlayerTurret->getTransform()->position);
+	m_pETurret[5]->setDestination(m_pPlayerTurret->getTransform()->position);
+	m_pETurret[6]->setDestination(m_pPlayerTurret->getTransform()->position);
+	m_pETurret[7]->setDestination(m_pPlayerTurret->getTransform()->position);
 
-
-	//binds the turret with the tank body
+	//Enemies turret bind
 	m_pETurret[1]->getTransform()->position = m_pEnemyTank[1]->getTransform()->position;
-
-	// set the destination to the player once this code is gucci
-	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
-
-
-	//binds the turret with the tank body
 	m_pETurret[2]->getTransform()->position = m_pEnemyTank[2]->getTransform()->position;
-
-	// set the destination to the player once this code is gucci
-	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
-
-
-	//binds the turret with the tank body
 	m_pETurret[3]->getTransform()->position = m_pEnemyTank[3]->getTransform()->position;
+	m_pETurret[4]->getTransform()->position = m_pEnemyTank[4]->getTransform()->position;
+	m_pETurret[5]->getTransform()->position = m_pEnemyTank[5]->getTransform()->position;
+	m_pETurret[6]->getTransform()->position = m_pEnemyTank[6]->getTransform()->position;
+	m_pETurret[7]->getTransform()->position = m_pEnemyTank[7]->getTransform()->position;
 
-	//binds the turret with the tank body
+	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 
-	//m_pPlayerTurret->setDestination()
 
-	//Collision
-	//for (unsigned i = 0; i < 4;i++)
-	//{
-		if(CollisionManager::circleAABBCheck(m_pPlayerTank,m_pEnemyTank[1]))
+		if(CollisionManager::CircleAABBTanks(m_pPlayerTank,m_pEnemyTank[1]))
 		{
 			std::cout << "Collision" << std::endl;
-			m_pEnemyTank[1]->speed = 0.0f;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[1]->setEnabled(false);
+			m_pETurret[1]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
 		}
-		else
-		{
-			m_pEnemyTank[1]->speed = 2.0f;
-		}
-	//}
 	
-	for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
-		m_bullet[i]->update();
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[2]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[2]->setEnabled(false);
+			m_pETurret[2]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[3]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[3]->setEnabled(false);
+			m_pETurret[3]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[4]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[4]->setEnabled(false);
+			m_pETurret[4]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[5]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[5]->setEnabled(false);
+			m_pETurret[5]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[6]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[6]->setEnabled(false);
+			m_pETurret[6]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[7]))
+		{
+			std::cout << "Collision" << std::endl;
+			m_pPlayerTank->setEnabled(false);
+			m_pPlayerTurret->setEnabled(false);
+			m_pEnemyTank[7]->setEnabled(false);
+			m_pETurret[7]->setEnabled(false);
+			SoundManager::Instance().playSound("Expl", 0, -1);
+		}
+
+	//for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
+	//	m_bullet[i]->update();
 }
 
 void PlayScene::clean()
@@ -90,7 +147,9 @@ void PlayScene::handleEvents()
 
 	/*m_mousePosition=EventManager::Instance().getMousePosition()* Util::Deg2Rad;
 	m_mousePosition = Util::normalize(m_mousePosition);*/
-	
+	SDL_GetMouseState(&m_mousePosition.x, &m_mousePosition.y);
+
+
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
 		TheGame::Instance()->quit();
@@ -108,52 +167,21 @@ void PlayScene::handleEvents()
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_X))
 	{
-		m_bullet.push_back(new Bullet);
-		for (unsigned i = 0; i < m_bullet.size(); i++)
+
+		for (unsigned i = 0; i < PT.size(); i++)
 		{
-			m_bullet[i]->draw();
+			PT.push_back(new Bullet);
 		}
-		m_bullet.shrink_to_fit();
+		/*	PT.shrink_to_fit();*/
 		std::cout << "Created" << std::endl;
 	}
 
 
-	// set the destination to the player once this code is gucci
-	m_pETurret[1]->setDestination(m_pPlayerTurret->getTransform()->position);
-	// set the destination to the player once this code is gucci
-	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
-	// set the destination to the player once this code is gucci
-	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
 
-
-	//binds the turret with the tank body
-	m_pETurret[1]->getTransform()->position = m_pEnemyTank[1]->getTransform()->position;
-
-	// set the destination to the player once this code is gucci
-	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
-
-
-	//binds the turret with the tank body
-	m_pETurret[2]->getTransform()->position = m_pEnemyTank[2]->getTransform()->position;
-
-	// set the destination to the player once this code is gucci
-	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
-
-
-	//binds the turret with the tank body
-	m_pETurret[3]->getTransform()->position = m_pEnemyTank[3]->getTransform()->position;
-	//CollisionManager::AABBCheck(m_pSpaceShip, m_pObstacle);
-
-	//binds the turret with the tank body
-
-
-	//m_pPlayerTurret->setDestination();
-
-	//for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
-	//	m_bullet[i]->update();
-	
-	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
-	
+	if(m_pPlayerTank->getTransform()->position.x>700.f)
+	{
+		SoundManager::Instance().playSound("Goal", 0, -1);
+	}
 }
 
 void PlayScene::start()
@@ -161,42 +189,79 @@ void PlayScene::start()
 	// Set GUI Title
 	m_guiTitle = "Play Scene";
 
+	//Labels
 
+	
+	//Enemy Tank
 	m_pEnemyTank[1] = new Tank();
-	m_pEnemyTank[1]->getTransform()->position = glm::vec2(300.0f, 300.0f);
+	m_pEnemyTank[1]->getTransform()->position = glm::vec2(200.0f, 250.0f);
+	m_pEnemyTank[1]->moveRight = true;
 	addChild(m_pEnemyTank[1]);
 
 	m_pEnemyTank[2] = new Tank();
-	m_pEnemyTank[2]->getTransform()->position = glm::vec2(500.0f, 300.0f);
+	m_pEnemyTank[2]->getTransform()->position = glm::vec2(280.0f, 100.0f);
+	m_pEnemyTank[2]->moveRight = false;
 	addChild(m_pEnemyTank[2]);
 
 	m_pEnemyTank[3] = new Tank();
-	m_pEnemyTank[3]->getTransform()->position = glm::vec2(700.0f, 300.0f);
+	m_pEnemyTank[3]->getTransform()->position = glm::vec2(360.0f, 400.0f);
 	addChild(m_pEnemyTank[3]);
 
-	// instantiating spaceship
+	m_pEnemyTank[4] = new Tank();
+	m_pEnemyTank[4]->getTransform()->position = glm::vec2(440.0f, 250.0f);
+	m_pEnemyTank[4]->moveRight = false;
+	addChild(m_pEnemyTank[4]);
+
+	m_pEnemyTank[5] = new Tank();
+	m_pEnemyTank[5]->getTransform()->position = glm::vec2(520.0f, 100.0f);
+	addChild(m_pEnemyTank[5]);
+
+	m_pEnemyTank[6] = new Tank();
+	m_pEnemyTank[6]->getTransform()->position = glm::vec2(600.0f, 400.0f);
+	m_pEnemyTank[6]->moveRight = false;
+	addChild(m_pEnemyTank[6]);
+
+	m_pEnemyTank[7] = new Tank();
+	m_pEnemyTank[7]->getTransform()->position = glm::vec2(680.0f, 250.0f);
+	addChild(m_pEnemyTank[7]);
+
+
+	// Enemy Turret
 	m_pETurret[1] = new eTurret();
 	m_pETurret[1]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	//m_pSpaceShip->setEnabled(false);
 	addChild(m_pETurret[1]);
 	
-	// instantiating spaceship
 	m_pETurret[2] = new eTurret();
 	m_pETurret[2]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	//m_pSpaceShip->setEnabled(false);
 	addChild(m_pETurret[2]);
 	
-	// instantiating spaceship
 	m_pETurret[3] = new eTurret();
 	m_pETurret[3]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	//m_pSpaceShip->setEnabled(false);
 	addChild(m_pETurret[3]);
-	
+
+	m_pETurret[4] = new eTurret();
+	m_pETurret[4]->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pETurret[4]);
+
+	m_pETurret[5] = new eTurret();
+	m_pETurret[5]->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pETurret[5]);
+
+	m_pETurret[6] = new eTurret();
+	m_pETurret[6]->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pETurret[6]);
+
+	m_pETurret[7] = new eTurret();
+	m_pETurret[7]->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pETurret[7]);
+
+	//PlayerTank
 	m_pPlayerTank = new PlayerTank();
 	m_pPlayerTank->getTransform()->position = glm::vec2(100.0f, 300.0f);
 	m_pPlayerTank->setEnabled(true);
 	addChild(m_pPlayerTank);
 
+	//Player Turret
 	m_pPlayerTurret = new pTurret();
 	m_pPlayerTurret->getTransform()->position== glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;

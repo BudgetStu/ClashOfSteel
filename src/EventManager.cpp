@@ -94,7 +94,7 @@ void EventManager::update()
                 std::cout << "Controller Removed " << std::endl;
                 m_initializeControllers();
                 break;
-	        	
+                
 
 	        default:
 	            break;
