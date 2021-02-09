@@ -46,7 +46,8 @@ private:
 	PlayerTank* m_pPlayerTank;
 	pTurret* m_pPlayerTurret;
 
-	std::pmr::vector<Bullet*> m_bullet;
+	Bullet* m_bullet;
+	//std::pmr::vector<Bullet*> m_bullet;
 	std::pmr::vector<PlayerTank*> PT;
 	
 	// UI Items

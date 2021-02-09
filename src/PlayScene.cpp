@@ -61,6 +61,13 @@ void PlayScene::update()
 	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 
+	//bullet playr bind
+	
+
+	
+
+
+
 
 		if(CollisionManager::CircleAABBTanks(m_pPlayerTank,m_pEnemyTank[1]))
 		{
@@ -165,16 +172,23 @@ void PlayScene::handleEvents()
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_X))
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
 	{
-
-		for (unsigned i = 0; i < PT.size(); i++)
-		{
-			PT.push_back(new Bullet);
-		}
-		/*	PT.shrink_to_fit();*/
-		std::cout << "Created" << std::endl;
+		m_bullet->setRotation(m_pPlayerTurret->m_rotationAngle) ;
+		m_bullet->getTransform()->position = m_pPlayerTurret->getTransform()->position;
+		m_bullet->Shoot();
 	}
+
+	//if (EventManager::Instance().isKeyDown(SDL_SCANCODE_X))
+	//{
+
+	//	for (unsigned i = 0; i < PT.size(); i++)
+	//	{
+	//		PT.push_back(new Bullet);
+	//	}
+	//	/*	PT.shrink_to_fit();*/
+	//	std::cout << "Created" << std::endl;
+	//}
 
 
 
@@ -207,7 +221,7 @@ void PlayScene::start()
 		20, blue, glm::vec2(340.f, 560.f));
 	m_Inst[4]->setParent(this);
 	addChild(m_Inst[4]);
-	
+
 	//Enemy Tank
 	m_pEnemyTank[1] = new Tank();
 	m_pEnemyTank[1]->getTransform()->position = glm::vec2(200.0f, 250.0f);
@@ -270,6 +284,12 @@ void PlayScene::start()
 	m_pETurret[7] = new eTurret();
 	m_pETurret[7]->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pETurret[7]);
+
+
+	m_bullet = new Bullet();
+	m_bullet->getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	m_bullet->setEnabled(true);
+	addChild(m_bullet);
 
 	//PlayerTank
 	m_pPlayerTank = new PlayerTank();

@@ -31,8 +31,6 @@ public:
 	float getAccelerationRate() const;
 	void setAccelerationRate(float rate);
 
-private:
-
 	glm::vec2 m_destination;
 	glm::vec2 m_targetDirection;
 	glm::vec2 m_orientation;
@@ -40,6 +38,10 @@ private:
 	float m_maxSpeed;
 	float m_turnRate;
 	float m_accelerationRate;
+
+private:
+
+	
 
 	// private function
 	void m_Move();
