@@ -1,3 +1,3 @@
-# GAME3001-W2021-Lab 2
+#FIRST PALYABLE: MOVEMENT TUTORIAL.
 
-This is a demo project for Lab 2
+Froggy like game to test player movements and colisions. Turrets for player can rotate too but that does not affect the gameplay for this tutorial.
