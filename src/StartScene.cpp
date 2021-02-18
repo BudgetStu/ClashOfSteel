@@ -14,6 +14,8 @@ StartScene::~StartScene()
 
 void StartScene::draw()
 {
+	TextureManager::Instance()->draw("background", 400, 300, 0, 255, true);
+
 	drawDisplayList();
 }
 
@@ -45,23 +47,20 @@ void StartScene::handleEvents()
 
 void StartScene::start()
 {
-	const SDL_Color blue = { 0, 0, 255, 255 };
+	TextureManager::Instance()->load("../Assets/textures/background.png", "background");
+
+	/*const SDL_Color blue = { 0, 0, 255, 255 };
 	m_pStartLabel = new Label("START SCENE", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->setParent(this);
 	addChild(m_pStartLabel);
 
 	m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->setParent(this);
-	addChild(m_pInstructionsLabel);
-
-
-	m_pShip = new Ship();
-	m_pShip->getTransform()->position = glm::vec2(400.0f, 300.0f); 
-	addChild(m_pShip); 
+	addChild(m_pInstructionsLabel);*/
 
 	// Start Button
 	m_pStartButton = new Button();
-	m_pStartButton->getTransform()->position = glm::vec2(400.0f, 400.0f); 
+	m_pStartButton->getTransform()->position = glm::vec2(200.0f, 300.0f); 
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{
@@ -79,6 +78,27 @@ void StartScene::start()
 		m_pStartButton->setAlpha(255);
 	});
 	addChild(m_pStartButton);
+
+	// Exit Button
+	m_pExitButton = new Button("../Assets/textures/backButton.png", "exit");
+	m_pExitButton->getTransform()->position = glm::vec2(500.0f, 300.0f);
+
+	m_pExitButton->addEventListener(CLICK, [&]()-> void
+		{
+			m_pExitButton->setActive(false);
+			TheGame::Instance()->quit();
+		});
+
+	m_pExitButton->addEventListener(MOUSE_OVER, [&]()->void
+		{
+			m_pExitButton->setAlpha(128);
+		});
+
+	m_pExitButton->addEventListener(MOUSE_OUT, [&]()->void
+		{
+			m_pExitButton->setAlpha(255);
+		});
+	addChild(m_pExitButton);
 
 	
 }
