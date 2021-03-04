@@ -13,6 +13,8 @@
 #include "pTurret.h"
 #include <vector>
 
+#include "Tile.h"
+
 
 class pTurret;
 
@@ -37,18 +39,30 @@ private:
 	glm::vec2 m_Position;
 	SDL_Point m_mousePosition;
 
+
+	//Tiles
+	void m_setGridEnabled(bool state) const;
+	std::vector<Tile*> m_pGrid;
+	void m_buildGrid();
+	//convenience functions
+	Tile* m_getTile(int col, int row) const;
+	Tile* m_getTile(glm::vec2 grid_position) const;
+
+	
+	//Labels
 	Label* m_Inst[5];
 	
+	//Enemy
+	ETank* m_pEnemyTank[8];
 	eTurret* m_pETurret[8];
-	//Target* m_pTarget;
-	Tank* m_pEnemyTank[8];
-	
+	void m_move();
+	//Player
 	PlayerTank* m_pPlayerTank;
 	pTurret* m_pPlayerTurret;
 
 	Bullet* m_bullet;
-	//std::pmr::vector<Bullet*> m_bullet;
-	std::pmr::vector<PlayerTank*> PT;
+
+	//std::pmr::vector<PlayerTank*> PT;
 	
 	// UI Items
 	

@@ -31,6 +31,9 @@
     <Filter Include="DOCS">
       <UniqueIdentifier>{a44d29c3-2835-4901-a310-0039121b84b9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TilesRelated">
+      <UniqueIdentifier>{cf093c10-db10-4095-af30-1d4f31ac7aa5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\StartScene.cpp">
@@ -137,6 +140,12 @@
     </ClCompile>
     <ClCompile Include="..\src\Bullet.cpp">
       <Filter>Game Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\NavigationObject.cpp">
+      <Filter>TilesRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Tile.cpp">
+      <Filter>TilesRelated</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -286,6 +295,18 @@
     </ClInclude>
     <ClInclude Include="..\src\Bullet.h">
       <Filter>Game Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\NavigationObject.h">
+      <Filter>TilesRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Tile.h">
+      <Filter>TilesRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\TileStatus.h">
+      <Filter>Enums</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\NeighbourTile.h">
+      <Filter>Enums</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
