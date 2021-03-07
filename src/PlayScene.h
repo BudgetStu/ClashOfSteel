@@ -31,11 +31,13 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 
+	float GunCD = 0;
+	int TotalBullets = 0;
 private:
 	// IMGUI Function
 	void GUI_Function() const;
 	std::string m_guiTitle;
-	
+
 	glm::vec2 m_Position;
 	SDL_Point m_mousePosition;
 
@@ -48,10 +50,10 @@ private:
 	Tile* m_getTile(int col, int row) const;
 	Tile* m_getTile(glm::vec2 grid_position) const;
 
-	
+
 	//Labels
 	Label* m_Inst[5];
-	
+
 	//Enemy
 	ETank* m_pEnemyTank[8];
 	eTurret* m_pETurret[8];
@@ -59,13 +61,14 @@ private:
 	//Player
 	PlayerTank* m_pPlayerTank;
 	pTurret* m_pPlayerTurret;
-
+	//Bullets
+	std::vector<Bullet*>m_pBullet;
 	Bullet* m_bullet;
 
 	//std::pmr::vector<PlayerTank*> PT;
-	
+
 	// UI Items
-	
+
 };
 
 #endif /* defined (__PLAY_SCENE__) */

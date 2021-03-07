@@ -4,7 +4,7 @@
 #include "Util.h"
 #include "EventManager.h"
 
-Bullet::Bullet()
+Bullet::Bullet(float rotation, glm::vec2 position, bool enable)
 {
 	TextureManager::Instance()->load("../Assets/textures/Tbullet.png", "Tbullet");
 
@@ -12,11 +12,13 @@ Bullet::Bullet()
 	setWidth(size.x);
 	setHeight(size.y);
 
-	getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	getTransform()->position = position;
+	setRotation(rotation);
 	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	setType(BULLET);
-    getRigidBody()->isColliding = false;
+	getRigidBody()->isColliding = false;
+	setEnabled(enable);
 	//setOrientation(orientation);
 }
 
@@ -34,17 +36,17 @@ void Bullet::update()
 {
 	//getTransform()->rotation = m_PlayerTurret->getTransform()->rotation;
 	move();
-	reset();
+	//reset();
 }
 
 void Bullet::handeEvents()
 {
-	
+
 }
 
 void Bullet::clean()
 {
-	
+
 }
 
 float Bullet::getAccelerationRate() const
@@ -90,58 +92,50 @@ void Bullet::move()
 {
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 	EventManager::Instance().update();
-	
-	if (bulletShot == true) {
 
-		setAccelerationRate(10.0f);
-		getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+	//if (bulletShot == true) {
 
-		// using the formula pf = pi + vi*t + 0.5ai*t^2
-		getRigidBody()->velocity += getOrientation() * (deltaTime)+
-			0.5f * getRigidBody()->acceleration * (deltaTime);
+	setAccelerationRate(10.0f);
+	getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
 
-		getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+	// using the formula pf = pi + vi*t + 0.5ai*t^2
+	getRigidBody()->velocity += getOrientation() * (deltaTime)+
+		0.5f * getRigidBody()->acceleration * (deltaTime);
 
-		getTransform()->position += getRigidBody()->velocity;
-		//getTransform()->position += glm::vec2(1.0f,1.0f);
-	}
+	getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+
+	getTransform()->position += getRigidBody()->velocity;
+	//}
 }
 
 void Bullet::reset() {
-	if (getTransform()->position.x <= 0 && bulletShot == true) {
-		bulletShot == false;
-		getTransform()->position = glm::vec2(1000.0f, 1000.0f);
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	} 
-	if (getTransform()->position.x  >= 800 && bulletShot == true) {
-		bulletShot == false;
-		getTransform()->position = glm::vec2(1000.0f, 1000.0f);
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	}
-	if (getTransform()->position.y <= 0 && bulletShot == true) {
-		bulletShot == false;
-		getTransform()->position = glm::vec2(1000.0f, 1000.0f);
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	}
-	if (getTransform()->position.y >= 600 && bulletShot == true) {
-		bulletShot == false;
-		getTransform()->position = glm::vec2(1000.0f, 1000.0f);
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-		getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
-	}
+	//if (getTransform()->position.x <= 0 && bulletShot == true) {
+	//	bulletShot == false;
+	//	getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	//	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	//	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	//} 
+	//if (getTransform()->position.x  >= 800 && bulletShot == true) {
+	//	bulletShot == false;
+	//	getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	//	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	//	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	//}
+	//if (getTransform()->position.y <= 0 && bulletShot == true) {
+	//	bulletShot == false;
+	//	getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	//	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	//	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	//}
+	//if (getTransform()->position.y >= 600 && bulletShot == true) {
+	//	bulletShot == false;
+	//	getTransform()->position = glm::vec2(1000.0f, 1000.0f);
+	//	getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+	//	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
+	//}
 }
 
 void Bullet::Shoot()
 {
-		bulletShot = true;
+	bulletShot = true;
 }
-
-
-
-
-
-
-

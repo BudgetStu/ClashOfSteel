@@ -22,121 +22,97 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
-	if(EventManager::Instance().isIMGUIActive())
+	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
 	}
 
-	//for (int i = 0; i <PT.size(); i++)
-	//{
-	//	PT[i]->draw();
-	//}
-	
 	drawDisplayList();
 	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
 }
 
 void PlayScene::update()
 {
+	auto deltaTime = TheGame::Instance()->getDeltaTime();
 	updateDisplayList();
 
+	//Enemy movements
+	m_move();
+
+	//Timer for Cooldowns
+	GunCD += 1 * deltaTime;
+	std::cout << GunCD << std::endl;
+
 	//Set Enemy turret destination
-	m_pETurret[1]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[2]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[3]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[4]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[5]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[6]->setDestination(m_pPlayerTurret->getTransform()->position);
-	m_pETurret[7]->setDestination(m_pPlayerTurret->getTransform()->position);
+	for (int i = 0; i < 8; i++)
+	{
+		m_pETurret[i]->setDestination(m_pPlayerTurret->getTransform()->position);
+	}
 
 	//Enemies turret bind
-	m_pETurret[1]->getTransform()->position = m_pEnemyTank[1]->getTransform()->position;
-	m_pETurret[2]->getTransform()->position = m_pEnemyTank[2]->getTransform()->position;
-	m_pETurret[3]->getTransform()->position = m_pEnemyTank[3]->getTransform()->position;
-	m_pETurret[4]->getTransform()->position = m_pEnemyTank[4]->getTransform()->position;
-	m_pETurret[5]->getTransform()->position = m_pEnemyTank[5]->getTransform()->position;
-	m_pETurret[6]->getTransform()->position = m_pEnemyTank[6]->getTransform()->position;
-	m_pETurret[7]->getTransform()->position = m_pEnemyTank[7]->getTransform()->position;
+	for (int i = 0; i < 8; i++)
+	{
+		m_pETurret[i]->getTransform()->position = m_pEnemyTank[i]->getTransform()->position;
+	}
 
 	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 
-	//bullet player bind
-
-		if(CollisionManager::CircleAABBTanks(m_pPlayerTank,m_pEnemyTank[1]))
+	//Player Bullet
+	for (int i = 0; i < m_pBullet.size(); i++)
+	{
+		if (m_pBullet[i]->getTransform()->position.x >= 800.0f ||
+			m_pBullet[i]->getTransform()->position.x <= 0.0f ||
+			m_pBullet[i]->getTransform()->position.y >= 600.0f ||
+			m_pBullet[i]->getTransform()->position.y <= 0)
 		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[1]->setEnabled(false);
-			m_pETurret[1]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
+			//delete m_pBullet[i];
+			m_pBullet[i]->setEnabled(false);
+			//m_pBullet.erase(m_pBullet.begin() + i);
+			//m_pBullet.shrink_to_fit();
+			std::cout << "BOOOOOOM" << std::endl;
+			break;
 		}
-	
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[2]))
-		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[2]->setEnabled(false);
-			m_pETurret[2]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
-		}
+	}
 
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[3]))
-		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[3]->setEnabled(false);
-			m_pETurret[3]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
-		}
+	//Collisions
 
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[4]))
+	//Player and enemy Collision
+	for (int EnemyTanks = 0; EnemyTanks < 8; EnemyTanks++)
+	{
+		if (m_pEnemyTank[EnemyTanks]->isEnabled() == true)
 		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[4]->setEnabled(false);
-			m_pETurret[4]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
+			if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[EnemyTanks]))
+			{
+				std::cout << "Collision" << std::endl;
+				m_pPlayerTank->setEnabled(false);
+				m_pPlayerTurret->setEnabled(false);
+				m_pEnemyTank[EnemyTanks]->setEnabled(false);
+				m_pETurret[EnemyTanks]->setEnabled(false);
+				SoundManager::Instance().playSound("Expl", 0, -1);
+			}
 		}
+	}
 
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[5]))
+	//Player bullet and enemy tank collision
+	for (int i = 0; i < m_pBullet.size(); i++)
+	{
+		for (int y = 0; y < 8; y++)
 		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[5]->setEnabled(false);
-			m_pETurret[5]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
-		}
 
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[6]))
-		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[6]->setEnabled(false);
-			m_pETurret[6]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
+			if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_pEnemyTank[y]))
+				if (m_pEnemyTank[y]->isEnabled() == true)
+				{
+					{
+						std::cout << "Collision" << std::endl;
+						m_pBullet[i]->setEnabled(false);
+						m_pEnemyTank[y]->setEnabled(false);
+						m_pETurret[y]->setEnabled(false);
+						SoundManager::Instance().playSound("Expl", 0, -1);
+					}
+				}
 		}
-
-		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[7]))
-		{
-			std::cout << "Collision" << std::endl;
-			m_pPlayerTank->setEnabled(false);
-			m_pPlayerTurret->setEnabled(false);
-			m_pEnemyTank[7]->setEnabled(false);
-			m_pETurret[7]->setEnabled(false);
-			SoundManager::Instance().playSound("Expl", 0, -1);
-		}
-
-		m_move();
-	
-	//for (unsigned i = 0; i < m_bullet.size(); i++) //size() is actual filled numbers of elements
-	//	m_bullet[i]->update();
+	}
 }
 
 void PlayScene::clean()
@@ -147,11 +123,6 @@ void PlayScene::clean()
 void PlayScene::handleEvents()
 {
 	EventManager::Instance().update();
-
-	/*m_mousePosition=EventManager::Instance().getMousePosition()* Util::Deg2Rad;
-	m_mousePosition = Util::normalize(m_mousePosition);*/
-	//SDL_GetMouseState(&m_mousePosition.x, &m_mousePosition.y);
-
 
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_ESCAPE))
 	{
@@ -168,27 +139,17 @@ void PlayScene::handleEvents()
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE))
+	//Player BulletShooting
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1)
 	{
-		m_bullet->setRotation(m_pPlayerTurret->m_rotationAngle) ;
-		m_bullet->getTransform()->position = m_pPlayerTurret->getTransform()->position;
-		m_bullet->Shoot();
+		GunCD = 0;
+		m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
+		addChild(m_pBullet[TotalBullets]);
+		TotalBullets++;
 	}
 
-	//if (EventManager::Instance().isKeyDown(SDL_SCANCODE_X))
-	//{
-
-	//	for (unsigned i = 0; i < PT.size(); i++)
-	//	{
-	//		PT.push_back(new Bullet);
-	//	}
-	//	/*	PT.shrink_to_fit();*/
-	//	std::cout << "Created" << std::endl;
-	//}
-
-
-
-	if(m_pPlayerTank->getTransform()->position.x>700.f)
+	//Win Condition TODO Update
+	if (m_pPlayerTank->getTransform()->position.x > 700.f)
 	{
 		SoundManager::Instance().playSound("Goal", 0, -1);
 	}
@@ -200,7 +161,7 @@ void PlayScene::start()
 	m_guiTitle = "Play Scene";
 
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
-	
+
 	//Labels
 	//const SDL_Color blue = { 0, 0, 255, 255 };
 	//m_Inst[1] = new Label("Movement Tutorial Instructions:", "Consolas",
@@ -224,8 +185,13 @@ void PlayScene::start()
 	m_buildGrid();
 
 	//Enemy ETank
+	m_pEnemyTank[0] = new ETank();
+	m_pEnemyTank[0]->getTransform()->position = m_getTile(1, 1)->getTransform()->position + offset;
+	m_pEnemyTank[0]->moveRight = true;
+	addChild(m_pEnemyTank[0]);
+
 	m_pEnemyTank[1] = new ETank();
-	m_pEnemyTank[1]->getTransform()->position = m_getTile(3,14)->getTransform()->position+offset;
+	m_pEnemyTank[1]->getTransform()->position = m_getTile(3, 14)->getTransform()->position + offset;
 	m_pEnemyTank[1]->moveRight = true;
 	addChild(m_pEnemyTank[1]);
 
@@ -259,14 +225,18 @@ void PlayScene::start()
 
 
 	// Enemy Turret
+	m_pETurret[0] = new eTurret();
+	m_pETurret[0]->getTransform()->position = glm::vec2(400.0f, 300.0f);
+	addChild(m_pETurret[0]);
+
 	m_pETurret[1] = new eTurret();
 	m_pETurret[1]->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pETurret[1]);
-	
+
 	m_pETurret[2] = new eTurret();
 	m_pETurret[2]->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pETurret[2]);
-	
+
 	m_pETurret[3] = new eTurret();
 	m_pETurret[3]->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pETurret[3]);
@@ -287,12 +257,6 @@ void PlayScene::start()
 	m_pETurret[7]->getTransform()->position = glm::vec2(400.0f, 300.0f);
 	addChild(m_pETurret[7]);
 
-
-	m_bullet = new Bullet();
-	m_bullet->getTransform()->position = glm::vec2(1000.0f, 1000.0f);
-	m_bullet->setEnabled(true);
-	addChild(m_bullet);
-
 	//PlayerTank
 	m_pPlayerTank = new PlayerTank();
 	m_pPlayerTank->getTransform()->position = glm::vec2(100.0f, 300.0f);
@@ -301,7 +265,7 @@ void PlayScene::start()
 
 	//Player Turret
 	m_pPlayerTurret = new pTurret();
-	m_pPlayerTurret->getTransform()->position== glm::vec2(100.0f, 300.0f);
+	m_pPlayerTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret);
 
@@ -310,93 +274,93 @@ void PlayScene::start()
 
 void PlayScene::GUI_Function() const
 {
-auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
-// Always open with a NewFrame
-ImGui::NewFrame();
+	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+	// Always open with a NewFrame
+	ImGui::NewFrame();
 
-// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
-//ImGui::ShowDemoWindow();
+	// See examples by uncommenting the following - also look at imgui_demo.cpp in the IMGUI filter
+	//ImGui::ShowDemoWindow();
 
-ImGui::Begin("GAME3001 - Lab 3", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
+	ImGui::Begin("GAME3001 - Lab 3", NULL, ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoMove);
 
-static bool isGridEnabled = false;
-if (ImGui::Checkbox("Grid Enabled", &isGridEnabled))
-{
-	//turn the grid on/off
-	m_setGridEnabled(isGridEnabled);
-}
+	static bool isGridEnabled = false;
+	if (ImGui::Checkbox("Grid Enabled", &isGridEnabled))
+	{
+		//turn the grid on/off
+		m_setGridEnabled(isGridEnabled);
+	}
 
-//ImGui::Separator();
-//
-//auto radio = static_cast<int>(currentHeuristic);
-//ImGui::LabelText("", "Heuristic Type");
-//ImGui::RadioButton("Euclidean", &radio, static_cast<int>(EUCLIDEAN));
-//ImGui::SameLine();
-//ImGui::RadioButton("Manhattan", &radio, static_cast<int>(MANHATTAN));
-//
-//if (currentHeuristic != Heuristic(radio))
-//{
-//	currentHeuristic = Heuristic(radio);
-//	m_computeTileCost();
-//}
-//
-//ImGui::Separator();
-//
-//static int startPosition[] = { m_pShip->getGridPosition().x,m_pShip->getGridPosition().y };
-//if (ImGui::SliderInt2("Start Position", startPosition, 0, Config::COL_NUM - 1))
-//{
-//	//Row adjustment so that it does not go out screen
-//	if (startPosition[1] > Config::ROW_NUM - 1)
-//	{
-//		startPosition[1] = Config::ROW_NUM - 1;
-//	}
-//	SDL_RenderClear(Renderer::Instance()->getRenderer());
-//	m_getTile(m_pShip->getGridPosition())->setTileStatus(UNVISITED);
-//	m_pShip->getTransform()->position = m_getTile(startPosition[0], startPosition[1])->getTransform()->position + offset;
-//	m_pShip->setGridPosition(startPosition[0], startPosition[1]);
-//	m_getTile(m_pShip->getGridPosition())->setTileStatus(START);
-//	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
-//	SDL_RenderPresent(Renderer::Instance()->getRenderer());
-//}
-//
-//static int targetPosition[] = { m_pTarget->getGridPosition().x,m_pTarget->getGridPosition().y };
-//if (ImGui::SliderInt2("Target Position", targetPosition, 0, Config::COL_NUM - 1))
-//{
-//	//Row adjustment so that it does not go out screen
-//	if (targetPosition[1] > Config::ROW_NUM - 1)
-//	{
-//		targetPosition[1] = Config::ROW_NUM - 1;
-//	}
-//	SDL_RenderClear(Renderer::Instance()->getRenderer());
-//	m_getTile(m_pTarget->getGridPosition())->setTileStatus(UNVISITED);
-//	m_pTarget->getTransform()->position = m_getTile(targetPosition[0], targetPosition[1])->getTransform()->position + offset;
-//	m_pTarget->setGridPosition(targetPosition[0], targetPosition[1]);
-//	m_getTile(m_pTarget->getGridPosition())->setTileStatus(GOAL);
-//	m_computeTileCost();
-//	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
-//	SDL_RenderPresent(Renderer::Instance()->getRenderer());
-//}
-//ImGui::Separator();
-//if (ImGui::Button("Start"))
-//{
-//	isMoving = true;
-//}
-//
-//ImGui::SameLine();
-//
-//if (ImGui::Button("Reset"))
-//{
-//	m_reset();
-//}
-//
-//ImGui::Separator();
+	//ImGui::Separator();
+	//
+	//auto radio = static_cast<int>(currentHeuristic);
+	//ImGui::LabelText("", "Heuristic Type");
+	//ImGui::RadioButton("Euclidean", &radio, static_cast<int>(EUCLIDEAN));
+	//ImGui::SameLine();
+	//ImGui::RadioButton("Manhattan", &radio, static_cast<int>(MANHATTAN));
+	//
+	//if (currentHeuristic != Heuristic(radio))
+	//{
+	//	currentHeuristic = Heuristic(radio);
+	//	m_computeTileCost();
+	//}
+	//
+	//ImGui::Separator();
+	//
+	//static int startPosition[] = { m_pShip->getGridPosition().x,m_pShip->getGridPosition().y };
+	//if (ImGui::SliderInt2("Start Position", startPosition, 0, Config::COL_NUM - 1))
+	//{
+	//	//Row adjustment so that it does not go out screen
+	//	if (startPosition[1] > Config::ROW_NUM - 1)
+	//	{
+	//		startPosition[1] = Config::ROW_NUM - 1;
+	//	}
+	//	SDL_RenderClear(Renderer::Instance()->getRenderer());
+	//	m_getTile(m_pShip->getGridPosition())->setTileStatus(UNVISITED);
+	//	m_pShip->getTransform()->position = m_getTile(startPosition[0], startPosition[1])->getTransform()->position + offset;
+	//	m_pShip->setGridPosition(startPosition[0], startPosition[1]);
+	//	m_getTile(m_pShip->getGridPosition())->setTileStatus(START);
+	//	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+	//	SDL_RenderPresent(Renderer::Instance()->getRenderer());
+	//}
+	//
+	//static int targetPosition[] = { m_pTarget->getGridPosition().x,m_pTarget->getGridPosition().y };
+	//if (ImGui::SliderInt2("Target Position", targetPosition, 0, Config::COL_NUM - 1))
+	//{
+	//	//Row adjustment so that it does not go out screen
+	//	if (targetPosition[1] > Config::ROW_NUM - 1)
+	//	{
+	//		targetPosition[1] = Config::ROW_NUM - 1;
+	//	}
+	//	SDL_RenderClear(Renderer::Instance()->getRenderer());
+	//	m_getTile(m_pTarget->getGridPosition())->setTileStatus(UNVISITED);
+	//	m_pTarget->getTransform()->position = m_getTile(targetPosition[0], targetPosition[1])->getTransform()->position + offset;
+	//	m_pTarget->setGridPosition(targetPosition[0], targetPosition[1]);
+	//	m_getTile(m_pTarget->getGridPosition())->setTileStatus(GOAL);
+	//	m_computeTileCost();
+	//	SDL_SetRenderDrawColor(Renderer::Instance()->getRenderer(), 255, 255, 255, 255);
+	//	SDL_RenderPresent(Renderer::Instance()->getRenderer());
+	//}
+	//ImGui::Separator();
+	//if (ImGui::Button("Start"))
+	//{
+	//	isMoving = true;
+	//}
+	//
+	//ImGui::SameLine();
+	//
+	//if (ImGui::Button("Reset"))
+	//{
+	//	m_reset();
+	//}
+	//
+	//ImGui::Separator();
 
-ImGui::End();
+	ImGui::End();
 
-// Don't Remove this
-ImGui::Render();
-ImGuiSDL::Render(ImGui::GetDrawData());
-ImGui::StyleColorsDark();
+	// Don't Remove this
+	ImGui::Render();
+	ImGuiSDL::Render(ImGui::GetDrawData());
+	ImGui::StyleColorsDark();
 }
 
 void PlayScene::m_buildGrid()
@@ -568,4 +532,5 @@ void PlayScene::m_move()
 			}
 		}
 	}
+	//Tank 3 //TODO
 }

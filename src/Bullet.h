@@ -10,7 +10,7 @@
 class Bullet :public PlayerTank
 {
 public:
-	Bullet();
+	Bullet(float rotation, glm::vec2 position, bool enable);
 
 	~Bullet();
 
