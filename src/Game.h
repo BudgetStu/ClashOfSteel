@@ -17,6 +17,8 @@
 #include "StartScene.h"
 #include "PlayScene.h"
 #include "EndScene.h"
+#include "WinScene.h"
+#include "LoseScene.h"
 
 #include "Config.h"
 

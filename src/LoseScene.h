@@ -1,17 +1,16 @@
-#pragma once
-#ifndef __START_SCENE__
-#define __START_SCENE__
+﻿#pragma once
+#ifndef __LOSE_SCENE__
+#define __LOSE_SCENE__
 
 #include "Scene.h"
 #include "Label.h"
-#include "ship.h"
 #include "Button.h"
 
-class StartScene final : public Scene
+class LoseScene final : public Scene
 {
 public:
-	StartScene();
-	~StartScene();
+	LoseScene();
+	~LoseScene();
 
 	// Inherited via Scene
 	virtual void draw() override;
@@ -19,7 +18,7 @@ public:
 	virtual void clean() override;
 	virtual void handleEvents() override;
 	virtual void start() override;
-	
+
 private:
 	Label* m_pStartLabel{};
 	Label* m_pInstructionsLabel{};
@@ -28,4 +27,4 @@ private:
 	Button* m_pExitButton;
 };
 
-#endif /* defined (__START_SCENE__) */
+#endif

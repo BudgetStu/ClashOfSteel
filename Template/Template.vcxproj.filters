@@ -34,6 +34,9 @@
     <Filter Include="TilesRelated">
       <UniqueIdentifier>{cf093c10-db10-4095-af30-1d4f31ac7aa5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resources">
+      <UniqueIdentifier>{77f5926c-b799-4564-86b6-89469035b2d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\StartScene.cpp">
@@ -147,6 +150,11 @@
     <ClCompile Include="..\src\Tile.cpp">
       <Filter>TilesRelated</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\TiledLevel.cpp">
+      <Filter>TilesRelated</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\WinScene.cpp" />
+    <ClCompile Include="..\src\LoseScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -308,10 +316,32 @@
     <ClInclude Include="..\src\NeighbourTile.h">
       <Filter>Enums</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\TiledLevel.h">
+      <Filter>TilesRelated</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\WinScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LoseScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
       <Filter>DOCS</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Assets\textures\Tiles.png">
+      <Filter>Resources</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Assets\data\Level1.txt">
+      <Filter>Resources</Filter>
+    </Text>
+    <Text Include="..\Assets\data\Tiledata.txt">
+      <Filter>Resources</Filter>
+    </Text>
   </ItemGroup>
 </Project>

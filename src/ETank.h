@@ -37,6 +37,8 @@ public:
 	bool p2 = false;
 	bool p3 = false;
 	bool p4 = false;
+
+	float cd = 0;
 	
 	float m_stopRadius;
 	bool move = false;

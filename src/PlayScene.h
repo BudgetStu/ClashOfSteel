@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "Tile.h"
+#include "TiledLevel.h"
 
 
 class pTurret;
@@ -32,7 +33,10 @@ public:
 	virtual void start() override;
 
 	float GunCD = 0;
+	float StageEndCD = 0;
+	int EnemiesDestroyed = 0;
 	int TotalBullets = 0;
+	int TotalEBullets = 0;
 private:
 	// IMGUI Function
 	void GUI_Function() const;
@@ -46,6 +50,10 @@ private:
 	void m_setGridEnabled(bool state) const;
 	std::vector<Tile*> m_pGrid;
 	void m_buildGrid();
+	//Map
+	std::map<char, TileC* > m_tiles;
+	std::vector<std::vector<TileC*>>m_level;
+	std::vector<TileC*> m_obstacles;
 	//convenience functions
 	Tile* m_getTile(int col, int row) const;
 	Tile* m_getTile(glm::vec2 grid_position) const;
@@ -63,7 +71,11 @@ private:
 	pTurret* m_pPlayerTurret;
 	//Bullets
 	std::vector<Bullet*>m_pBullet;
-	Bullet* m_bullet;
+	std::vector<Bullet*>m_pEnemyBullet;
+	//Bullet* m_bullet;
+	//
+	//std::map<char, TileC* > m_tiles;
+	//std::vector<std::vector<TileC*>>m_level;
 
 	//std::pmr::vector<PlayerTank*> PT;
 

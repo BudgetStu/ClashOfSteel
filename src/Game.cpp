@@ -5,6 +5,7 @@
 #include "glm/gtx/string_cast.hpp"
 #include "Renderer.h"
 #include "EventManager.h"
+#include "WinScene.h"
 
 // IMGUI Includes
 #include "imgui.h"
@@ -174,6 +175,15 @@ void Game::changeSceneState(const SceneState new_state)
 			m_currentScene = new EndScene();
 			std::cout << "end scene activated" << std::endl;
 			break;
+		case WIN_SCENE:
+			m_currentScene = new WinScene();
+			std::cout << "win scene activated" << std::endl;
+			break;
+		case LOSE_SCENE:
+			m_currentScene = new LoseScene();
+			std::cout << "lose scene activated" << std::endl;
+			break;
+			
 		default:
 			std::cout << "default case activated" << std::endl;
 			break;

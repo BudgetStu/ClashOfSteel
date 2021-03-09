@@ -7,6 +7,8 @@ enum SceneState
 	START_SCENE,
 	PLAY_SCENE,
 	END_SCENE,
+	WIN_SCENE,
+	LOSE_SCENE,
 	NUM_OF_SCENES
 };
 #endif /* defined (__SCENE_STATE__) */

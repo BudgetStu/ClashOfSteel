@@ -27,7 +27,7 @@ ETank::ETank()
 	setRotation(0.0f);
 	setAccelerationRate(1.0f);
 	setTurnRate(5.0f);
-	setStopRadius(5.0f);
+	setStopRadius(150.0f);
 }
 
 ETank::~ETank()

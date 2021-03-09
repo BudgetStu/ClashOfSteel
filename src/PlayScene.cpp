@@ -11,6 +11,7 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+	TextureManager::Instance()->load("../Assets/textures/Tiles.png", "tiles");
 	SoundManager::Instance().load("../Assets/audio/Bgm.mp3", "Bgm", SOUND_MUSIC);
 	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
@@ -41,6 +42,15 @@ void PlayScene::update()
 
 	//Timer for Cooldowns
 	GunCD += 1 * deltaTime;
+	for (auto i = 0; i < 8; i++)
+	{
+		m_pEnemyTank[i]->cd += 1 * deltaTime;
+		//std::cout << "Tank " << i << " Cd: " << m_pEnemyTank[i]->cd << std::endl;
+	}
+	if ((m_pPlayerTank->isEnabled() == false)||(EnemiesDestroyed==8))
+	{
+		StageEndCD += 1 * deltaTime;
+	}
 	std::cout << GunCD << std::endl;
 
 	//Set Enemy turret destination
@@ -58,7 +68,7 @@ void PlayScene::update()
 	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 
-	//Player Bullet
+	//Player Bullet Off Screen
 	for (int i = 0; i < m_pBullet.size(); i++)
 	{
 		if (m_pBullet[i]->getTransform()->position.x >= 800.0f ||
@@ -82,14 +92,17 @@ void PlayScene::update()
 	{
 		if (m_pEnemyTank[EnemyTanks]->isEnabled() == true)
 		{
-			if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[EnemyTanks]))
+			if (m_pPlayerTank->isEnabled() == true)
 			{
-				std::cout << "Collision" << std::endl;
-				m_pPlayerTank->setEnabled(false);
-				m_pPlayerTurret->setEnabled(false);
-				m_pEnemyTank[EnemyTanks]->setEnabled(false);
-				m_pETurret[EnemyTanks]->setEnabled(false);
-				SoundManager::Instance().playSound("Expl", 0, -1);
+				if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_pEnemyTank[EnemyTanks]))
+				{
+					std::cout << "Collision" << std::endl;
+					m_pPlayerTank->setEnabled(false);
+					m_pPlayerTurret->setEnabled(false);
+					m_pEnemyTank[EnemyTanks]->setEnabled(false);
+					m_pETurret[EnemyTanks]->setEnabled(false);
+					SoundManager::Instance().playSound("Expl", 0, -1);
+				}
 			}
 		}
 	}
@@ -99,21 +112,40 @@ void PlayScene::update()
 	{
 		for (int y = 0; y < 8; y++)
 		{
-
-			if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_pEnemyTank[y]))
-				if (m_pEnemyTank[y]->isEnabled() == true)
+			if (m_pEnemyTank[y]->isEnabled() == true)
+			{
+				if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_pEnemyTank[y]))
 				{
-					{
-						std::cout << "Collision" << std::endl;
-						m_pBullet[i]->setEnabled(false);
-						m_pEnemyTank[y]->setEnabled(false);
-						m_pETurret[y]->setEnabled(false);
-						SoundManager::Instance().playSound("Expl", 0, -1);
-					}
+
+					std::cout << "Collision" << std::endl;
+					m_pBullet[i]->setEnabled(false);
+					m_pEnemyTank[y]->setEnabled(false);
+					m_pETurret[y]->setEnabled(false);
+					EnemiesDestroyed++;
+					SoundManager::Instance().playSound("Expl", 0, -1);
 				}
+			}
+		}
+	}
+
+	//Enemy Bullet and player Tank Collision
+	if (m_pPlayerTank->isEnabled() == true)
+	{
+		for (int i = 0; i < m_pEnemyBullet.size(); i++)
+		{
+
+			if (CollisionManager::CircleAABBTanks(m_pEnemyBullet[i], m_pPlayerTank))
+			{
+				std::cout << "Collision" << std::endl;
+				m_pEnemyBullet[i]->setEnabled(false);
+				m_pPlayerTank->setEnabled(false);
+				m_pPlayerTurret->setEnabled(false);
+				SoundManager::Instance().playSound("Expl", 0, -1);
+			}
 		}
 	}
 }
+	
 
 void PlayScene::clean()
 {
@@ -142,16 +174,54 @@ void PlayScene::handleEvents()
 	//Player BulletShooting
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1)
 	{
-		GunCD = 0;
-		m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
-		addChild(m_pBullet[TotalBullets]);
-		TotalBullets++;
+		if (m_pPlayerTank->isEnabled() == true)
+		{
+			GunCD = 0;
+			m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
+			addChild(m_pBullet[TotalBullets]);
+			TotalBullets++;
+		}
 	}
 
-	//Win Condition TODO Update
-	if (m_pPlayerTank->getTransform()->position.x > 700.f)
+	//Enemy BulletShooting
+	if (m_pPlayerTank->isEnabled() == true)
 	{
-		SoundManager::Instance().playSound("Goal", 0, -1);
+		for (int i = 0; i < 8; i++)
+		{
+			if (m_pEnemyTank[i]->isEnabled() == true)
+			{
+				if (m_pEnemyTank[i]->cd > 4.0f)
+				{
+					//TODO Change to a line of sight so that tanks dont try to shoot pass objects
+					if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
+					{
+						m_pEnemyTank[i]->cd = 0;
+						m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+						addChild(m_pEnemyBullet[TotalEBullets]);
+						TotalEBullets++;
+						//std::cout << "Tank " << i << " Shoot!" << std::endl;
+					}
+				}
+			}
+		}
+	}
+	
+	//Win Condition TODO Update
+	if(m_pPlayerTank->isEnabled()==false)
+	{
+		if(StageEndCD>1)
+		{
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
+			//SoundManager::Instance().playSound("Goal", 0, -1);
+		}
+	}
+	else if(EnemiesDestroyed==8)
+	{
+		if (StageEndCD > 1)
+		{
+			TheGame::Instance()->changeSceneState(WIN_SCENE);
+			//SoundManager::Instance().playSound("Goal", 0, -1);
+		}
 	}
 }
 
@@ -367,25 +437,56 @@ void PlayScene::m_buildGrid()
 {
 
 	auto tileSize = Config::TILE_SIZE;
-
-	//Add tiles to the grid
-	for (int row = 0; row < Config::ROW_NUM; ++row)
+	//
+	std::ifstream inFile("../Assets/data/Tiledata.txt");
+	if (inFile.is_open())
 	{
-		for (int col = 0; col < Config::COL_NUM; ++col)
+		char key;
+		int x, y;
+		bool obs, haz;
+		while (!inFile.eof())
 		{
-			Tile* tile = new Tile();//Create empty tile
-			tile->getTransform()->position = glm::vec2(col * tileSize, row * tileSize);
-			tile->setGridPosition(col, row);
-			addChild(tile);
-			tile->addLabels();
-			tile->setTileCost(tile->getGridPosition().x);
-			tile->setTileStatus(tile->getGridPosition().y);
-			tile->setEnabled(false);
-			m_pGrid.push_back(tile);
-
+			inFile >> key >> x >> y >> obs >> haz;
+			m_tiles.emplace(key, new TileC({ x * tileSize,y * tileSize, }, { 0.0f, 0.0f }, obs, haz));
 		}
 	}
+	inFile.close();
+	//
+	//inFile.open("../Assets/data/Level1.txt");
+	//if (inFile.is_open())
+	//{
+	//	char key;
+	//	//Add tiles to the grid
+		for (int row = 0; row < Config::ROW_NUM; ++row)
+		{
+			for (int col = 0; col < Config::COL_NUM; ++col)
+			{
+				Tile* tile = new Tile();//Create empty tile
+				tile->getTransform()->position = glm::vec2(col * tileSize, row * tileSize);
+				tile->setGridPosition(col, row);
+				addChild(tile);
+				tile->addLabels();
+				tile->setTileCost(tile->getGridPosition().x);
+				tile->setTileStatus(tile->getGridPosition().y);
+				tile->setEnabled(false);
+				m_pGrid.push_back(tile);
 
+			//	//TODO Try to make this like a basic tile, create a new class derived from it
+			//	inFile >> key;
+			//	//m_level[row][col] = m_tiles[key]->Clone();
+			//	m_level[row][col]->getTransform()->position= glm::vec2(col * tileSize, row * tileSize);
+			//	if (m_level[row][col]->IsObstacle())
+			//		if (m_level[row][col]->IsObstacle())
+			//		{
+			//			m_obstacles.push_back(m_level[row][col]);
+			//		}
+			//	m_level[row][col]->draw();
+			//	m_level[row][col]->setEnabled(true);
+			//	addChild(m_level[row][col]);
+			}
+		}
+	//}
+	//inFile.close();
 	//Create references for each tile to its neighbours
 	for (int row = 0; row < Config::ROW_NUM; ++row)
 	{
@@ -438,6 +539,8 @@ void PlayScene::m_buildGrid()
 
 	}
 
+
+	
 	std::cout << m_pGrid.size() << std::endl;
 }
 void PlayScene::m_setGridEnabled(bool state) const
