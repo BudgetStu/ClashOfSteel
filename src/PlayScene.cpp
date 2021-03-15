@@ -93,7 +93,7 @@ void PlayScene::update()
 
 	//Player and stage Collision
 
-	//TODO Manage to set speed back after collision properly
+	//TODO Manage to set speed back after collision. Properly
 	if(m_pPlayerTank->isEnabled())
 	{
 		for(int i=0;i<12;i++)
