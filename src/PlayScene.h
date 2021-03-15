@@ -49,11 +49,14 @@ private:
 	//Tiles
 	void m_setGridEnabled(bool state) const;
 	std::vector<Tile*> m_pGrid;
+	std::vector<TileC*>m_pMap;
 	void m_buildGrid();
 	//Map
 	std::map<char, TileC* > m_tiles;
 	std::vector<std::vector<TileC*>>m_level;
-	std::vector<TileC*> m_obstacles;
+	//std::vector<TileC*> m_obstacles;
+	TileC* Bg;
+	TileC* m_field[12];
 	//convenience functions
 	Tile* m_getTile(int col, int row) const;
 	Tile* m_getTile(glm::vec2 grid_position) const;

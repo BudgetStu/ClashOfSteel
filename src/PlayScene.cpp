@@ -11,6 +11,7 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+	TextureManager::Instance()->load("../Assets/grid/Bg.png", "Bg");
 	TextureManager::Instance()->load("../Assets/textures/Tiles.png", "tiles");
 	SoundManager::Instance().load("../Assets/audio/Bgm.mp3", "Bgm", SOUND_MUSIC);
 	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
@@ -23,6 +24,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
+
 	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
@@ -112,35 +114,77 @@ void PlayScene::update()
 	{
 		for (int y = 0; y < 8; y++)
 		{
-			if (m_pEnemyTank[y]->isEnabled() == true)
+			if (m_pBullet[i]->isEnabled())
 			{
-				if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_pEnemyTank[y]))
+				if (m_pEnemyTank[y]->isEnabled() == true)
 				{
+					if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_pEnemyTank[y]))
+					{
 
+						std::cout << "Collision" << std::endl;
+						m_pBullet[i]->setEnabled(false);
+						m_pEnemyTank[y]->setEnabled(false);
+						m_pETurret[y]->setEnabled(false);
+						EnemiesDestroyed++;
+						SoundManager::Instance().playSound("Expl", 0, -1);
+					}
+				}
+			}
+		}
+	}
+
+	//Player bullet and Stage collision
+	for (int i = 0; i < m_pBullet.size(); i++)
+	{
+		for (int y = 0; y < 12; y++)
+		{
+			if (m_pBullet[i]->isEnabled())
+			{
+				if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_field[y]))
+				{
 					std::cout << "Collision" << std::endl;
 					m_pBullet[i]->setEnabled(false);
-					m_pEnemyTank[y]->setEnabled(false);
-					m_pETurret[y]->setEnabled(false);
-					EnemiesDestroyed++;
+					SoundManager::Instance().playSound("Expl", 0, -1);
+				}
+			}
+		}
+		
+	}
+	
+	//Enemy Bullet and player Tank Collision
+	if (m_pPlayerTank->isEnabled() == true)
+	{
+		for (int i = 0; i < m_pEnemyBullet.size(); i++)
+		{
+			if (m_pEnemyBullet[i]->isEnabled())
+			{
+				if (CollisionManager::CircleAABBTanks(m_pEnemyBullet[i], m_pPlayerTank))
+				{
+					std::cout << "Collision" << std::endl;
+					m_pEnemyBullet[i]->setEnabled(false);
+					m_pPlayerTank->setEnabled(false);
+					m_pPlayerTurret->setEnabled(false);
 					SoundManager::Instance().playSound("Expl", 0, -1);
 				}
 			}
 		}
 	}
 
-	//Enemy Bullet and player Tank Collision
-	if (m_pPlayerTank->isEnabled() == true)
-	{
-		for (int i = 0; i < m_pEnemyBullet.size(); i++)
-		{
+	//Enemy Bullet and stage Collision
 
-			if (CollisionManager::CircleAABBTanks(m_pEnemyBullet[i], m_pPlayerTank))
+	for (int i = 0; i < m_pEnemyBullet.size(); i++)
+	{
+		if (m_pEnemyBullet[i]->isEnabled() == true)
+		{
+			for (int u = 0; u < 12; u++)
 			{
-				std::cout << "Collision" << std::endl;
-				m_pEnemyBullet[i]->setEnabled(false);
-				m_pPlayerTank->setEnabled(false);
-				m_pPlayerTurret->setEnabled(false);
-				SoundManager::Instance().playSound("Expl", 0, -1);
+				if (CollisionManager::CircleAABBTanks(m_pEnemyBullet[i], m_field[u]))
+				{
+					std::cout << "Collision" << std::endl;
+					m_pEnemyBullet[i]->setEnabled(false);
+
+					SoundManager::Instance().playSound("Expl", 0, -1);
+				}
 			}
 		}
 	}
@@ -206,7 +250,7 @@ void PlayScene::handleEvents()
 		}
 	}
 	
-	//Win Condition TODO Update
+	//Win Condition
 	if(m_pPlayerTank->isEnabled()==false)
 	{
 		if(StageEndCD>1)
@@ -231,6 +275,7 @@ void PlayScene::start()
 	m_guiTitle = "Play Scene";
 
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+	auto offset2 = glm::vec2(Config::TILE_SIZE * 1.0f, Config::TILE_SIZE * 0.5f);
 
 	//Labels
 	//const SDL_Color blue = { 0, 0, 255, 255 };
@@ -254,90 +299,146 @@ void PlayScene::start()
 	//Tiles
 	m_buildGrid();
 
+	//Background
+	
+	//Bg = new TileC("../Assets/grid/Bg.png", "Bg");
+	//Bg->getTransform()->position.x = 800.0f/2;		
+	//Bg->getTransform()->position.y = 600.0f/2;
+	//addChild(Bg,0);
+
+	//Obstacles
+	
+	m_field[0] = new TileC("../Assets/grid/wide.png","w");
+	m_field[0]->getTransform()->position = m_getTile(2, 1)->getTransform()->position+offset2;
+	addChild(m_field[0],1);
+
+	m_field[2] = new TileC("../Assets/grid/wide.png", "w");
+	m_field[2]->getTransform()->position = m_getTile(10, 1)->getTransform()->position + offset2;
+	addChild(m_field[2], 1);
+
+	m_field[3] = new TileC("../Assets/grid/wide.png", "w");
+	m_field[3]->getTransform()->position = m_getTile(2, 13)->getTransform()->position + offset2;
+	addChild(m_field[3], 1);
+
+	m_field[4] = new TileC("../Assets/grid/wide.png", "w");
+	m_field[4]->getTransform()->position = m_getTile(10, 13)->getTransform()->position + offset2;
+	addChild(m_field[4], 1);
+
+	m_field[1] = new TileC("../Assets/grid/120.png", "120");
+	m_field[1]->getTransform()->position = m_getTile(1, 4)->getTransform()->position+offset;
+	addChild(m_field[1], 1);
+
+	m_field[5] = new TileC("../Assets/grid/120.png", "120");
+	m_field[5]->getTransform()->position = m_getTile(7, 7)->getTransform()->position + offset;
+	addChild(m_field[5], 1);
+
+	m_field[6] = new TileC("../Assets/grid/120.png", "120");
+	m_field[6]->getTransform()->position = m_getTile(13, 7)->getTransform()->position + offset;
+	addChild(m_field[6], 1);
+
+	m_field[7] = new TileC("../Assets/grid/120.png", "120");
+	m_field[7]->getTransform()->position = m_getTile(18, 13)->getTransform()->position + offset;
+	addChild(m_field[7], 1);
+
+	m_field[8] = new TileC("../Assets/grid/120.png", "120");
+	m_field[8]->getTransform()->position = m_getTile(18, 10)->getTransform()->position + offset;
+	addChild(m_field[8], 1);
+
+	m_field[9] = new TileC("../Assets/grid/120.png", "120");
+	m_field[9]->getTransform()->position = m_getTile(1, 10)->getTransform()->position + offset;
+	addChild(m_field[9], 1);
+
+	m_field[10] = new TileC("../Assets/grid/120.png", "120");
+	m_field[10]->getTransform()->position = m_getTile(18, 1)->getTransform()->position + offset;
+	addChild(m_field[10], 1);
+
+	m_field[11] = new TileC("../Assets/grid/120.png", "120");
+	m_field[11]->getTransform()->position = m_getTile(18, 4)->getTransform()->position + offset;
+	addChild(m_field[11], 1);
 	//Enemy ETank
 	m_pEnemyTank[0] = new ETank();
 	m_pEnemyTank[0]->getTransform()->position = m_getTile(1, 1)->getTransform()->position + offset;
 	m_pEnemyTank[0]->moveRight = true;
-	addChild(m_pEnemyTank[0]);
+	addChild(m_pEnemyTank[0],2);
 
 	m_pEnemyTank[1] = new ETank();
 	m_pEnemyTank[1]->getTransform()->position = m_getTile(3, 14)->getTransform()->position + offset;
 	m_pEnemyTank[1]->moveRight = true;
-	addChild(m_pEnemyTank[1]);
+	addChild(m_pEnemyTank[1], 2);
 
 	m_pEnemyTank[2] = new ETank();
 	m_pEnemyTank[2]->getTransform()->position = m_getTile(4, 14)->getTransform()->position + offset;
 	m_pEnemyTank[2]->moveRight = false;
-	addChild(m_pEnemyTank[2]);
+	addChild(m_pEnemyTank[2], 2);
 
 	m_pEnemyTank[3] = new ETank();
 	m_pEnemyTank[3]->getTransform()->position = m_getTile(15, 0)->getTransform()->position + offset;
-	addChild(m_pEnemyTank[3]);
+	addChild(m_pEnemyTank[3], 2);
 
 	m_pEnemyTank[4] = new ETank();
 	m_pEnemyTank[4]->getTransform()->position = m_getTile(14, 0)->getTransform()->position + offset;
 	m_pEnemyTank[4]->moveRight = false;
-	addChild(m_pEnemyTank[4]);
+	addChild(m_pEnemyTank[4], 2);
 
 	m_pEnemyTank[5] = new ETank();
 	m_pEnemyTank[5]->getTransform()->position = m_getTile(0, 5)->getTransform()->position + offset;
-	addChild(m_pEnemyTank[5]);
+	addChild(m_pEnemyTank[5], 2);
 
 	m_pEnemyTank[6] = new ETank();
 	m_pEnemyTank[6]->getTransform()->position = m_getTile(0, 7)->getTransform()->position + offset;
 	m_pEnemyTank[6]->moveRight = false;
-	addChild(m_pEnemyTank[6]);
+	addChild(m_pEnemyTank[6], 2);
 
 	m_pEnemyTank[7] = new ETank();
 	m_pEnemyTank[7]->getTransform()->position = m_getTile(19, 6)->getTransform()->position + offset;
 	m_pEnemyTank[7]->setRotation(90.0f);
-	addChild(m_pEnemyTank[7]);
+	addChild(m_pEnemyTank[7], 2);
 
 
 	// Enemy Turret
 	m_pETurret[0] = new eTurret();
 	m_pETurret[0]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[0]);
+	addChild(m_pETurret[0], 3);
 
 	m_pETurret[1] = new eTurret();
 	m_pETurret[1]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[1]);
+	addChild(m_pETurret[1], 3);
 
 	m_pETurret[2] = new eTurret();
 	m_pETurret[2]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[2]);
+	addChild(m_pETurret[2], 3);
 
 	m_pETurret[3] = new eTurret();
 	m_pETurret[3]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[3]);
+	addChild(m_pETurret[3], 3);
 
 	m_pETurret[4] = new eTurret();
 	m_pETurret[4]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[4]);
+	addChild(m_pETurret[4], 3);
 
 	m_pETurret[5] = new eTurret();
 	m_pETurret[5]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[5]);
+	addChild(m_pETurret[5], 3);
 
 	m_pETurret[6] = new eTurret();
 	m_pETurret[6]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[6]);
+	addChild(m_pETurret[6], 3);
 
 	m_pETurret[7] = new eTurret();
 	m_pETurret[7]->getTransform()->position = glm::vec2(400.0f, 300.0f);
-	addChild(m_pETurret[7]);
+	addChild(m_pETurret[7], 3);
 
 	//PlayerTank
 	m_pPlayerTank = new PlayerTank();
-	m_pPlayerTank->getTransform()->position = glm::vec2(100.0f, 300.0f);
+	m_pPlayerTank->getTransform()->position = m_getTile(10,7)->getTransform()->position+offset;
 	m_pPlayerTank->setEnabled(true);
-	addChild(m_pPlayerTank);
+	addChild(m_pPlayerTank,2);
 
 	//Player Turret
 	m_pPlayerTurret = new pTurret();
 	m_pPlayerTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
-	addChild(m_pPlayerTurret);
+	addChild(m_pPlayerTurret, 3);
 
 
 }
@@ -438,19 +539,19 @@ void PlayScene::m_buildGrid()
 
 	auto tileSize = Config::TILE_SIZE;
 	//
-	std::ifstream inFile("../Assets/data/Tiledata.txt");
-	if (inFile.is_open())
-	{
-		char key;
-		int x, y;
-		bool obs, haz;
-		while (!inFile.eof())
-		{
-			inFile >> key >> x >> y >> obs >> haz;
-			m_tiles.emplace(key, new TileC({ x * tileSize,y * tileSize, }, { 0.0f, 0.0f }, obs, haz));
-		}
-	}
-	inFile.close();
+	//std::ifstream inFile("../Assets/data/Tiledata.txt");
+	//if (inFile.is_open())
+	//{
+	//	char key;
+	//	int x, y;
+	//	bool obs, haz;
+	//	while (!inFile.eof())
+	//	{
+	//		inFile >> key >> x >> y >> obs >> haz;
+	//		m_tiles.emplace(key, new TileC({ x * tileSize,y * tileSize, }, { 0.0f, 0.0f }, obs, haz));
+	//	}
+	//}
+	//inFile.close();
 	//
 	//inFile.open("../Assets/data/Level1.txt");
 	//if (inFile.is_open())
@@ -461,10 +562,12 @@ void PlayScene::m_buildGrid()
 		{
 			for (int col = 0; col < Config::COL_NUM; ++col)
 			{
+				auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
+
 				Tile* tile = new Tile();//Create empty tile
 				tile->getTransform()->position = glm::vec2(col * tileSize, row * tileSize);
 				tile->setGridPosition(col, row);
-				addChild(tile);
+				addChild(tile,1);
 				tile->addLabels();
 				tile->setTileCost(tile->getGridPosition().x);
 				tile->setTileStatus(tile->getGridPosition().y);
@@ -472,6 +575,17 @@ void PlayScene::m_buildGrid()
 				m_pGrid.push_back(tile);
 
 			//	//TODO Try to make this like a basic tile, create a new class derived from it
+			
+				//TileC* Map = new TileC("../Assets/grid/field1.png","field1");//Create empty tile
+				//Map->isObstacle;
+				//Map->getTransform()->position = m_getTile(col, row)->getTransform()->position + offset;
+				//Map->setGridPosition(col, row);
+				//Map->setEnabled(true);
+				//addChild(Map, 0);
+				//m_pMap.push_back(Map);
+			
+			
+				
 			//	inFile >> key;
 			//	//m_level[row][col] = m_tiles[key]->Clone();
 			//	m_level[row][col]->getTransform()->position= glm::vec2(col * tileSize, row * tileSize);
@@ -539,7 +653,7 @@ void PlayScene::m_buildGrid()
 
 	}
 
-
+	m_setGridEnabled(true);
 	
 	std::cout << m_pGrid.size() << std::endl;
 }
