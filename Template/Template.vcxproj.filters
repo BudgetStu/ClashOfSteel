@@ -154,7 +154,9 @@
       <Filter>TilesRelated</Filter>
     </ClCompile>
     <ClCompile Include="..\src\WinScene.cpp" />
-    <ClCompile Include="..\src\LoseScene.cpp" />
+    <ClCompile Include="..\src\LoseScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">

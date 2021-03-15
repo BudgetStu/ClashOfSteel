@@ -18,7 +18,8 @@ PlayerTank::PlayerTank()
 	getRigidBody()->acceleration = glm::vec2(0.0f, 0.0f);
 	getRigidBody()->isColliding = false;
 	setType(PLAYER_TANK);
-	setMaxSpeed(2.0f);
+	setMaxWSpeed(1.0f);
+	setMaxSSpeed(0.5f);
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
 	setAccelerationRate(00.0f);
@@ -39,7 +40,7 @@ void PlayerTank::draw()
 void PlayerTank::update()
 {
 	m_Move();
-
+	m_checkBounds();
 }
 
 void PlayerTank::handleEvents()
@@ -52,9 +53,14 @@ void PlayerTank::clean()
 {
 }
 
-void PlayerTank::setMaxSpeed(float speed)
+void PlayerTank::setMaxWSpeed(float speed)
 {
-	m_maxSpeed = speed;
+	m_maxWSpeed = speed;
+}
+
+void PlayerTank::setMaxSSpeed(float speed)
+{
+	m_maxSSpeed = speed;
 }
 
 glm::vec2 PlayerTank::getOrientation() const
@@ -106,53 +112,84 @@ void PlayerTank::setAccelerationRate(float rate)
 	m_accelerationRate = rate;
 }
 
+void PlayerTank::wCollision()
+{
+	setMaxWSpeed(0);
+}
+
 void PlayerTank::m_Move()
 {
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 	EventManager::Instance().update();
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
-	{
-		setAccelerationRate(3.0f);
-		getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
+		{
+			setAccelerationRate(2.0f);
+			getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
 
-		// using the formula pf = pi + vi*t + 0.5ai*t^2
-		getRigidBody()->velocity += getOrientation() * (deltaTime)+
-		0.5f * getRigidBody()->acceleration * (deltaTime);
+			// using the formula pf = pi + vi*t + 0.5ai*t^2
+			getRigidBody()->velocity += getOrientation()/* * (deltaTime)+
+			0.5f * getRigidBody()->acceleration * (deltaTime)*/;
 
-		getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+			getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxWSpeed);
 
-		getTransform()->position += getRigidBody()->velocity;
-			
-	}
-	else
-	{
-		getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
-	}
-		
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
-	{
-		setAccelerationRate(-50.0f);
-		getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+			Util::clamp(getRigidBody()->velocity, m_maxWSpeed);
 
-		// using the formula pf = pi + vi*t + 0.5ai*t^2
-		getRigidBody()->velocity += getOrientation() * (deltaTime)+
-			0.5f * -getRigidBody()->acceleration * (deltaTime);
+			getTransform()->position += getRigidBody()->velocity;
 
-		getRigidBody()->velocity = -Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+		}
+		else
+		{
+			getRigidBody()->velocity = glm::vec2(0.0f, 0.0f);
+		}
 
-		getTransform()->position += getRigidBody()->velocity;
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_S))
+		{
+			setAccelerationRate(-25.0f);
+			setMaxWSpeed(1.0f);
+			getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
 
-	}
+			// using the formula pf = pi + vi*t + 0.5ai*t^2
+			getRigidBody()->velocity += getOrientation()/* * (deltaTime)+
+			0.5f * getRigidBody()->acceleration * (deltaTime)*/;
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
-	{
-		setTurnRate(1.0f);
-		setRotation(getRotation()+ getTurnRate());
-	}
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
-	{
-		setTurnRate(-1.0f);
-		setRotation(getRotation() + getTurnRate());
-	}
+			getRigidBody()->velocity = -Util::clamp(getRigidBody()->velocity, m_maxSSpeed);
+
+			getTransform()->position += getRigidBody()->velocity;
+
+		}
+
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_D))
+		{
+			setTurnRate(1.0f);
+			setRotation(getRotation() + getTurnRate());
+		}
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_A))
+		{
+			setTurnRate(-1.0f);
+			setRotation(getRotation() + getTurnRate());
+		}
 }
+
+void PlayerTank::m_checkBounds()
+	{
+		if (getTransform()->position.x > Config::SCREEN_WIDTH)
+		{
+			getTransform()->position = glm::vec2(799.0f, getTransform()->position.y);
+		}
+	
+		if (getTransform()->position.x < 0)
+		{
+			getTransform()->position = glm::vec2(1.0f, getTransform()->position.y);
+		}
+	
+		if (getTransform()->position.y > Config::SCREEN_HEIGHT)
+		{
+			getTransform()->position = glm::vec2(getTransform()->position.x, 599.0f);
+		}
+	
+		if (getTransform()->position.y < 0)
+		{
+			getTransform()->position = glm::vec2(getTransform()->position.x, 1.0f);
+		}
+	}

@@ -9,20 +9,22 @@
 #include "NavigationObject.h"
 #include "Tile.h"
 
-class TileC : public NavigationObject
+class TileC : public Tile
 {
 public:
-	TileC(glm::vec2 p, glm::vec2 d, bool o, bool h)
-		: m_obstacle(o), m_hazard(h) {}
-	TileC* Clone() { return new TileC(this->getTransform()->position, this->getTransform()->scale, m_obstacle, m_hazard); }
+	TileC(std::string texture, std::string key);
 	bool IsObstacle() { return m_obstacle; }
-	void SetXY(float x, float y) { this->getTransform()->position.x = x; this->getTransform()->position.y = y; }
 
-	void draw() override {};
+	void draw() override ;
 	void update() override {};
 	void clean() override {};
+
+	//void setString(std::string texture);
+
+	
 private:
-	bool m_obstacle, m_hazard;
+	std::string m_Texture, m_key;
+	bool m_obstacle=false;
 };
 
 class TiledLevel :public NavigationObject

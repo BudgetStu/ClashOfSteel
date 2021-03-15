@@ -134,12 +134,12 @@ void pTurret::m_Move()
 
 	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_RIGHT))
 	{
-		setTurnRate(1.0f);
+		setTurnRate(1.5f);
 		setRotation(getRotation() + getTurnRate());
 	}
 	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_LEFT))
 	{
-		setTurnRate(-1.0f);
+		setTurnRate(-1.5f);
 		setRotation(getRotation() + getTurnRate());
 	}*/
 
