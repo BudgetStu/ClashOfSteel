@@ -2,6 +2,7 @@
 #include "Util.h"
 #include <algorithm>
 
+#include "NavigationObject.h"
 
 
 int CollisionManager::squaredDistance(const glm::vec2 p1, const glm::vec2 p2)
@@ -403,6 +404,29 @@ bool CollisionManager::pointRectCheck(const glm::vec2 point, const glm::vec2 rec
 	return false;
 }
 
+bool CollisionManager::LOSCheck(glm::vec2 start_point, glm::vec2 end_point, const std::vector<NavigationObject*>& objects,
+	NavigationObject* target)
+{
+	for (auto object : objects)
+	{
+		auto ObjectOffset = glm::vec2(object->getWidth() * 0.5f, object->getHeight() * 0.5f);
+
+		//Check if object colides with an object on the list
+		if (lineRectCheck(start_point, end_point, object->getTransform()->position - ObjectOffset, object->getWidth(), object->getHeight()))
+		{
+			//If the collision is with the targer object the LOS is true
+			if (object->getType() == target->getType())
+			{
+				return true;
+			}
+			//If the lines collide with an object in the list that is not the target then LOS is false
+			return false;
+		}
+	}
+
+	// if a line does not collide with an object that is the target then LOS is false
+	return false;
+}
 
 CollisionManager::CollisionManager()
 = default;

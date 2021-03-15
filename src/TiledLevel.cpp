@@ -11,6 +11,7 @@ TileC::TileC(std::string texture, std::string key)
 	auto size = TextureManager::Instance()->getTextureSize(key);
 	setWidth(size.x);
 	setHeight(size.y);
+	setType(STAGE);
 }
 
 void TileC::draw()

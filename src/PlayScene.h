@@ -32,7 +32,7 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 
-	float spawnCd = 0;
+	float GameTimer = 0;
 	float GunCD = 0;
 	float StageEndCD = 0;
 	int EnemiesDestroyed = 0;
@@ -50,11 +50,11 @@ private:
 	//Tiles
 	void m_setGridEnabled(bool state) const;
 	std::vector<Tile*> m_pGrid;
-	std::vector<TileC*>m_pMap;
+	std::vector<NavigationObject*>m_pMap;
 	void m_buildGrid();
 	//Map
-	std::map<char, TileC* > m_tiles;
-	std::vector<std::vector<TileC*>>m_level;
+	//std::map<char, TileC* > m_tiles;
+	//std::vector<std::vector<TileC*>>m_level;
 	//std::vector<TileC*> m_obstacles;
 	TileC* Bg;
 	TileC* m_field[12];
@@ -76,6 +76,8 @@ private:
 	//Bullets
 	std::vector<Bullet*>m_pBullet;
 	std::vector<Bullet*>m_pEnemyBullet;
+
+	void m_CheckShipLOS(NavigationObject* object);
 	//Bullet* m_bullet;
 	//
 	//std::map<char, TileC* > m_tiles;

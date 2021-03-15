@@ -44,7 +44,7 @@ void PlayScene::update()
 	m_move();
 
 	//Timer for Cooldowns
-	spawnCd += 1 * deltaTime;
+	GameTimer += 1 * deltaTime;
 	GunCD += 1 * deltaTime;
 	for (auto i = 0; i < 8; i++)
 	{
@@ -55,11 +55,12 @@ void PlayScene::update()
 	{
 		StageEndCD += 1 * deltaTime;
 	}
-	std::cout << spawnCd << std::endl;
+	std::cout << GameTimer << std::endl;
 
 	//Set Enemy turret destination
 	for (int i = 0; i < 8; i++)
 	{
+		//TODO Probably Needs to add an offset
 		m_pETurret[i]->setDestination(m_pPlayerTurret->getTransform()->position);
 	}
 
@@ -80,10 +81,7 @@ void PlayScene::update()
 			m_pBullet[i]->getTransform()->position.y >= 600.0f ||
 			m_pBullet[i]->getTransform()->position.y <= 0)
 		{
-			//delete m_pBullet[i];
 			m_pBullet[i]->setEnabled(false);
-			//m_pBullet.erase(m_pBullet.begin() + i);
-			//m_pBullet.shrink_to_fit();
 			std::cout << "BOOOOOOM" << std::endl;
 			break;
 		}
@@ -250,33 +248,44 @@ void PlayScene::handleEvents()
 	}
 
 	//Enemy BulletShooting
-	//if (m_pPlayerTank->isEnabled() == true)
-	//{
-	//	for (int i = 0; i < 8; i++)
-	//	{
-	//		if((m_pEnemyTank[i]->getTransform()->position.x>0.0f) && (m_pEnemyTank[i]->getTransform()->position.x <800.0f))
-	//		{
-	//			if ((m_pEnemyTank[i]->getTransform()->position.y > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.y < 600.0f))
-	//			{
-	//				if (m_pEnemyTank[i]->isEnabled() == true)
-	//				{
-	//					if (m_pEnemyTank[i]->cd > 4.0f)
-	//					{
-	//						//TODO Add a line of sight so that tanks dont try to shoot pass objects
-	//						if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
-	//						{
-	//							m_pEnemyTank[i]->cd = 0;
-	//							m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
-	//							addChild(m_pEnemyBullet[TotalEBullets]);
-	//							TotalEBullets++;
-	//							//std::cout << "Tank " << i << " Shoot!" << std::endl;
-	//						}
-	//					}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
+	if (m_pPlayerTank->isEnabled() == true)
+	{
+		for (int i = 0; i < 8; i++)
+		{
+			if((m_pEnemyTank[i]->getTransform()->position.x>0.0f) && (m_pEnemyTank[i]->getTransform()->position.x <800.0f))
+			{
+				if ((m_pEnemyTank[i]->getTransform()->position.y > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.y < 600.0f))
+				{
+					if (m_pEnemyTank[i]->isEnabled() == true)
+					{
+						//Checking LOS
+						m_CheckShipLOS(m_pETurret[i]);
+						if (m_pEnemyTank[i]->cd > 4.0f)
+						{
+							//LOS fire
+							if(m_pETurret[i]->hasLOS())
+							{
+								m_pEnemyTank[i]->cd = 0;
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+								addChild(m_pEnemyBullet[TotalEBullets]);
+								TotalEBullets++;
+								//std::cout << "Tank " << i << " Shoot!" << std::endl;
+							}
+							//Radius (Probably useless)
+							if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
+							{
+								m_pEnemyTank[i]->cd = 0;
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+								addChild(m_pEnemyBullet[TotalEBullets]);
+								TotalEBullets++;
+								//std::cout << "Tank " << i << " Shoot!" << std::endl;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
 	
 	//Win Condition
 	//if(m_pPlayerTank->isEnabled()==false)
@@ -331,8 +340,7 @@ void PlayScene::start()
 	//Tiles
 	m_buildGrid();
 
-	//Background
-	
+	//Background TODO Add a good one
 	//Bg = new TileC("../Assets/grid/Bg.png", "Bg");
 	//Bg->getTransform()->position.x = 800.0f/2;		
 	//Bg->getTransform()->position.y = 600.0f/2;
@@ -343,50 +351,62 @@ void PlayScene::start()
 	m_field[0] = new TileC("../Assets/grid/wide.png","w");
 	m_field[0]->getTransform()->position = m_getTile(2, 1)->getTransform()->position+offsetTiles2;
 	addChild(m_field[0],1);
+	m_pMap.push_back(m_field[0]);
 
 	m_field[2] = new TileC("../Assets/grid/wide.png", "w");
 	m_field[2]->getTransform()->position = m_getTile(10, 1)->getTransform()->position + offsetTiles2;
 	addChild(m_field[2], 1);
+	m_pMap.push_back(m_field[2]);
 
 	m_field[3] = new TileC("../Assets/grid/wide.png", "w");
 	m_field[3]->getTransform()->position = m_getTile(2, 13)->getTransform()->position + offsetTiles2;
 	addChild(m_field[3], 1);
+	m_pMap.push_back(m_field[3]);
 
 	m_field[4] = new TileC("../Assets/grid/wide.png", "w");
 	m_field[4]->getTransform()->position = m_getTile(10, 13)->getTransform()->position + offsetTiles2;
 	addChild(m_field[4], 1);
+	m_pMap.push_back(m_field[4]);
 
 	m_field[1] = new TileC("../Assets/grid/120.png", "120");
 	m_field[1]->getTransform()->position = m_getTile(1, 4)->getTransform()->position+offsetTiles1;
 	addChild(m_field[1], 1);
+	m_pMap.push_back(m_field[1]);
 
 	m_field[5] = new TileC("../Assets/grid/120.png", "120");
 	m_field[5]->getTransform()->position = m_getTile(7, 7)->getTransform()->position + offsetTiles1;
 	addChild(m_field[5], 1);
+	m_pMap.push_back(m_field[5]);
 
 	m_field[6] = new TileC("../Assets/grid/120.png", "120");
 	m_field[6]->getTransform()->position = m_getTile(13, 7)->getTransform()->position + offsetTiles1;
 	addChild(m_field[6], 1);
+	m_pMap.push_back(m_field[6]);
 
 	m_field[7] = new TileC("../Assets/grid/120.png", "120");
 	m_field[7]->getTransform()->position = m_getTile(18, 13)->getTransform()->position + offsetTiles1;
 	addChild(m_field[7], 1);
+	m_pMap.push_back(m_field[7]);
 
 	m_field[8] = new TileC("../Assets/grid/120.png", "120");
 	m_field[8]->getTransform()->position = m_getTile(18, 10)->getTransform()->position + offsetTiles1;
 	addChild(m_field[8], 1);
+	m_pMap.push_back(m_field[8]);
 
 	m_field[9] = new TileC("../Assets/grid/120.png", "120");
 	m_field[9]->getTransform()->position = m_getTile(1, 10)->getTransform()->position + offsetTiles1;
 	addChild(m_field[9], 1);
+	m_pMap.push_back(m_field[9]);
 
 	m_field[10] = new TileC("../Assets/grid/120.png", "120");
 	m_field[10]->getTransform()->position = m_getTile(18, 1)->getTransform()->position + offsetTiles1;
 	addChild(m_field[10], 1);
+	m_pMap.push_back(m_field[10]);
 
 	m_field[11] = new TileC("../Assets/grid/120.png", "120");
 	m_field[11]->getTransform()->position = m_getTile(18, 4)->getTransform()->position + offsetTiles1;
 	addChild(m_field[11], 1);
+	m_pMap.push_back(m_field[11]);
 	
 	//Enemy ETank //
 	m_pEnemyTank[0] = new ETank();
@@ -461,6 +481,8 @@ void PlayScene::start()
 	m_pPlayerTank->getTransform()->position = m_getTile(10,7)->getTransform()->position+offsetTiles1;
 	m_pPlayerTank->setEnabled(true);
 	addChild(m_pPlayerTank,2);
+	m_pMap.push_back(m_pPlayerTank);
+	
 
 	//Player Turret
 	m_pPlayerTurret = new pTurret();
@@ -681,7 +703,7 @@ void PlayScene::m_buildGrid()
 
 	}
 
-	m_setGridEnabled(true);
+	m_setGridEnabled(true);//TODO delete to set Tile info to false
 	
 	std::cout << m_pGrid.size() << std::endl;
 }
@@ -714,12 +736,12 @@ Tile* PlayScene::m_getTile(glm::vec2 grid_position) const
 void PlayScene::m_move()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
-
+	//TODO Enable the seek function after swarming
 	//Tank 0
 
 	if (m_pEnemyTank[0]->p0 == false && m_pEnemyTank[0]->p1 == false)
 	{
-		if (spawnCd >= 1)
+		if (GameTimer >= 1)
 			m_pEnemyTank[0]->move = true;
 		m_pEnemyTank[0]->setDestination(m_getTile(14, 11)->getTransform()->position + offset);
 		if (m_pEnemyTank[0]->getTransform()->position == m_getTile(14, 11)->getTransform()->position + offset)
@@ -731,7 +753,7 @@ void PlayScene::m_move()
 	else if (m_pEnemyTank[0]->p0 == true)
 	{
 		m_pEnemyTank[0]->move = false;
-		if (spawnCd >= 14)
+		if (GameTimer >= 14)
 		{
 			m_pEnemyTank[0]->move = true;
 			m_pEnemyTank[0]->setDestination(m_getTile(4, 11)->getTransform()->position + offset);
@@ -828,11 +850,12 @@ void PlayScene::m_move()
 	//{				 
 	//	m_pEnemyTank[2]->setDestination(m_pPlayerTank->getTransform()->position);
 	//}
+	
 	//Tank 3 //
 
 	if (m_pEnemyTank[3]->p0 == false && m_pEnemyTank[3]->p1 == false)
 	{
-		if (spawnCd >= 2)
+		if (GameTimer >= 2)
 			m_pEnemyTank[3]->move = true;
 		m_pEnemyTank[3]->setDestination(m_getTile(3, 7)->getTransform()->position + offset);
 		if (m_pEnemyTank[3]->getTransform()->position == m_getTile(3, 7)->getTransform()->position + offset)
@@ -844,7 +867,7 @@ void PlayScene::m_move()
 	else if (m_pEnemyTank[3]->p0 == true)
 	{
 		m_pEnemyTank[3]->move = false;
-		if (spawnCd >= 15)
+		if (GameTimer >= 15)
 		{
 			m_pEnemyTank[3]->move = true;
 			m_pEnemyTank[3]->setDestination(m_getTile(3, 4)->getTransform()->position + offset);
@@ -860,11 +883,12 @@ void PlayScene::m_move()
 	//{				 
 	//	m_pEnemyTank[3]->setDestination(m_pPlayerTank->getTransform()->position);
 	//}
+	
 	//Tank 4
 
 	if (m_pEnemyTank[4]->p0 == false && m_pEnemyTank[4]->p1 == false)
 	{
-		if (spawnCd >= 4)
+		if (GameTimer >= 4)
 			m_pEnemyTank[4]->move = true;
 		m_pEnemyTank[4]->setDestination(m_getTile(15, 3)->getTransform()->position + offset);
 		if (m_pEnemyTank[4]->getTransform()->position == m_getTile(15, 3)->getTransform()->position + offset)
@@ -876,7 +900,7 @@ void PlayScene::m_move()
 	else if (m_pEnemyTank[4]->p0 == true)
 	{
 		m_pEnemyTank[4]->move = false;
-		if (spawnCd >= 10)
+		if (GameTimer >= 10)
 		{
 			m_pEnemyTank[4]->move = true;
 			m_pEnemyTank[4]->setDestination(m_getTile(10, 3)->getTransform()->position + offset);
@@ -892,11 +916,12 @@ void PlayScene::m_move()
 	//{				 
 	//	m_pEnemyTank[4]->setDestination(m_pPlayerTank->getTransform()->position);
 	//}
+	
 	//Tank 5
 
 	if (m_pEnemyTank[5]->p0 == false && m_pEnemyTank[5]->p1 == false)
 	{
-		if (spawnCd >= 1)
+		if (GameTimer >= 1)
 			m_pEnemyTank[5]->move = true;
 		m_pEnemyTank[5]->setDestination(m_getTile(15, 8)->getTransform()->position + offset);
 		if (m_pEnemyTank[5]->getTransform()->position == m_getTile(15, 8)->getTransform()->position + offset)
@@ -917,7 +942,7 @@ void PlayScene::m_move()
 	else if (m_pEnemyTank[5]->p1 == true)
 	{
 		m_pEnemyTank[5]->move = false;
-		if (spawnCd >= 18)
+		if (GameTimer >= 18)
 		{
 			m_pEnemyTank[5]->move = true;
 			m_pEnemyTank[5]->setDestination(m_getTile(10, 9)->getTransform()->position + offset);
@@ -932,11 +957,12 @@ void PlayScene::m_move()
 	//{				 
 	//	m_pEnemyTank[5]->setDestination(m_pPlayerTank->getTransform()->position);
 	//}
+	
 	//Tank 6
 
 	if (m_pEnemyTank[6]->p0 == false && m_pEnemyTank[6]->p1 == false)
 	{
-		if (spawnCd >= 16)
+		if (GameTimer >= 16)
 			m_pEnemyTank[6]->move = true;
 		m_pEnemyTank[6]->setDestination(m_getTile(6, 3)->getTransform()->position + offset);
 		if (m_pEnemyTank[6]->getTransform()->position == m_getTile(6, 3)->getTransform()->position + offset)
@@ -955,7 +981,7 @@ void PlayScene::m_move()
 
 	if (m_pEnemyTank[7]->p0 == false && m_pEnemyTank[7]->p1 == false)
 	{
-		if (spawnCd >= 1)
+		if (GameTimer >= 1)
 			m_pEnemyTank[7]->move = true;
 		m_pEnemyTank[7]->setDestination(m_getTile(15, 6)->getTransform()->position + offset);
 		if (m_pEnemyTank[7]->getTransform()->position == m_getTile(15, 6)->getTransform()->position + offset)
@@ -976,7 +1002,7 @@ void PlayScene::m_move()
 	else if (m_pEnemyTank[7]->p1 == true)
 	{
 		m_pEnemyTank[7]->move = false;
-		if (spawnCd >= 18)
+		if (GameTimer >= 18)
 		{
 			m_pEnemyTank[7]->move = true;
 			m_pEnemyTank[7]->setDestination(m_getTile(14, 5)->getTransform()->position + offset);
@@ -991,4 +1017,32 @@ void PlayScene::m_move()
 	//{
 	//	m_pEnemyTank[7]->setDestination(m_pPlayerTank->getTransform()->position);
 	//}
+	
+}
+
+void PlayScene::m_CheckShipLOS(NavigationObject* object)
+{
+	// if ship to target distance is less than or equal to LOS distance
+	auto ShipToTargetDistance = Util::distance(object->getTransform()->position, m_pPlayerTank->getTransform()->position);
+	if (ShipToTargetDistance <= object->getLOSDistance())
+	{
+		std::vector<NavigationObject*> contactList;
+		for (auto obj : m_pMap)
+		{
+			//Check if object is farther than the target
+			auto ShipToObjectDistance = Util::distance(object->getTransform()->position, obj->getTransform()->position);
+			if (ShipToObjectDistance <= ShipToTargetDistance)
+			{
+				if ((obj->getType() != object->getType()) && (object->getType() != m_pPlayerTank->getType()))
+				{
+					contactList.push_back(obj);
+				}
+			}
+		}
+		contactList.push_back(m_pPlayerTank); //add the target at the end of the list
+		auto hasLOS = CollisionManager::LOSCheck(object->getTransform()->position,
+			object->getTransform()->position + object->getOrientation() * object->getLOSDistance(),
+			contactList, m_pPlayerTank);
+		object->setHasLOS(hasLOS);
+	}
 }

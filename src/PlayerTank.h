@@ -4,8 +4,9 @@
 
 #include "DisplayObject.h"
 #include "TextureManager.h"
+#include "NavigationObject.h"
 
-class PlayerTank: public DisplayObject
+class PlayerTank: public NavigationObject
 {
 public:
 	PlayerTank();

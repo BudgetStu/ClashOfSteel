@@ -21,6 +21,10 @@ eTurret::eTurret()
 	setRotation(0.0f);
 	setAccelerationRate(0.0f);
 	setTurnRate(2.0f);
+
+	setLOSDistance(400.0f);// 5 pixel per frame * 80 feet
+	m_LOSColor = glm::vec4(1, 0, 0, 1);//red
+	
 }
 
 eTurret::~eTurret()
@@ -31,7 +35,11 @@ void eTurret::draw()
 	TextureManager::Instance()->draw("turret", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
-	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f) );
+	/*Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f) );*/
+
+	//draw LOS
+	Util::DrawLine(getTransform()->position, getTransform()->position + getOrientation() * getLOSDistance(), m_LOSColor);
+
 }
 
 void eTurret::update()
@@ -53,10 +61,10 @@ void eTurret::setMaxSpeed(const float speed)
 	m_maxSpeed = speed;
 }
 
-glm::vec2 eTurret::getOrientation() const
-{
-	return m_orientation;
-}
+//glm::vec2 eTurret::getOrientation() const
+//{
+//	return m_orientation;
+//}
 
 float eTurret::getTurnRate() const
 {
@@ -78,10 +86,31 @@ void eTurret::setAccelerationRate(const float rate)
 	m_accelerationRate = rate;
 }
 
-void eTurret::setOrientation(const glm::vec2 orientation)
-{
-	m_orientation = orientation;
-}
+//float eTurret::getLOSDistance() const
+//{
+//	return m_LOSDistance;
+//}
+//
+//bool eTurret::hasLOS() const
+//{
+//	return m_hasLOS;
+//}
+//
+//void eTurret::setLOSDistance(float distance)
+//{
+//	m_LOSDistance = distance;
+//}
+//
+//void eTurret::setHasLOS(bool state)
+//{
+//	m_hasLOS = state;
+//	m_LOSColor = (m_hasLOS) ? glm::vec4(0, 1, 0, 1) : glm::vec4(1, 0, 0, 1);
+//}
+
+//void eTurret::setOrientation(const glm::vec2 orientation)
+//{
+//	m_orientation = orientation;
+//}
 
 void eTurret::setRotation(const float angle)
 {
