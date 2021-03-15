@@ -32,6 +32,7 @@ public:
 
 	// mouse events
 	bool getMouseButton(int button_number) const;
+	void serMousePosition(glm::vec2 mousePosition);
 	glm::vec2 getMousePosition() const;
 	int getMouseWheel() const;
 

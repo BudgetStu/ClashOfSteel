@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "EventManager.h"
 
+
 // required for IMGUI
 #include "imgui.h"
 #include "imgui_sdl.h"
@@ -37,6 +38,9 @@ void PlayScene::update()
 	auto deltaTime = TheGame::Instance()->getDeltaTime();
 	updateDisplayList();
 
+	int mx, my;
+	SDL_GetMouseState(&mx, &my);
+
 	//Enemy movements
 	m_move();
 
@@ -67,6 +71,9 @@ void PlayScene::update()
 
 	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
+
+	//Set Player turret destiantion
+	m_pPlayerTurret->setDestination(glm::vec2(mx,my));
 
 	//Player Bullet Off Screen
 	for (int i = 0; i < m_pBullet.size(); i++)
@@ -172,7 +179,9 @@ void PlayScene::handleEvents()
 	}
 
 	//Player BulletShooting
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1)
+
+	// (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1) shoot with spacebar
+	if (EventManager::Instance().getMouseButton(0) && GunCD > 1)
 	{
 		if (m_pPlayerTank->isEnabled() == true)
 		{
