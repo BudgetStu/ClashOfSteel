@@ -29,7 +29,7 @@ public:
 	void setAccelerationRate(float rate);
 
 	void wCollision();
-	void m_Move();
+
 	
 	glm::vec2 m_orientation;
 	float m_rotationAngle;
@@ -44,8 +44,8 @@ private:
 	float m_turnRate;
 	float m_accelerationRate;
 
-
-	
+	void m_Move();
+	void m_checkBounds();
 };
 
 #endif

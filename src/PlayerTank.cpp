@@ -40,7 +40,7 @@ void PlayerTank::draw()
 void PlayerTank::update()
 {
 	m_Move();
-
+	m_checkBounds();
 }
 
 void PlayerTank::handleEvents()
@@ -170,3 +170,26 @@ void PlayerTank::m_Move()
 			setRotation(getRotation() + getTurnRate());
 		}
 }
+
+void PlayerTank::m_checkBounds()
+	{
+		if (getTransform()->position.x > Config::SCREEN_WIDTH)
+		{
+			getTransform()->position = glm::vec2(799.0f, getTransform()->position.y);
+		}
+	
+		if (getTransform()->position.x < 0)
+		{
+			getTransform()->position = glm::vec2(1.0f, getTransform()->position.y);
+		}
+	
+		if (getTransform()->position.y > Config::SCREEN_HEIGHT)
+		{
+			getTransform()->position = glm::vec2(getTransform()->position.x, 599.0f);
+		}
+	
+		if (getTransform()->position.y < 0)
+		{
+			getTransform()->position = glm::vec2(getTransform()->position.x, 1.0f);
+		}
+	}
