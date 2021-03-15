@@ -32,6 +32,7 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 
+	float spawnCd = 0;
 	float GunCD = 0;
 	float StageEndCD = 0;
 	int EnemiesDestroyed = 0;
