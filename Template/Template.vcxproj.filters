@@ -153,8 +153,12 @@
     <ClCompile Include="..\src\TiledLevel.cpp">
       <Filter>TilesRelated</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\WinScene.cpp" />
-    <ClCompile Include="..\src\LoseScene.cpp" />
+    <ClCompile Include="..\src\WinScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\LoseScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
