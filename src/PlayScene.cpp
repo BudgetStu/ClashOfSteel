@@ -2,6 +2,7 @@
 #include "Game.h"
 #include "EventManager.h"
 
+
 // required for IMGUI
 #include "imgui.h"
 #include "imgui_sdl.h"
@@ -72,6 +73,11 @@ void PlayScene::update()
 
 	//Player Turret Bind
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
+
+	//Set Player turret destiantion
+	int mx, my;
+	SDL_GetMouseState(&mx, &my);
+	m_pPlayerTurret->setDestination(glm::vec2(mx,my));
 
 	//Player Bullet Off Screen
 	for (int i = 0; i < m_pBullet.size(); i++)
@@ -236,7 +242,9 @@ void PlayScene::handleEvents()
 	}
 
 	//Player BulletShooting
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1)
+
+	// (EventManager::Instance().isKeyDown(SDL_SCANCODE_SPACE) && GunCD > 1) shoot with spacebar
+	if (EventManager::Instance().getMouseButton(0) && GunCD > 1)
 	{
 		if (m_pPlayerTank->isEnabled() == true)
 		{
@@ -288,22 +296,22 @@ void PlayScene::handleEvents()
 	}
 	
 	//Win Condition
-	//if(m_pPlayerTank->isEnabled()==false)
-	//{
-	//	if(StageEndCD>1)
-	//	{
-	//		TheGame::Instance()->changeSceneState(LOSE_SCENE);
-	//		//SoundManager::Instance().playSound("Goal", 0, -1);
-	//	}
-	//}
-	//else if(EnemiesDestroyed==8)
-	//{
-	//	if (StageEndCD > 1)
-	//	{
-	//		TheGame::Instance()->changeSceneState(WIN_SCENE);
-	//		//SoundManager::Instance().playSound("Goal", 0, -1);
-	//	}
-	//}
+	if(m_pPlayerTank->isEnabled()==false)
+	{
+		if(StageEndCD>1)
+		{
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
+			//SoundManager::Instance().playSound("Goal", 0, -1);
+		}
+	}
+	else if(EnemiesDestroyed==8)
+	{
+		if (StageEndCD > 1)
+		{
+			TheGame::Instance()->changeSceneState(WIN_SCENE);
+			//SoundManager::Instance().playSound("Goal", 0, -1);
+		}
+	}
 }
 
 void PlayScene::start()
@@ -1013,10 +1021,10 @@ void PlayScene::m_move()
 			}
 		}
 	}
-	//if(m_pEnemyTank[7]->seek == true)
-	//{
-	//	m_pEnemyTank[7]->setDestination(m_pPlayerTank->getTransform()->position);
-	//}
+	if(m_pEnemyTank[7]->seek == true)
+	{
+		m_pEnemyTank[7]->setDestination(m_pPlayerTank->getTransform()->position);
+	}
 	
 }
 

@@ -263,8 +263,15 @@ bool EventManager::getMouseButton(const int button_number) const
     return m_mouseButtons[button_number];
 }
 
+void EventManager::serMousePosition(glm::vec2 mousePosition)
+{
+    m_mousePosition = mousePosition;
+}
+
 glm::vec2 EventManager::getMousePosition() const
 {
+
+ 
     return m_mousePosition;
 }
 

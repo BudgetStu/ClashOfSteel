@@ -21,7 +21,7 @@ pTurret::pTurret()
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
 	setAccelerationRate(0.0f);
-	setTurnRate(0.0f);
+	setTurnRate(2.0f);
 }
 
 pTurret::~pTurret()
@@ -118,7 +118,21 @@ void pTurret::m_Move()
 
 	auto turn_sensitivity = 5.0f;
 
-	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_RIGHT))
+	if (abs(target_rotation) > turn_sensitivity)
+	{
+		if (target_rotation > 0.0f)
+		{
+			setRotation(getRotation() + getTurnRate());
+		}
+		else if (target_rotation < 0.0f)
+		{
+			setRotation(getRotation() - getTurnRate());
+		}
+	}
+
+
+
+	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_RIGHT))
 	{
 		setTurnRate(1.5f);
 		setRotation(getRotation() + getTurnRate());
@@ -127,7 +141,15 @@ void pTurret::m_Move()
 	{
 		setTurnRate(-1.5f);
 		setRotation(getRotation() + getTurnRate());
-	}
+	}*/
+
+
+
+
+
+
+
+
 
 
 	//getTransform()->position = m_pEnemyTank->getTransform()->position;

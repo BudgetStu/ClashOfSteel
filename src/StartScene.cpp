@@ -63,20 +63,20 @@ void StartScene::start()
 	m_pStartButton->getTransform()->position = glm::vec2(200.0f, 300.0f);
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
-		{
-			m_pStartButton->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE);
-		});
+	{
+		m_pStartButton->setActive(false);
+		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+	});
 
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void
-		{
+	{
 			m_pStartButton->setAlpha(128);
-		});
+	});
 
 	m_pStartButton->addEventListener(MOUSE_OUT, [&]()->void
-		{
+	{
 			m_pStartButton->setAlpha(255);
-		});
+	});
 	addChild(m_pStartButton);
 
 	// Exit Button
