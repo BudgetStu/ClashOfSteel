@@ -14,7 +14,7 @@ WinScene::~WinScene()
 
 void WinScene::draw()
 {
-	//TextureManager::Instance()->draw("background", 400, 300, 0, 255, true);
+	TextureManager::Instance()->draw("backgroundWin", 400, 300, 0, 255, true);
 
 	drawDisplayList();
 }
@@ -47,12 +47,12 @@ void WinScene::handleEvents()
 
 void WinScene::start()
 {
-	TextureManager::Instance()->load("../Assets/textures/background.png", "background");
+	TextureManager::Instance()->load("../Assets/textures/backgroundWin.png", "backgroundWin");
 
-	const SDL_Color blue = { 0, 0, 255, 255 };
+	/*const SDL_Color blue = { 0, 0, 255, 255 };
 	m_pStartLabel = new Label("WIN SCENE", "Consolas", 80, blue, glm::vec2(400.0f, 40.0f));
 	m_pStartLabel->setParent(this);
-	addChild(m_pStartLabel);
+	addChild(m_pStartLabel);*/
 
 	/*m_pInstructionsLabel = new Label("Press 1 to Play", "Consolas", 40, blue, glm::vec2(400.0f, 120.0f));
 	m_pInstructionsLabel->setParent(this);
@@ -60,7 +60,7 @@ void WinScene::start()
 
 	//TODO Change button sprite to "Restart", Same use
 	// Start Button
-	m_pStartButton = new Button();
+	m_pStartButton = new Button("../Assets/textures/restartButton.png", "restart");
 	m_pStartButton->getTransform()->position = glm::vec2(200.0f, 300.0f);
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
@@ -82,7 +82,7 @@ void WinScene::start()
 
 	//TODO Change button sprite to "Main menu"
 	// Exit Button
-	m_pExitButton = new Button("../Assets/textures/backButton.png", "exit");
+	m_pExitButton = new Button("../Assets/textures/menuButton.png", "menu");
 	m_pExitButton->getTransform()->position = glm::vec2(500.0f, 300.0f);
 
 	m_pExitButton->addEventListener(CLICK, [&]()-> void
