@@ -7,6 +7,8 @@
 WinScene::WinScene()
 {
 	WinScene::start();
+	SoundManager::Instance().load("../Assets/audio/WBgm.mp3", "WBgm", SOUND_MUSIC);
+	SoundManager::Instance().playMusic("WBgm", -1, 0);
 }
 
 WinScene::~WinScene()

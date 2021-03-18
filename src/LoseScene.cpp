@@ -7,6 +7,8 @@
 LoseScene::LoseScene()
 {
 	LoseScene::start();
+	SoundManager::Instance().load("../Assets/audio/LBgm.mp3", "LBgm", SOUND_MUSIC);
+	SoundManager::Instance().playMusic("LBgm", -1, 0);
 }
 
 LoseScene::~LoseScene()

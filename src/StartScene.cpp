@@ -7,6 +7,8 @@
 StartScene::StartScene()
 {
 	StartScene::start();
+	SoundManager::Instance().load("../Assets/audio/TBgm.mp3", "TBgm", SOUND_MUSIC);
+	SoundManager::Instance().playMusic("TBgm", -1, 0);
 }
 
 StartScene::~StartScene()

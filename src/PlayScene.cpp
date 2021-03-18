@@ -50,7 +50,6 @@ void PlayScene::update()
 	{
 		m_pEnemyTank[i]->cd += 1 * deltaTime;
 		m_pEnemyTank[i]->avocd += 1 * deltaTime;
-		//std::cout << "Tank " << i << " Cd: " << m_pEnemyTank[i]->cd << std::endl;
 	}
 	if ((m_pPlayerTank->isEnabled() == false)||(EnemiesDestroyed==8))
 	{
@@ -402,10 +401,10 @@ void PlayScene::start()
 	m_buildGrid();
 
 	//Background TODO Add a good one
-	//Bg = new TileC("../Assets/grid/Bg.png", "Bg");
-	//Bg->getTransform()->position.x = 800.0f/2;		
-	//Bg->getTransform()->position.y = 600.0f/2;
-	//addChild(Bg,0);
+	Bg = new TileC("../Assets/grid/Bg.png", "Bg");
+	Bg->getTransform()->position.x = 800.0f/2;		
+	Bg->getTransform()->position.y = 600.0f/2;
+	addChild(Bg,0);
 
 	//Obstacles
 	
@@ -467,7 +466,7 @@ void PlayScene::start()
 	m_field[11] = new TileC("../Assets/grid/120.png", "120");
 	m_field[11]->getTransform()->position = m_getTile(18, 4)->getTransform()->position + offsetTiles1;
 	addChild(m_field[11], 1);
-	m_pMap.push_back(m_field[11]);
+		m_pMap.push_back(m_field[11]);
 	
 	//Enemy ETank //
 	m_pEnemyTank[0] = new ETank();
@@ -723,7 +722,7 @@ void PlayScene::m_buildGrid()
 
 	}
 
-	m_setGridEnabled(true);//TODO delete to set Tile info to false
+	//m_setGridEnabled(true);//TODO delete to set Tile info to false
 	
 	std::cout << m_pGrid.size() << std::endl;
 }
