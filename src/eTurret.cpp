@@ -22,7 +22,7 @@ eTurret::eTurret()
 	setAccelerationRate(0.0f);
 	setTurnRate(2.0f);
 
-	setLOSDistance(400.0f);// 5 pixel per frame * 80 feet
+	setLOSDistance(250.0f);// 5 pixel per frame * 80 feet
 	m_LOSColor = glm::vec4(1, 0, 0, 1);//red
 	
 }

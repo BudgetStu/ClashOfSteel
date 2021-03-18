@@ -311,6 +311,17 @@ float Util::signedAngle(const glm::vec2 from, const glm::vec2 to)
 	return unsigned_angle * sign;
 }
 
+glm::vec2 Util::getOrientation(const float angle)
+{
+	const auto angle_in_radians = (angle - 90.0f) * Util::Deg2Rad;
+
+	const auto dx = cos(angle_in_radians);
+	const auto dy = sin(angle_in_radians);
+
+	// convert the angle to a normalized vector and store it in Orientation
+	return glm::vec2(dx, dy);
+}
+
 void Util::DrawLine(glm::vec2 start, glm::vec2 end, glm::vec4 colour)
 {
 	int r = floor(colour.r * 255.0f);

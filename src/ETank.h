@@ -2,6 +2,7 @@
 #ifndef __ETANK__
 #define __ETANK__
 #include "NavigationObject.h"
+#include "Line.h"
 
 class ETank final : public NavigationObject
 {
@@ -31,6 +32,7 @@ public:
 	void setAccelerationRate(float rate);
 	void setStopRadius(float stopR);
 
+	void turnLeft();
 	//CheckPoints
 	bool p0 = false;
 	bool p1 = false;
@@ -38,11 +40,22 @@ public:
 	bool p3 = false;
 	bool p4 = false;
 	bool seek = false;
+	bool avoidance = false;
 	float cd = 0;
+	float avocd = 0;
 	
 	float m_stopRadius;
 	bool move = false;
 	int moveCounterShip = 0;
+	int ColObsL = 100;
+	int ColObsR = 100;
+
+	Line m_RWhishker;
+	Line m_LWhishker;
+
+	bool tLeft = false;
+	bool tRight = false;
+
 private:
 
 	glm::vec2 m_destination;
@@ -53,6 +66,9 @@ private:
 	float m_turnRate;
 	float m_accelerationRate;
 
+	//Line m_RWhishker;
+	//Line m_LWhishker;
+	
 	// private function
 	void m_Move();
 private:

@@ -212,6 +212,7 @@
     <ClInclude Include="..\src\CollisionShape.h" />
     <ClInclude Include="..\src\Config.h" />
     <ClInclude Include="..\src\ETank.h" />
+    <ClInclude Include="..\src\Line.h" />
     <ClInclude Include="..\src\LoseScene.h" />
     <ClInclude Include="..\src\NavigationObject.h" />
     <ClInclude Include="..\src\NeighbourTile.h" />

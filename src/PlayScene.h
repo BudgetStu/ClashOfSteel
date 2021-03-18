@@ -53,9 +53,6 @@ private:
 	std::vector<NavigationObject*>m_pMap;
 	void m_buildGrid();
 	//Map
-	//std::map<char, TileC* > m_tiles;
-	//std::vector<std::vector<TileC*>>m_level;
-	//std::vector<TileC*> m_obstacles;
 	TileC* Bg;
 	TileC* m_field[12];
 	//convenience functions
@@ -78,12 +75,6 @@ private:
 	std::vector<Bullet*>m_pEnemyBullet;
 
 	void m_CheckShipLOS(NavigationObject* object);
-	//Bullet* m_bullet;
-	//
-	//std::map<char, TileC* > m_tiles;
-	//std::vector<std::vector<TileC*>>m_level;
-
-	//std::pmr::vector<PlayerTank*> PT;
 
 	// UI Items
 

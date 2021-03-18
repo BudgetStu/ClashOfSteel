@@ -25,8 +25,8 @@ ETank::ETank()
 	setMaxSpeed(1.0f);
 	setOrientation(glm::vec2(0.0f, -1.0f));
 	setRotation(0.0f);
-	setAccelerationRate(1.0f);
-	setTurnRate(5.0f);
+	setAccelerationRate(0.0f);
+	setTurnRate(2.0f);
 	setStopRadius(150.0f);
 }
 
@@ -37,23 +37,17 @@ void ETank::draw()
 {
 	TextureManager::Instance()->draw("etank", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
+	Util::DrawLine(m_RWhishker.Start(), m_RWhishker.End());
+	Util::DrawLine(m_LWhishker.Start(), m_LWhishker.End());
 }
 
 void ETank::update()
 {
-		//if (moveRight == true) {
-		//	getTransform()->position.y += speed;
-		//	if (getTransform()->position.y == 550) {
-		//		moveRight = false;
-		//	}
-		//}
-		//else if (moveRight == false) {
-		//	getTransform()->position.y -= speed;
-		//	if (getTransform()->position.y == 50) {
-		//		moveRight = true;
-		//	}
-		//}
-
+	m_RWhishker.setLine(getTransform()->position,
+		(getTransform()->position + Util::getOrientation(m_rotationAngle + 45) * 40.0f));
+	m_LWhishker.setLine(getTransform()->position,
+		(getTransform()->position + Util::getOrientation(m_rotationAngle + -45) * 40.0f));
+	
 		m_Move();
 
 }
@@ -126,14 +120,73 @@ void ETank::setStopRadius(float stopR)
 	m_stopRadius = stopR;
 }
 
+void ETank::turnLeft()
+{
+	auto deltaTime = TheGame::Instance()->getDeltaTime();
+
+		if (seek == true)
+		{
+			if (Util::distance(this->getTransform()->position, m_destination) < 200.0f)
+			{
+				setMaxSpeed(0.5f);
+			}
+			else if (Util::distance(this->getTransform()->position, m_destination) < 75.0f)
+			{
+				setMaxSpeed(0.0f);
+			}
+			else
+			{
+				setMaxSpeed(1.0f);
+			}
+		}
+		//setTurnRate(5.0f);
+		//setMaxSpeed(1.0f);
+		// direction with magnitude
+		m_targetDirection = m_destination - getTransform()->position;
+
+		// normalized direction
+		m_targetDirection = Util::normalize(m_targetDirection);
+
+		auto target_rotation = Util::signedAngle(getOrientation(), m_targetDirection);
+
+		auto turn_sensitivity = 5.0f;
+
+		setRotation(getRotation() - getTurnRate());
+
+		//getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+
+		//// using the formula pf = pi + vi*t + 0.5ai*t^2
+		//getRigidBody()->velocity += getOrientation() * (deltaTime)+
+		//	0.5f * getRigidBody()->acceleration * (deltaTime);
+
+		getRigidBody()->velocity = m_targetDirection;
+
+		getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);
+
+		getTransform()->position += getRigidBody()->velocity;
+}
 
 void ETank::m_Move()
 {
 		auto deltaTime = TheGame::Instance()->getDeltaTime();
 		if (move == true)
 		{
-			setTurnRate(5.0f);
-			setMaxSpeed(1.0f);
+			if (seek == true)
+			{
+				if (Util::distance(this->getTransform()->position, m_destination) < 200.0f)
+				{
+					setMaxSpeed(0.75f);
+				}
+				else if (Util::distance(this->getTransform()->position, m_destination) < 75.0f)
+				{
+					setMaxSpeed(0.0f);
+				}
+				else if((tLeft==false)&&(tRight==false))
+				{
+					setMaxSpeed(1.0f);
+				}
+			}
+
 			// direction with magnitude
 			m_targetDirection = m_destination - getTransform()->position;
 
@@ -144,24 +197,47 @@ void ETank::m_Move()
 
 			auto turn_sensitivity = 5.0f;
 
-			if (abs(target_rotation) > turn_sensitivity)
+			if ((tLeft == false) && (tRight == false))
 			{
-				if (target_rotation > 0.0f)
+				if (abs(target_rotation) > turn_sensitivity)
 				{
-					setRotation(getRotation() + getTurnRate());
-				}
-				else if (target_rotation < 0.0f)
-				{
-					setRotation(getRotation() - getTurnRate());
+					if (target_rotation > 0.0f)
+					{
+						setRotation(getRotation() + getTurnRate());
+					}
+					else if (target_rotation < 0.0f)
+					{
+						setRotation(getRotation() - getTurnRate());
+					}
 				}
 			}
+			//TODO Heavily Polish This
+			//Turn Left
+			else if((tLeft==true)/*&&(tRight==false)*/)
+			{
+				setMaxSpeed(1.5f);
+				setTurnRate(10.0f);
+				setRotation(getRotation() - getTurnRate());
+			}
+			//TODO Heavily Polish This
+			//Turn Right
+			else if (/*(tLeft == false) && */(tRight == true))
+			{
+				setMaxSpeed(1.5f);
+				setTurnRate(10.0f);
+				setRotation(getRotation() + getTurnRate());
+			}
 
-			//getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
-
-			//// using the formula pf = pi + vi*t + 0.5ai*t^2
-			//getRigidBody()->velocity += getOrientation() * (deltaTime)+
-			//	0.5f * getRigidBody()->acceleration * (deltaTime);
-
+			//TODO Heavily Polish This
+			if (avoidance == true)
+			{
+				setAccelerationRate(10.0f);
+				getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
+				// using the formula pf = pi + vi*t + 0.5ai*t^2
+				getRigidBody()->velocity += getOrientation() * (deltaTime)+
+					0.05f * getRigidBody()->acceleration * (deltaTime);
+			}
+			else
 			getRigidBody()->velocity = m_targetDirection;
 
 			getRigidBody()->velocity = Util::clamp(getRigidBody()->velocity, m_maxSpeed);

@@ -124,7 +124,7 @@ void PlayerTank::m_Move()
 
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_W))
 		{
-			setAccelerationRate(2.0f);
+			//setAccelerationRate(2.0f);
 			getRigidBody()->acceleration = getOrientation() * getAccelerationRate();
 
 			// using the formula pf = pi + vi*t + 0.5ai*t^2

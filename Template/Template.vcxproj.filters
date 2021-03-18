@@ -329,6 +329,9 @@
     <ClInclude Include="..\src\LoseScene.h">
       <Filter>Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="..\src\Line.h">
+      <Filter>Core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\README.md">
