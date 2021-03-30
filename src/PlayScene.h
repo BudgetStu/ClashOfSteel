@@ -46,6 +46,7 @@ private:
 	glm::vec2 m_Position;
 	SDL_Point m_mousePosition;
 
+	bool isRunning = true;
 
 	//Tiles
 	void m_setGridEnabled(bool state) const;
