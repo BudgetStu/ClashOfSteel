@@ -595,6 +595,16 @@ void PlayScene2::start()
 	m_pEnemyTank[13]->setRotation(-90.0f);
 	addChild(m_pEnemyTank[13], 2);
 
+	m_pEnemyTank[14] = new ETank();
+	m_pEnemyTank[14]->getTransform()->position = m_getTile(16, 0)->getTransform()->position + offsetEnemiesUp;
+	m_pEnemyTank[14]->setRotation(-90.0f);
+	addChild(m_pEnemyTank[14], 2);
+
+	m_pEnemyTank[15] = new ETank();
+	m_pEnemyTank[15]->getTransform()->position = m_getTile(15, 0)->getTransform()->position + offsetEnemiesUp;
+	m_pEnemyTank[15]->setRotation(-90.0f);
+	addChild(m_pEnemyTank[15], 2);
+
 	// Enemy Turret
 	/*m_pETurret[0] = new eTurret();
 	m_pETurret[0]->getTransform()->position = glm::vec2(400.0f, 300.0f);
@@ -1344,7 +1354,7 @@ void PlayScene2::m_move()
 	}
 	else if (m_pEnemyTank[11]->p3 == true && m_pEnemyTank[11]->p4 == false)
 	{
-		if(GameTimer>=60)//todo
+		if(GameTimer>=60)
 			m_pEnemyTank[11]->move = true;
 		m_pEnemyTank[11]->setDestination(m_getTile(15, 10)->getTransform()->position + offset);
 		if (m_pEnemyTank[11]->getTransform()->position == m_getTile(15, 10)->getTransform()->position + offset)
@@ -1402,7 +1412,7 @@ void PlayScene2::m_move()
 	}
 	else if (m_pEnemyTank[12]->p3 == true && m_pEnemyTank[12]->p4 == false)
 	{
-		if(GameTimer>=60) //TODO
+		if(GameTimer>=60)
 			m_pEnemyTank[12]->move = true;
 		m_pEnemyTank[12]->setDestination(m_getTile(16, 11)->getTransform()->position + offset);
 		if (m_pEnemyTank[12]->getTransform()->position == m_getTile(16, 11)->getTransform()->position + offset)
@@ -1410,8 +1420,6 @@ void PlayScene2::m_move()
 			m_pEnemyTank[12]->seek = true;
 		}
 	}
-
-	//Ready
 
 	//Tank 13
 
@@ -1463,6 +1471,95 @@ void PlayScene2::m_move()
 			m_pEnemyTank[13]->seek = true;
 		}
 	}
+
+	//Tank 14
+
+	if (m_pEnemyTank[14]->seek == true)
+	{
+		m_pEnemyTank[14]->move = true;
+		m_pEnemyTank[14]->setDestination(m_pPlayerTank->getTransform()->position);
+	}
+	else if (m_pEnemyTank[14]->p0 == false && m_pEnemyTank[14]->p1 == false)
+	{
+		if (GameTimer >= 38)
+			m_pEnemyTank[14]->move = true;
+		m_pEnemyTank[14]->setDestination(m_getTile(16, 0)->getTransform()->position + offset);
+		if (m_pEnemyTank[14]->getTransform()->position == m_getTile(16, 0)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[14]->p0 = true;
+			m_pEnemyTank[14]->move = false;
+		}
+
+	}
+	else if (m_pEnemyTank[14]->p0 == true)
+	{
+		if (GameTimer >= 47)
+			m_pEnemyTank[14]->move = true;
+		m_pEnemyTank[14]->setDestination(m_getTile(16, 5)->getTransform()->position + offset);
+		if (m_pEnemyTank[14]->getTransform()->position == m_getTile(16, 5)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[14]->p0 = false;
+			m_pEnemyTank[14]->p1 = true;
+			m_pEnemyTank[14]->move = false;
+		}
+	}
+	else if (m_pEnemyTank[14]->p1 == true && m_pEnemyTank[14]->p2 == false)
+	{
+		if (GameTimer >= 66)
+			m_pEnemyTank[14]->move = true;
+		m_pEnemyTank[14]->setDestination(m_getTile(16, 11)->getTransform()->position + offset);
+		if (m_pEnemyTank[14]->getTransform()->position == m_getTile(16, 11)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[14]->p2 = true;
+			m_pEnemyTank[14]->seek = true;
+		}
+	}
+
+	//Tank 15
+	if (m_pEnemyTank[15]->seek == true)
+	{
+		m_pEnemyTank[15]->move = true;
+		m_pEnemyTank[15]->setDestination(m_pPlayerTank->getTransform()->position);
+	}
+	else if (m_pEnemyTank[15]->p0 == false && m_pEnemyTank[15]->p1 == false)
+	{
+		if (GameTimer >= 38)
+			m_pEnemyTank[15]->move = true;
+		m_pEnemyTank[15]->setDestination(m_getTile(15, 0)->getTransform()->position + offset);
+		if (m_pEnemyTank[15]->getTransform()->position == m_getTile(15, 0)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[15]->p0 = true;
+			m_pEnemyTank[15]->move = false;
+		}
+
+	}
+	else if (m_pEnemyTank[15]->p0 == true)
+	{
+		if (GameTimer >= 47)
+			m_pEnemyTank[15]->move = true;
+		m_pEnemyTank[15]->setDestination(m_getTile(15, 5)->getTransform()->position + offset);
+		if (m_pEnemyTank[15]->getTransform()->position == m_getTile(15, 5)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[15]->p0 = false;
+			m_pEnemyTank[15]->p1 = true;
+			m_pEnemyTank[15]->move = false;
+		}
+	}
+	else if (m_pEnemyTank[15]->p1 == true && m_pEnemyTank[15]->p2 == false)
+	{
+		if (GameTimer >= 66)
+			m_pEnemyTank[15]->move = true;
+		m_pEnemyTank[15]->setDestination(m_getTile(15, 10)->getTransform()->position + offset);
+		if (m_pEnemyTank[15]->getTransform()->position == m_getTile(15, 10)->getTransform()->position + offset)
+		{
+			m_pEnemyTank[15]->p2 = true;
+			m_pEnemyTank[15]->seek = true;
+		}
+	}
+
+	//Ready
+
+	//Todo at least two more
 }
 
 void PlayScene2::m_CheckShipLOS(NavigationObject * object)
