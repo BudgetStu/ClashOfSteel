@@ -39,7 +39,7 @@ public:
 	int TotalBullets = 0;
 	int TotalEBullets = 0;
 	int totalEnemies;
-	int totalBuildings;
+	int totalBuildings=23;
 private:
 	// IMGUI Function
 	void GUI_Function() const;
