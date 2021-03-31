@@ -66,8 +66,8 @@ private:
 	Label* m_Inst[5];
 
 	//Enemy
-	ETank* m_pEnemyTank[8];
-	eTurret* m_pETurret[8];
+	ETank* m_pEnemyTank[16];
+	eTurret* m_pETurret[16];
 	void m_move();
 	//Player
 	PlayerTank* m_pPlayerTank;
