@@ -169,6 +169,7 @@
     <ClCompile Include="..\src\LoseScene.cpp" />
     <ClCompile Include="..\src\NavigationObject.cpp" />
     <ClCompile Include="..\src\PlayerTank.cpp" />
+    <ClCompile Include="..\src\PlayScene2.cpp" />
     <ClCompile Include="..\src\pTurret.cpp" />
     <ClCompile Include="..\src\Sprite.cpp" />
     <ClCompile Include="..\src\Tile.cpp" />
@@ -217,6 +218,7 @@
     <ClInclude Include="..\src\NavigationObject.h" />
     <ClInclude Include="..\src\NeighbourTile.h" />
     <ClInclude Include="..\src\PlayerTank.h" />
+    <ClInclude Include="..\src\PlayScene2.h" />
     <ClInclude Include="..\src\pTurret.h" />
     <ClInclude Include="..\src\SoundType.h" />
     <ClInclude Include="..\src\eTurret.h" />

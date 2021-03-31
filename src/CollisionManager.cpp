@@ -328,12 +328,12 @@ bool CollisionManager::CircleAABBTanks(GameObject* object1, GameObject* object2)
 			const auto dot = Util::dot(attackVector, normal);
 			const auto angle = acos(dot / Util::magnitude(attackVector)) * Util::Rad2Deg;
 
-			switch (object2->getType()) {
+			switch (object1->getType()) {
 			case TARGET:
 				std::cout << "Collision with Planet!" << std::endl;
 				SoundManager::Instance().playSound("yay", 0);
 				break;
-			case SHIP:
+			case STAGE:
 			{
 				SoundManager::Instance().playSound("thunder", 0);
 				auto velocityX = object1->getRigidBody()->velocity.x;

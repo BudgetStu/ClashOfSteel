@@ -159,6 +159,9 @@
     <ClCompile Include="..\src\LoseScene.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\PlayScene2.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="..\src\Line.h">
       <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\PlayScene2.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

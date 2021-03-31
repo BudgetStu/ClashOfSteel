@@ -60,7 +60,7 @@ void LoseScene::start()
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);*/
 
-	//TODO Change button sprite to "Restart", Same use
+
 	// Start Button
 	m_pStartButton = new Button("../Assets/textures/restartButton.png", "restart");
 	m_pStartButton->getTransform()->position = glm::vec2(200.0f, 300.0f);
@@ -68,7 +68,7 @@ void LoseScene::start()
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 		{
 			m_pStartButton->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE);
+			TheGame::Instance()->changeSceneState(PLAY_SCENE2);
 		});
 
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void

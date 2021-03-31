@@ -12,11 +12,13 @@
 PlayScene::PlayScene()
 {
 	PlayScene::start();
+
 	TextureManager::Instance()->load("../Assets/grid/Bg.png", "Bg");
 	TextureManager::Instance()->load("../Assets/textures/Tiles.png", "tiles");
 	SoundManager::Instance().load("../Assets/audio/Bgm.mp3", "Bgm", SOUND_MUSIC);
 	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Ff.mp3", "ff", SOUND_SFX);
 	SoundManager::Instance().playMusic("Bgm", -1, 0);
 }
 
@@ -305,6 +307,7 @@ void PlayScene::handleEvents()
 		{
 			GunCD = 0;
 			m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
+			SoundManager::Instance().playSound("ff", 0, -1);
 			addChild(m_pBullet[TotalBullets]);
 			TotalBullets++;
 		}
@@ -322,11 +325,11 @@ void PlayScene::handleEvents()
 					if (m_pEnemyTank[i]->isEnabled() == true)
 					{
 						//Checking LOS
-						m_CheckShipLOS(m_pETurret[i]);
+						m_CheckShipLOS(m_pEnemyTank[i]);
 						if (m_pEnemyTank[i]->cd > 4.0f)
 						{
 							//LOS fire
-							if(m_pETurret[i]->hasLOS())
+							if(m_pEnemyTank[i]->hasLOS())
 							{
 								m_pEnemyTank[i]->seek=true;
 								m_pEnemyTank[i]->cd = 0;
@@ -400,7 +403,7 @@ void PlayScene::start()
 	//Tiles
 	m_buildGrid();
 
-	//Background TODO Add a good one
+	//Background
 	Bg = new TileC("../Assets/grid/Bg.png", "Bg");
 	Bg->getTransform()->position.x = 800.0f/2;		
 	Bg->getTransform()->position.y = 600.0f/2;
@@ -448,7 +451,7 @@ void PlayScene::start()
 	addChild(m_field[7], 1);
 	m_pMap.push_back(m_field[7]);
 
-	m_field[8] = new TileC("../Assets/grid/120.png", "120");
+	m_field[8] = new TileC("/Assets/grid/120.png", "120");
 	m_field[8]->getTransform()->position = m_getTile(18, 10)->getTransform()->position + offsetTiles1;
 	addChild(m_field[8], 1);
 	m_pMap.push_back(m_field[8]);
@@ -755,7 +758,7 @@ Tile* PlayScene::m_getTile(glm::vec2 grid_position) const
 void PlayScene::m_move()
 {
 	auto offset = glm::vec2(Config::TILE_SIZE * 0.5f, Config::TILE_SIZE * 0.5f);
-	//TODO Enable the seek function after swarming
+	
 	//Tank 0
 
 	if (m_pEnemyTank[0]->seek == true)

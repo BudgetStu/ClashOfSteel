@@ -10,6 +10,7 @@
 // IMGUI Includes
 #include "imgui.h"
 #include "imgui_sdl.h"
+#include "PlayScene2.h"
 
 
 Game* Game::s_pInstance = nullptr;
@@ -105,8 +106,8 @@ void Game::start()
 	m_currentSceneState = NO_SCENE;
 
 
-	changeSceneState(START_SCENE);
-	//changeSceneState(PLAY_SCENE);
+	/*changeSceneState(START_SCENE);*///TODO
+	changeSceneState(PLAY_SCENE2);
 }
 
 bool Game::isRunning() const
@@ -169,6 +170,10 @@ void Game::changeSceneState(const SceneState new_state)
 			break;
 		case PLAY_SCENE:
 			m_currentScene = new PlayScene();
+			std::cout << "play scene activated" << std::endl;
+			break;
+		case PLAY_SCENE2:
+			m_currentScene = new PlayScene2();
 			std::cout << "play scene activated" << std::endl;
 			break;
 		case END_SCENE:

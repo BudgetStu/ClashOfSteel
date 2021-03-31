@@ -28,6 +28,8 @@ ETank::ETank()
 	setAccelerationRate(0.0f);
 	setTurnRate(2.0f);
 	setStopRadius(150.0f);
+	setLOSDistance(250.0f);// 5 pixel per frame * 80 feet
+	m_LOSColor = glm::vec4(1, 0, 0, 1);//red
 }
 
 ETank::~ETank()
@@ -39,6 +41,10 @@ void ETank::draw()
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 	Util::DrawLine(m_RWhishker.Start(), m_RWhishker.End());
 	Util::DrawLine(m_LWhishker.Start(), m_LWhishker.End());
+
+	Util::DrawLine(getTransform()->position, getTransform()->position + getOrientation() * getLOSDistance(), m_LOSColor);
+
+
 }
 
 void ETank::update()
@@ -66,10 +72,10 @@ void ETank::setMaxSpeed(const float speed)
 	m_maxSpeed = speed;
 }
 
-glm::vec2 ETank::getOrientation() const
-{
-	return m_orientation;
-}
+//glm::vec2 ETank::getOrientation() const
+//{
+//	return m_orientation;
+//}
 
 float ETank::getTurnRate() const
 {
@@ -91,10 +97,10 @@ void ETank::setAccelerationRate(const float rate)
 	m_accelerationRate = rate;
 }
 
-void ETank::setOrientation(const glm::vec2 orientation)
-{
-	m_orientation = orientation;
-}
+//void ETank::setOrientation(const glm::vec2 orientation)
+//{
+//	m_orientation = orientation;
+//}
 
 void ETank::setRotation(const float angle)
 {
