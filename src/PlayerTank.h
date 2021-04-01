@@ -34,6 +34,9 @@ public:
 	
 	glm::vec2 m_orientation;
 	float m_rotationAngle;
+
+	bool hasExtraWeapon = false;
+	bool extraWeaponOn = false;
 	//
 	//glm::vec2 m_Wposition;
 	//glm::vec2 m_Sposition;

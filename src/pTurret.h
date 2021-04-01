@@ -9,7 +9,7 @@ class pTurret final : public DisplayObject
 {
 public:
 	// constructor(s)
-	pTurret();
+	pTurret(std::string texture, std::string key);
 
 	// destructor
 	~pTurret();
@@ -39,8 +39,9 @@ public:
 	float m_turnRate;
 	float m_accelerationRate;
 
+	int totalBullets;
 private:
-
+	std::string m_Texture, m_key;
 	
 
 	// private function

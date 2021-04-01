@@ -552,7 +552,7 @@ void PlayScene::start()
 	
 
 	//Player Turret
-	m_pPlayerTurret = new pTurret();
+	m_pPlayerTurret = new pTurret("../Assets/textures/TigerT.png", "TigerT");
 	m_pPlayerTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret, 3);

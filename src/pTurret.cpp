@@ -4,11 +4,13 @@
 #include "Game.h"
 #include "Util.h"
 
-pTurret::pTurret()
+pTurret::pTurret(std::string texture, std::string key)
 {
-	TextureManager::Instance()->load("../Assets/textures/TigerT.png", "TigerT");
+	TextureManager::Instance()->load(texture,key);
 
-	auto size = TextureManager::Instance()->getTextureSize("TigerT");
+	m_Texture = texture;
+	m_key = key;
+	auto size = TextureManager::Instance()->getTextureSize(key);
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -29,7 +31,7 @@ pTurret::~pTurret()
 
 void pTurret::draw()
 {
-	TextureManager::Instance()->draw("TigerT",
+	TextureManager::Instance()->draw(m_key,
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
 	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));

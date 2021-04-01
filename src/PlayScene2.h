@@ -35,10 +35,12 @@ public:
 	float GameTimer = 0;
 	float GunCD = 0;
 	float StageEndCD = 0;
+	float ChangeGun = 0;
 	int EnemiesDestroyed = 0;
 	int TotalBullets = 0;
 	int TotalEBullets = 0;
-	int totalEnemies;
+	int TotalExtraBullets = 0;
+	int totalEnemies =18;
 	int totalBuildings=23;
 private:
 	// IMGUI Function
@@ -57,6 +59,7 @@ private:
 	//Map
 	TileC* Bg;
 	TileC* m_field[23];
+	TileC* extraDrop;
 	//convenience functions
 	Tile* m_getTile(int col, int row) const;
 	Tile* m_getTile(glm::vec2 grid_position) const;
@@ -66,20 +69,22 @@ private:
 	Label* m_Inst[5];
 
 	//Enemy
-	ETank* m_pEnemyTank[16];
-	eTurret* m_pETurret[16];
+	ETank* m_pEnemyTank[18];
+	eTurret* m_pETurret[18];
 	void m_move();
 	//Player
 	PlayerTank* m_pPlayerTank;
 	pTurret* m_pPlayerTurret;
+	pTurret* m_pExtraTurret;
 	//Bullets
 	std::vector<Bullet*>m_pBullet;
+	std::vector<Bullet*>m_pExtraBullet;
 	std::vector<Bullet*>m_pEnemyBullet;
+	void aoeDamage(Bullet* The);
 
 	void m_CheckShipLOS(NavigationObject* object);
 
 	// UI Items
 
 };
-
 #endif 
