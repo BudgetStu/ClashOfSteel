@@ -373,14 +373,14 @@ void PlayScene::handleEvents()
 	{
 		if(StageEndCD>1)
 		{
-			TheGame::Instance()->changeSceneState(LOSE_SCENE);
+			TheGame::Instance()->changeSceneState(LVL_SELECT);
 		}
 	}
 	else if(EnemiesDestroyed==8)
 	{
 		if (StageEndCD > 1)
 		{
-			TheGame::Instance()->changeSceneState(WIN_SCENE);
+			TheGame::Instance()->changeSceneState(LVL_SELECT);
 		}
 	}
 }

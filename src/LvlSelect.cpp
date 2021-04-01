@@ -107,8 +107,8 @@ void LvlSelect::start()
 
 	m_pLvl3Button->addEventListener(CLICK, [&]()-> void
 		{
-			m_pLvl3Button->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE);
+			//m_pLvl3Button->setActive(false);
+			//TheGame::Instance()->changeSceneState(PLAY_SCENE);
 		});
 
 	m_pLvl3Button->addEventListener(MOUSE_OVER, [&]()->void
