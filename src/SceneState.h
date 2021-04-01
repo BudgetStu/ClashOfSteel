@@ -10,6 +10,7 @@ enum SceneState
 	END_SCENE,
 	WIN_SCENE,
 	LOSE_SCENE,
+	LVL_SELECT,
 	NUM_OF_SCENES
 };
 #endif /* defined (__SCENE_STATE__) */

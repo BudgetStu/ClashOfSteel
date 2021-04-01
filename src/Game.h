@@ -19,6 +19,7 @@
 #include "EndScene.h"
 #include "WinScene.h"
 #include "LoseScene.h"
+#include "LvlSelect.h"
 
 #include "Config.h"
 

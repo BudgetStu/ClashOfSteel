@@ -167,6 +167,7 @@
     <ClCompile Include="..\src\ETank.cpp" />
     <ClCompile Include="..\src\eTurret.cpp" />
     <ClCompile Include="..\src\LoseScene.cpp" />
+    <ClCompile Include="..\src\LvlSelect.cpp" />
     <ClCompile Include="..\src\NavigationObject.cpp" />
     <ClCompile Include="..\src\PlayerTank.cpp" />
     <ClCompile Include="..\src\PlayScene2.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="..\src\ETank.h" />
     <ClInclude Include="..\src\Line.h" />
     <ClInclude Include="..\src\LoseScene.h" />
+    <ClInclude Include="..\src\LvlSelect.h" />
     <ClInclude Include="..\src\NavigationObject.h" />
     <ClInclude Include="..\src\NeighbourTile.h" />
     <ClInclude Include="..\src\PlayerTank.h" />

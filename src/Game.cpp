@@ -188,6 +188,10 @@ void Game::changeSceneState(const SceneState new_state)
 			m_currentScene = new LoseScene();
 			std::cout << "lose scene activated" << std::endl;
 			break;
+		case LVL_SELECT:
+			m_currentScene = new LvlSelect();
+			std::cout << "lose scene activated" << std::endl;
+			break;
 			
 		default:
 			std::cout << "default case activated" << std::endl;
