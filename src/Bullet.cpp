@@ -6,9 +6,9 @@
 
 Bullet::Bullet(float rotation, glm::vec2 position, bool enable)
 {
-	TextureManager::Instance()->load("../Assets/textures/Tbullet.png", "Tbullet");
+	TextureManager::Instance()->load("../Assets/textures/Blt.png", "bL");
 
-	auto size = TextureManager::Instance()->getTextureSize("Tbullet");
+	auto size = TextureManager::Instance()->getTextureSize("bL");
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -27,7 +27,7 @@ Bullet::~Bullet()
 
 void Bullet::draw()
 {
-	TextureManager::Instance()->draw("Tbullet",
+	TextureManager::Instance()->draw("bL",
 		getTransform()->position.x, getTransform()->position.y,
 		m_rotationAngle, 255, true);
 }

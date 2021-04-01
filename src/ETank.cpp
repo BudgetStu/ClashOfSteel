@@ -9,9 +9,9 @@
 
 ETank::ETank()
 {
-	TextureManager::Instance()->load("../Assets/textures/Tank2.png", "etank");
+	TextureManager::Instance()->load("../Assets/textures/eTank.png", "eTn");
 
-	auto size = TextureManager::Instance()->getTextureSize("etank");
+	auto size = TextureManager::Instance()->getTextureSize("eTn");
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -37,7 +37,7 @@ ETank::~ETank()
 
 void ETank::draw()
 {
-	TextureManager::Instance()->draw("etank", 
+	TextureManager::Instance()->draw("eTn", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 	Util::DrawLine(m_RWhishker.Start(), m_RWhishker.End());
 	Util::DrawLine(m_LWhishker.Start(), m_LWhishker.End());

@@ -66,6 +66,16 @@ void PlayScene2::update()
 	for (auto i = 0; i < totalEnemies; i++)
 	{
 		m_CheckShipLOS(m_pETurret[i]);
+		if ((m_pEnemyTank[i]->getTransform()->position.x > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.x < 800.0f))
+		{
+			if ((m_pEnemyTank[i]->getTransform()->position.y > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.y < 600.0f))
+			{
+				if (m_pETurret[i]->hasLOS())
+				{
+					m_pEnemyTank[i]->seek = true;
+				}
+			}
+		}
 	}
 
 	//Set Enemy turret destination
@@ -507,7 +517,7 @@ void PlayScene2::handleEvents()
 							//LOS fire
 							if (m_pEnemyTank[i]->hasLOS())
 							{
-								m_pEnemyTank[i]->seek = true;
+
 								m_pEnemyTank[i]->cd = 0;
 								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
 								addChild(m_pEnemyBullet[TotalEBullets]);
@@ -601,10 +611,10 @@ void PlayScene2::start()
 	m_buildGrid();
 
 	//Background
-	//Bg = new TileC("../Assets/grid/Bg.png", "Bg");
-	//Bg->getTransform()->position.x = 800.0f / 2;
-	//Bg->getTransform()->position.y = 600.0f / 2;
-	//addChild(Bg, 0);
+	Bg = new TileC("../Assets/grid/Bg2.png", "Bg2");
+	Bg->getTransform()->position.x = 800.0f / 2;
+	Bg->getTransform()->position.y = 600.0f / 2;
+	addChild(Bg, 0);
 
 	//Obstacles //
 
@@ -828,7 +838,7 @@ void PlayScene2::start()
 
 
 	//Player Turret
-	m_pPlayerTurret = new pTurret("../Assets/textures/TigerT.png", "TigerT");
+	m_pPlayerTurret = new pTurret("../Assets/textures/pTurret.png", "pT");
 	m_pPlayerTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret, 3);

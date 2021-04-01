@@ -5,9 +5,9 @@
 
 eTurret::eTurret()
 {
-	TextureManager::Instance()->load("../Assets/textures/Turret.png", "turret");
+	TextureManager::Instance()->load("../Assets/textures/eTurret.png", "eT");
 
-	auto size = TextureManager::Instance()->getTextureSize("turret");
+	auto size = TextureManager::Instance()->getTextureSize("eT");
 	setWidth(size.x);
 	setHeight(size.y);
 
@@ -32,7 +32,7 @@ eTurret::~eTurret()
 
 void eTurret::draw()
 {
-	TextureManager::Instance()->draw("turret", 
+	TextureManager::Instance()->draw("eT", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
 	/*Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f) );*/

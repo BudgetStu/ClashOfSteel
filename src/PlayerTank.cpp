@@ -6,9 +6,9 @@
 
 PlayerTank::PlayerTank()
 {
-	TextureManager::Instance()->load("../Assets/textures/tiger1.png", "Tiger");
+	TextureManager::Instance()->load("../Assets/textures/pTank.png", "pTn");
 
-	auto size = TextureManager::Instance()->getTextureSize("Tiger");
+	auto size = TextureManager::Instance()->getTextureSize("pTn");
 
 	setWidth(size.x);
 	setHeight(size.y);
@@ -31,7 +31,7 @@ PlayerTank::~PlayerTank()
 
 void PlayerTank::draw()
 {
-	TextureManager::Instance()->draw("Tiger",
+	TextureManager::Instance()->draw("pTn",
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
 	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));
