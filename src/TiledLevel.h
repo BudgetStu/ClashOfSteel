@@ -19,6 +19,7 @@ public:
 	void update() override {};
 	void clean() override {};
 
+	bool on = false;
 	//void setString(std::string texture);
 
 	

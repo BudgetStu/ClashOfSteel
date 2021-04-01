@@ -36,9 +36,11 @@ public:
 	float GunCD = 0;
 	float StageEndCD = 0;
 	float ChangeGun = 0;
+	float fire = 0;
 	int EnemiesDestroyed = 0;
 	int TotalBullets = 0;
 	int TotalEBullets = 0;
+	int TotalFire = 0;
 	int TotalExtraBullets = 0;
 	int totalEnemies =18;
 	int totalBuildings=23;
@@ -79,6 +81,7 @@ private:
 	//Bullets
 	std::vector<Bullet*>m_pBullet;
 	std::vector<Bullet*>m_pExtraBullet;
+	std::vector<TileC*>m_pFire;
 	std::vector<Bullet*>m_pEnemyBullet;
 	void aoeDamage(Bullet* The);
 

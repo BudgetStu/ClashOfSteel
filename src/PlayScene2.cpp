@@ -19,6 +19,7 @@ PlayScene2::PlayScene2()
 	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Ff.mp3", "ff", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Ef.mp3", "ef", SOUND_SFX);
 	SoundManager::Instance().playMusic("Bgm", -1, 0);
 }
 
@@ -59,6 +60,19 @@ void PlayScene2::update()
 	if ((m_pPlayerTank->isEnabled() == false) || (EnemiesDestroyed == 8))
 	{
 		StageEndCD += 1 * deltaTime;
+	}
+	for (int i=0;i<TotalFire;i++)
+	{
+		if(m_pFire[i]->on==true)
+		{
+			fire += 1 * deltaTime;
+			if (fire > 1)
+			{
+				m_pFire[i]->setEnabled(false);
+				m_pFire[i]->on = false;
+				fire = 0;
+			}
+		}
 	}
 	std::cout << GameTimer << std::endl;
 
@@ -268,7 +282,7 @@ void PlayScene2::update()
 								m_pEnemyTank[y]->setEnabled(false);
 								m_pETurret[y]->setEnabled(false);
 								EnemiesDestroyed++;
-								SoundManager::Instance().playSound("Expl", 0, -1);
+								SoundManager::Instance().playSound("Expl", 0, -1);//TODO Change
 							}
 						}
 					}
@@ -292,6 +306,12 @@ void PlayScene2::update()
 						{
 							if (CollisionManager::CircleAABBTanks(m_pExtraBullet[i], m_pEnemyTank[y]))
 							{
+								//int timer = GameTimer;
+								m_pFire.push_back(new TileC("../Assets/textures/boom.png", "boom"));
+								m_pFire[i]->getTransform()->position = m_pExtraBullet[i]->getTransform()->position;
+								addChild(m_pFire[i], 4);
+								m_pFire[i]->on = true;
+								TotalFire++;
 								aoeDamage(m_pExtraBullet[i]);
 								m_pExtraBullet[i]->setEnabled(false);
 								SoundManager::Instance().playSound("Expl", 0, -1);
@@ -313,7 +333,7 @@ void PlayScene2::update()
 				if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_field[y]))
 				{
 					m_pBullet[i]->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);
+					SoundManager::Instance().playSound("Expl", 0, -1);//TODO Change
 				}
 			}
 		}
@@ -328,6 +348,12 @@ void PlayScene2::update()
 			{
 				if (CollisionManager::CircleAABBTanks(m_pExtraBullet[i], m_field[y]))
 				{
+					int timer = GameTimer;
+					m_pFire.push_back(new TileC("../Assets/textures/boom.png", "boom"));
+					m_pFire[i]->getTransform()->position = m_pExtraBullet[i]->getTransform()->position;
+					addChild(m_pFire[i], 4);
+					m_pFire[i]->on = true;
+					TotalFire++;
 					aoeDamage(m_pExtraBullet[i]);
 					m_pExtraBullet[i]->setEnabled(false);
 					SoundManager::Instance().playSound("Expl", 0, -1);
@@ -351,7 +377,7 @@ void PlayScene2::update()
 						m_pPlayerTurret->setEnabled(false);
 					if (m_pExtraTurret->isEnabled() == true)
 						m_pExtraTurret->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);
+					SoundManager::Instance().playSound("Expl", 0, -1);//TODO CHANGE
 				}
 			}
 		}
@@ -369,7 +395,7 @@ void PlayScene2::update()
 				{
 					m_pEnemyBullet[i]->setEnabled(false);
 
-					SoundManager::Instance().playSound("Expl", 0, -1);
+					SoundManager::Instance().playSound("Expl", 0, -1);//TODO CHANGE
 				}
 			}
 		}
@@ -511,7 +537,7 @@ void PlayScene2::handleEvents()
 					if (m_pEnemyTank[i]->isEnabled() == true)
 					{
 						////Checking LOS
-						//m_CheckShipLOS(m_pEnemyTank[i]);
+						m_CheckShipLOS(m_pEnemyTank[i]);
 						if (m_pEnemyTank[i]->cd > 4.0f)
 						{
 							//LOS fire
@@ -519,18 +545,20 @@ void PlayScene2::handleEvents()
 							{
 
 								m_pEnemyTank[i]->cd = 0;
+								SoundManager::Instance().playSound("ef", 0, -1);
 								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
 							}
 							//Radius (Probably useless)
-							if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
-							{
-								m_pEnemyTank[i]->cd = 0;
-								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
-								addChild(m_pEnemyBullet[TotalEBullets]);
-								TotalEBullets++;
-							}
+							//else if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
+							//{
+							//	m_pEnemyTank[i]->cd = 0;
+							//	SoundManager::Instance().playSound("ef", 0, -1);
+							//	m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+							//	addChild(m_pEnemyBullet[TotalEBullets]);
+							//	TotalEBullets++;
+							//}
 						}
 					}
 				}
@@ -560,20 +588,20 @@ void PlayScene2::handleEvents()
 	}
 
 	//Win Condition
-	//if (m_pPlayerTank->isEnabled() == false)
-	//{
-	//	if (StageEndCD > 1)
-	//	{
-	//		TheGame::Instance()->changeSceneState(LOSE_SCENE);
-	//	}
-	//}
-	//else if (EnemiesDestroyed == 8)
-	//{
-	//	if (StageEndCD > 1)
-	//	{
-	//		TheGame::Instance()->changeSceneState(WIN_SCENE);
-	//	}
-	//}
+	if (m_pPlayerTank->isEnabled() == false)
+	{
+		if (StageEndCD > 1)
+		{
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
+		}
+	}
+	else if (EnemiesDestroyed == totalEnemies)
+	{
+		if (StageEndCD > 1)
+		{
+			TheGame::Instance()->changeSceneState(WIN_SCENE);
+		}
+	}
 }
 
 void PlayScene2::start()
