@@ -118,17 +118,104 @@ void PlayScene2::update()
 
 	//Player and stage Collision
 
-	//TODO Manage to set speed back after collision. Properly
-	//if (m_pPlayerTank->isEnabled())
-	//{
-	//	for (int i = 0; i < 12; i++)
-	//	{
-	//		if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_field[i]))
-	//		{
-	//			m_pPlayerTank->wCollision();
-	//		}
-	//	}
-	//}
+	if (m_pPlayerTank->isEnabled())
+	{
+		for (int i = 0; i < totalBuildings; i++)
+		{
+			if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_field[i]))
+			{
+				float xLess = m_field[i]->getTransform()->position.x - m_pPlayerTank->getTransform()->position.x;//collision right
+				float xLess2 = m_pPlayerTank->getTransform()->position.x - m_field[i]->getTransform()->position.x;//collision left
+				float yLess = m_field[i]->getTransform()->position.y - m_pPlayerTank->getTransform()->position.y;//collision down
+				float yLess2 = m_pPlayerTank->getTransform()->position.y - m_field[i]->getTransform()->position.y;//collision up
+
+				//RightCollision
+				if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+					m_pPlayerTank->getTransform()->position.x = m_pPlayerTank->getTransform()->position.x - 2.0f;
+				//LeftCollision
+				else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+					m_pPlayerTank->getTransform()->position.x = m_pPlayerTank->getTransform()->position.x + 2.0f;
+				//DownCollision
+				else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+					m_pPlayerTank->getTransform()->position.y = m_pPlayerTank->getTransform()->position.y - 2.0f;
+				//UpCollision
+				else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+					m_pPlayerTank->getTransform()->position.y = m_pPlayerTank->getTransform()->position.y + 2.0f;
+			}
+		}
+	}
+
+	//Enemy and stage Collision
+	for (int e=0;e<totalEnemies;e++)
+	{
+		if (m_pEnemyTank[e]->isEnabled())
+		{
+			if(m_pEnemyTank[e]->seek==true)
+			{
+				for (int i = 0; i < totalBuildings; i++)
+				{
+					if (CollisionManager::CircleAABBTanks(m_pEnemyTank[e], m_field[i]))
+					{
+						float xLess = m_field[i]->getTransform()->position.x - m_pEnemyTank[e]->getTransform()->position.x;//collision right
+						float xLess2 = m_pEnemyTank[e]->getTransform()->position.x - m_field[i]->getTransform()->position.x;//collision left
+						float yLess = m_field[i]->getTransform()->position.y - m_pEnemyTank[e]->getTransform()->position.y;//collision down
+						float yLess2 = m_pEnemyTank[e]->getTransform()->position.y - m_field[i]->getTransform()->position.y;//collision up
+
+						//RightCollision
+						if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+							m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x - 2.0f;
+						//LeftCollision
+						else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+							m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x + 2.0f;
+						//DownCollision
+						else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+							m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y - 2.0f;
+						//UpCollision
+						else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+							m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y + 2.0f;
+					}
+				}
+			}
+		}
+	}
+
+	//Enemy and enemy //TODO could improve
+	for (int e = 0; e < totalEnemies; e++)
+	{
+		if (m_pEnemyTank[e]->isEnabled())
+		{
+			if (m_pEnemyTank[e]->seek == true)
+			{
+				for (int i = 0; i < totalEnemies; i++)
+				{
+					if (m_pEnemyTank[i]->seek == true)
+					{
+						if (CollisionManager::CircleAABBTanks(m_pEnemyTank[e], m_field[i]))
+						{
+							float xLess = m_pEnemyTank[i]->getTransform()->position.x - m_pEnemyTank[e]->getTransform()->position.x;//collision right
+							float xLess2 = m_pEnemyTank[e]->getTransform()->position.x - m_pEnemyTank[i]->getTransform()->position.x;//collision left
+							float yLess = m_pEnemyTank[i]->getTransform()->position.y - m_pEnemyTank[e]->getTransform()->position.y;//collision down
+							float yLess2 = m_pEnemyTank[e]->getTransform()->position.y - m_pEnemyTank[i]->getTransform()->position.y;//collision up
+
+							//RightCollision
+							if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x - 2.0f;
+							//LeftCollision
+							else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x + 2.0f;
+							//DownCollision
+							else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y - 2.0f;
+							//UpCollision
+							else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+								m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y + 2.0f;
+
+						}
+					}
+				}
+			}
+		}
+	}
 
 	//Player and enemy Collision
 	for (int EnemyTanks = 0; EnemyTanks < totalEnemies; EnemyTanks++)
@@ -180,7 +267,7 @@ void PlayScene2::update()
 		}
 	}
 
-	//Player extra bullet and enemy tank collision TODO
+	//Player extra bullet and enemy tank collision
 	for (int i = 0; i < m_pExtraBullet.size(); i++)
 	{
 		for (int y = 0; y < totalEnemies; y++)
@@ -197,9 +284,6 @@ void PlayScene2::update()
 							{
 								aoeDamage(m_pExtraBullet[i]);
 								m_pExtraBullet[i]->setEnabled(false);
-								//m_pEnemyTank[y]->setEnabled(false);
-								//m_pETurret[y]->setEnabled(false);
-								//EnemiesDestroyed++;
 								SoundManager::Instance().playSound("Expl", 0, -1);
 							}
 						}
@@ -282,68 +366,67 @@ void PlayScene2::update()
 	}
 
 	//Avoidance TODO
-//	for (int EnemyTanks = 0; EnemyTanks < 8; EnemyTanks++)
-//	{
-//		if (m_pEnemyTank[EnemyTanks]->seek == true)
-//		{
-//			for (int y = 0; y < 12; y++)
-//			{
-//				//Left whishker
-//				if (CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_LWhishker.Start(),
-//					m_pEnemyTank[EnemyTanks]->m_LWhishker.End(), m_field[y]->getTransform()->position -
-//					glm::vec2(m_field[y]->getWidth() / 2, m_field[y]->getHeight() / 2),
-//					m_field[y]->getWidth(), m_field[y]->getHeight()))
-//				{
-//					m_pEnemyTank[EnemyTanks]->ColObsL = y;
-//					m_pEnemyTank[EnemyTanks]->tRight = true;
-//					m_pEnemyTank[EnemyTanks]->avoidance = true;
-//				}
-//				if (m_pEnemyTank[EnemyTanks]->ColObsL != 100)
-//				{
-//					if (!(CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_LWhishker.Start(),
-//						m_pEnemyTank[EnemyTanks]->m_LWhishker.End(), m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getTransform()->position -
-//						glm::vec2(m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getWidth() / 2, m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getHeight() / 2),
-//						m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getWidth(), m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getHeight())))
-//					{
-//						m_pEnemyTank[EnemyTanks]->tRight = false;
-//						m_pEnemyTank[EnemyTanks]->avocd = 0;
-//						if (m_pEnemyTank[EnemyTanks]->avocd > 1)
-//						{
-//							m_pEnemyTank[EnemyTanks]->avoidance = false;
-//							m_pEnemyTank[EnemyTanks]->ColObsL = 100;
-//						}
-//					}
-//				}
-//				//Right Whishker
-//				if (CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_RWhishker.Start(),
-//					m_pEnemyTank[EnemyTanks]->m_RWhishker.End(), m_field[y]->getTransform()->position -
-//					glm::vec2(m_field[y]->getWidth() / 2, m_field[y]->getHeight() / 2),
-//					m_field[y]->getWidth(), m_field[y]->getHeight()))
-//				{
-//					m_pEnemyTank[EnemyTanks]->ColObsR = y;
-//					m_pEnemyTank[EnemyTanks]->avoidance = true;
-//					m_pEnemyTank[EnemyTanks]->tLeft = true;
-//				}
-//				if (m_pEnemyTank[EnemyTanks]->ColObsR != 100)
-//				{
-//					if (!(CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_RWhishker.Start(),
-//						m_pEnemyTank[EnemyTanks]->m_RWhishker.End(), m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getTransform()->position -
-//						glm::vec2(m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getWidth() / 2, m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getHeight() / 2),
-//						m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getWidth(), m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getHeight())))
-//					{
-//						m_pEnemyTank[EnemyTanks]->tLeft = false;
-//						m_pEnemyTank[EnemyTanks]->avocd = 0;
-//						if (m_pEnemyTank[EnemyTanks]->avocd > 1)
-//						{
-//							m_pEnemyTank[EnemyTanks]->avoidance = false;
-//							m_pEnemyTank[EnemyTanks]->ColObsL = 100;
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-//
+	for (int EnemyTanks = 0; EnemyTanks < 8; EnemyTanks++)
+	{
+		if (m_pEnemyTank[EnemyTanks]->seek == true)
+		{
+			for (int y = 0; y < totalEnemies; y++)
+			{
+				//Left whishker
+				if (CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_LWhishker.Start(),
+					m_pEnemyTank[EnemyTanks]->m_LWhishker.End(), m_field[y]->getTransform()->position -
+					glm::vec2(m_field[y]->getWidth() / 2, m_field[y]->getHeight() / 2),
+					m_field[y]->getWidth(), m_field[y]->getHeight()))
+				{
+					m_pEnemyTank[EnemyTanks]->ColObsL = y;
+					m_pEnemyTank[EnemyTanks]->tRight = true;
+					m_pEnemyTank[EnemyTanks]->avoidance = true;
+				}
+				if (m_pEnemyTank[EnemyTanks]->ColObsL != 100)
+				{
+					if (!(CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_LWhishker.Start(),
+						m_pEnemyTank[EnemyTanks]->m_LWhishker.End(), m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getTransform()->position -
+						glm::vec2(m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getWidth() / 2, m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getHeight() / 2),
+						m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getWidth(), m_field[m_pEnemyTank[EnemyTanks]->ColObsL]->getHeight())))
+					{
+						m_pEnemyTank[EnemyTanks]->tRight = false;
+						m_pEnemyTank[EnemyTanks]->avocd = 0;
+						if (m_pEnemyTank[EnemyTanks]->avocd > 1)
+						{
+							m_pEnemyTank[EnemyTanks]->avoidance = false;
+							m_pEnemyTank[EnemyTanks]->ColObsL = 100;
+						}
+					}
+				}
+				//Right Whishker
+				if (CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_RWhishker.Start(),
+					m_pEnemyTank[EnemyTanks]->m_RWhishker.End(), m_field[y]->getTransform()->position -
+					glm::vec2(m_field[y]->getWidth() / 2, m_field[y]->getHeight() / 2),
+					m_field[y]->getWidth(), m_field[y]->getHeight()))
+				{
+					m_pEnemyTank[EnemyTanks]->ColObsR = y;
+					m_pEnemyTank[EnemyTanks]->avoidance = true;
+					m_pEnemyTank[EnemyTanks]->tLeft = true;
+				}
+				if (m_pEnemyTank[EnemyTanks]->ColObsR != 100)
+				{
+					if (!(CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_RWhishker.Start(),
+						m_pEnemyTank[EnemyTanks]->m_RWhishker.End(), m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getTransform()->position -
+						glm::vec2(m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getWidth() / 2, m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getHeight() / 2),
+						m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getWidth(), m_field[m_pEnemyTank[EnemyTanks]->ColObsR]->getHeight())))
+					{
+						m_pEnemyTank[EnemyTanks]->tLeft = false;
+						m_pEnemyTank[EnemyTanks]->avocd = 0;
+						if (m_pEnemyTank[EnemyTanks]->avocd > 1)
+						{
+							m_pEnemyTank[EnemyTanks]->avoidance = false;
+							m_pEnemyTank[EnemyTanks]->ColObsL = 100;
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 
