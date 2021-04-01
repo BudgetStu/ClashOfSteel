@@ -10,7 +10,7 @@
 class Bullet :public PlayerTank
 {
 public:
-	Bullet(float rotation, glm::vec2 position, bool enable);
+	Bullet(float rotation, glm::vec2 position, bool enable, std::string texture, std::string key);
 
 	~Bullet();
 
@@ -35,7 +35,7 @@ private:
 	float m_rotationAngle;
 	float m_maxSpeed = 10;
 	float m_accelerationRate;
-
+	std::string m_Texture, m_key;
 };
 #endif
 

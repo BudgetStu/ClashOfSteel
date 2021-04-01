@@ -20,6 +20,11 @@ PlayScene2::PlayScene2()
 	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Ff.mp3", "ff", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Ef.mp3", "ef", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/eE.mp3", "ee", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/fE.mp3", "fe", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sS.mp3", "ss", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sE.mp3", "se", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/cE.mp3", "ce", SOUND_SFX);
 	SoundManager::Instance().playMusic("Bgm", -1, 0);
 }
 
@@ -79,11 +84,11 @@ void PlayScene2::update()
 	//Los check
 	for (auto i = 0; i < totalEnemies; i++)
 	{
-		m_CheckShipLOS(m_pETurret[i]);
 		if ((m_pEnemyTank[i]->getTransform()->position.x > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.x < 800.0f))
 		{
 			if ((m_pEnemyTank[i]->getTransform()->position.y > 0.0f) && (m_pEnemyTank[i]->getTransform()->position.y < 600.0f))
 			{
+				m_CheckShipLOS(m_pETurret[i]);
 				if (m_pETurret[i]->hasLOS())
 				{
 					m_pEnemyTank[i]->seek = true;
@@ -257,7 +262,7 @@ void PlayScene2::update()
 						m_pExtraTurret->setEnabled(false);
 					m_pEnemyTank[EnemyTanks]->setEnabled(false);
 					m_pETurret[EnemyTanks]->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);
+					SoundManager::Instance().playSound("fe", 0, -1);
 				}
 			}
 		}
@@ -282,7 +287,7 @@ void PlayScene2::update()
 								m_pEnemyTank[y]->setEnabled(false);
 								m_pETurret[y]->setEnabled(false);
 								EnemiesDestroyed++;
-								SoundManager::Instance().playSound("Expl", 0, -1);//TODO Change
+								SoundManager::Instance().playSound("ee", 0, -1);//TODO Change
 							}
 						}
 					}
@@ -312,9 +317,10 @@ void PlayScene2::update()
 								addChild(m_pFire[i], 4);
 								m_pFire[i]->on = true;
 								TotalFire++;
+								SoundManager::Instance().playSound("se", 0, -1);
 								aoeDamage(m_pExtraBullet[i]);
 								m_pExtraBullet[i]->setEnabled(false);
-								SoundManager::Instance().playSound("Expl", 0, -1);
+								
 							}
 						}
 					}
@@ -333,7 +339,7 @@ void PlayScene2::update()
 				if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_field[y]))
 				{
 					m_pBullet[i]->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);//TODO Change
+					SoundManager::Instance().playSound("ce", 0, -1);//TODO Change
 				}
 			}
 		}
@@ -354,9 +360,10 @@ void PlayScene2::update()
 					addChild(m_pFire[i], 4);
 					m_pFire[i]->on = true;
 					TotalFire++;
+					SoundManager::Instance().playSound("se", 0, -1);
 					aoeDamage(m_pExtraBullet[i]);
 					m_pExtraBullet[i]->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);
+					
 				}
 			}
 		}
@@ -377,7 +384,7 @@ void PlayScene2::update()
 						m_pPlayerTurret->setEnabled(false);
 					if (m_pExtraTurret->isEnabled() == true)
 						m_pExtraTurret->setEnabled(false);
-					SoundManager::Instance().playSound("Expl", 0, -1);//TODO CHANGE
+					SoundManager::Instance().playSound("fe", 0, -1);//TODO CHANGE
 				}
 			}
 		}
@@ -395,7 +402,7 @@ void PlayScene2::update()
 				{
 					m_pEnemyBullet[i]->setEnabled(false);
 
-					SoundManager::Instance().playSound("Expl", 0, -1);//TODO CHANGE
+					SoundManager::Instance().playSound("ce", 0, -1);//TODO CHANGE
 				}
 			}
 		}
@@ -499,7 +506,7 @@ void PlayScene2::handleEvents()
 			if (m_pPlayerTurret->isEnabled() == true)
 			{
 				GunCD = 0;
-				m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
+				m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 				SoundManager::Instance().playSound("ff", 0, -1);
 				addChild(m_pBullet[TotalBullets]);
 				TotalBullets++;
@@ -508,8 +515,8 @@ void PlayScene2::handleEvents()
 			else if(m_pExtraTurret->isEnabled()==true)
 			{
 				GunCD = 0;
-				m_pExtraBullet.push_back(new Bullet(m_pExtraTurret->m_rotationAngle, m_pExtraTurret->getTransform()->position, true));
-				SoundManager::Instance().playSound("ff", 0, -1);
+				m_pExtraBullet.push_back(new Bullet(m_pExtraTurret->m_rotationAngle, m_pExtraTurret->getTransform()->position, true, "../Assets/textures/extraBullet.png", "extraB"));
+				SoundManager::Instance().playSound("ss", 0, -1);
 				addChild(m_pExtraBullet[TotalExtraBullets]);
 				m_pExtraTurret->totalBullets--;
 				if(m_pExtraTurret->totalBullets==0)
@@ -546,19 +553,19 @@ void PlayScene2::handleEvents()
 
 								m_pEnemyTank[i]->cd = 0;
 								SoundManager::Instance().playSound("ef", 0, -1);
-								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
 							}
 							//Radius (Probably useless)
-							//else if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
-							//{
-							//	m_pEnemyTank[i]->cd = 0;
-							//	SoundManager::Instance().playSound("ef", 0, -1);
-							//	m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
-							//	addChild(m_pEnemyBullet[TotalEBullets]);
-							//	TotalEBullets++;
-							//}
+							else if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
+							{
+								m_pEnemyTank[i]->cd = 0;
+								SoundManager::Instance().playSound("ef", 0, -1);
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
+								addChild(m_pEnemyBullet[TotalEBullets]);
+								TotalEBullets++;
+							}
 						}
 					}
 				}
@@ -590,7 +597,7 @@ void PlayScene2::handleEvents()
 	//Win Condition
 	if (m_pPlayerTank->isEnabled() == false)
 	{
-		if (StageEndCD > 1)
+		if (StageEndCD > 4)
 		{
 			TheGame::Instance()->changeSceneState(LOSE_SCENE);
 		}
@@ -765,14 +772,17 @@ void PlayScene2::start()
 	
 	m_pEnemyTank[0] = new ETank();
 	m_pEnemyTank[0]->getTransform()->position = m_getTile(0, 6)->getTransform()->position + offsetEnemiesLeft;
+	m_pEnemyTank[0]->setRotation(90.0f);
 	addChild(m_pEnemyTank[0], 2);
 
 	m_pEnemyTank[1] = new ETank();
 	m_pEnemyTank[1]->getTransform()->position = m_getTile(4, 0)->getTransform()->position + offsetEnemiesUp;
+	m_pEnemyTank[1]->setRotation(180.0f);
 	addChild(m_pEnemyTank[1], 2);
 
 	m_pEnemyTank[2] = new ETank();
 	m_pEnemyTank[2]->getTransform()->position = m_getTile(0, 10)->getTransform()->position + offsetEnemiesLeft;
+	m_pEnemyTank[2]->setRotation(90.0f);
 	addChild(m_pEnemyTank[2], 2);
 
 	m_pEnemyTank[3] = new ETank();
@@ -792,22 +802,22 @@ void PlayScene2::start()
 	
 	m_pEnemyTank[6] = new ETank();
 	m_pEnemyTank[6]->getTransform()->position = m_getTile(0, 5)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[6]->setRotation(180.0f);
+	m_pEnemyTank[6]->setRotation(90.0f);
 	addChild(m_pEnemyTank[6], 2);
 
 	m_pEnemyTank[7] = new ETank();
 	m_pEnemyTank[7]->getTransform()->position = m_getTile(0, 6)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[7]->setRotation(-90.0f);
+	m_pEnemyTank[7]->setRotation(90.0f);
 	addChild(m_pEnemyTank[7], 2);
 
 	m_pEnemyTank[8] = new ETank();
 	m_pEnemyTank[8]->getTransform()->position = m_getTile(0, 5)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[8]->setRotation(180.0f);
+	m_pEnemyTank[8]->setRotation(90.0f);
 	addChild(m_pEnemyTank[8], 2);
 
 	m_pEnemyTank[9] = new ETank();
 	m_pEnemyTank[9]->getTransform()->position = m_getTile(0, 6)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[9]->setRotation(-90.0f);
+	m_pEnemyTank[9]->setRotation(90.0f);
 	addChild(m_pEnemyTank[9], 2);
 
 	m_pEnemyTank[10] = new ETank();
@@ -817,12 +827,12 @@ void PlayScene2::start()
 
 	m_pEnemyTank[11] = new ETank();
 	m_pEnemyTank[11]->getTransform()->position = m_getTile(4, 0)->getTransform()->position + offsetEnemiesUp;
-	m_pEnemyTank[11]->setRotation(-90.0f);
+	m_pEnemyTank[11]->setRotation(180.0f);
 	addChild(m_pEnemyTank[11], 2);
 
 	m_pEnemyTank[12] = new ETank();
 	m_pEnemyTank[12]->getTransform()->position = m_getTile(5, 0)->getTransform()->position + offsetEnemiesUp;
-	m_pEnemyTank[12]->setRotation(-90.0f);
+	m_pEnemyTank[12]->setRotation(180.0f);
 	addChild(m_pEnemyTank[12], 2);
 
 	m_pEnemyTank[13] = new ETank();
@@ -832,22 +842,22 @@ void PlayScene2::start()
 
 	m_pEnemyTank[14] = new ETank();
 	m_pEnemyTank[14]->getTransform()->position = m_getTile(16, 0)->getTransform()->position + offsetEnemiesUp;
-	m_pEnemyTank[14]->setRotation(-90.0f);
+	m_pEnemyTank[14]->setRotation(180.0f);
 	addChild(m_pEnemyTank[14], 2);
 
 	m_pEnemyTank[15] = new ETank();
 	m_pEnemyTank[15]->getTransform()->position = m_getTile(15, 0)->getTransform()->position + offsetEnemiesUp;
-	m_pEnemyTank[15]->setRotation(-90.0f);
+	m_pEnemyTank[15]->setRotation(180.0f);
 	addChild(m_pEnemyTank[15], 2);
 
 	m_pEnemyTank[16] = new ETank();
 	m_pEnemyTank[16]->getTransform()->position = m_getTile(0, 10)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[16]->setRotation(-90.0f);
+	m_pEnemyTank[16]->setRotation(90.0f);
 	addChild(m_pEnemyTank[16], 2);
 
 	m_pEnemyTank[17] = new ETank();
 	m_pEnemyTank[17]->getTransform()->position = m_getTile(0, 11)->getTransform()->position + offsetEnemiesLeft;
-	m_pEnemyTank[17]->setRotation(-90.0f);
+	m_pEnemyTank[17]->setRotation(90.0f);
 	addChild(m_pEnemyTank[17], 2);
 
 	for (int i = 0; i < totalEnemies; i++)
@@ -860,6 +870,7 @@ void PlayScene2::start()
 	//PlayerTank
 	m_pPlayerTank = new PlayerTank();
 	m_pPlayerTank->getTransform()->position = m_getTile(3, 11)->getTransform()->position + offsetTiles1;
+	m_pPlayerTank->setRotation(90.0f);
 	m_pPlayerTank->setEnabled(true);
 	addChild(m_pPlayerTank, 2);
 	m_pMap.push_back(m_pPlayerTank);
@@ -871,13 +882,14 @@ void PlayScene2::start()
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret, 3);
 	//Extra Turret
-	m_pExtraTurret = new pTurret("../Assets/textures/Turret.png", "turret");
+	m_pExtraTurret = new pTurret("../Assets/textures/pExTurret.png", "eXturret");
 	m_pExtraTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pExtraTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
+	m_pExtraTurret->setEnabled(false);
 	m_pExtraTurret->totalBullets = 8;
 	addChild(m_pExtraTurret, 3);
 	//Droped
-	extraDrop = new TileC("../Assets/textures/Turret.png", "turret");
+	extraDrop = new TileC("../Assets/textures/pExTurret.png", "eXturret");
 	extraDrop->getTransform()->position=m_getTile(10, 3)->getTransform()->position + offsetTiles1;
 	addChild(extraDrop, 2);
 
@@ -1880,6 +1892,7 @@ void PlayScene2::aoeDamage(Bullet* The)
 		{
 			m_pEnemyTank[e]->setEnabled(false);
 			m_pETurret[e]->setEnabled(false);
+			SoundManager::Instance().playSound("ee", 0, -1);
 			EnemiesDestroyed++;
 		}
 	}

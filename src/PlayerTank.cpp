@@ -34,7 +34,7 @@ void PlayerTank::draw()
 	TextureManager::Instance()->draw("pTn",
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
-	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));
+	/*Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));*/
 }
 
 void PlayerTank::update()

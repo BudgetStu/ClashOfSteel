@@ -27,7 +27,7 @@ ETank::ETank()
 	setRotation(0.0f);
 	setAccelerationRate(0.0f);
 	setTurnRate(2.0f);
-	setStopRadius(150.0f);
+	setStopRadius(100.0f);
 	setLOSDistance(325.0f);// 5 pixel per frame * 80 feet
 	m_LOSColor = glm::vec4(1, 0, 0, 1);//red
 }
@@ -39,10 +39,10 @@ void ETank::draw()
 {
 	TextureManager::Instance()->draw("eTn", 
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
-	Util::DrawLine(m_RWhishker.Start(), m_RWhishker.End());
+	/*Util::DrawLine(m_RWhishker.Start(), m_RWhishker.End());
 	Util::DrawLine(m_LWhishker.Start(), m_LWhishker.End());
 
-	Util::DrawLine(getTransform()->position, getTransform()->position + getOrientation() * getLOSDistance(), m_LOSColor);
+	Util::DrawLine(getTransform()->position, getTransform()->position + getOrientation() * getLOSDistance(), m_LOSColor);*/
 
 
 }

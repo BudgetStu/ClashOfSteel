@@ -34,7 +34,7 @@ void pTurret::draw()
 	TextureManager::Instance()->draw(m_key,
 		getTransform()->position.x, getTransform()->position.y, m_rotationAngle, 255, true);
 
-	Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));
+	/*Util::DrawLine(getTransform()->position, (getTransform()->position + getOrientation() * 60.0f));*/
 }
 
 void pTurret::update()

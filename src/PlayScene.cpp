@@ -322,7 +322,7 @@ void PlayScene::handleEvents()
 		if (m_pPlayerTank->isEnabled() == true)
 		{
 			GunCD = 0;
-			m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true));
+			m_pBullet.push_back(new Bullet(m_pPlayerTurret->m_rotationAngle, m_pPlayerTurret->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 			SoundManager::Instance().playSound("ff", 0, -1);
 			addChild(m_pBullet[TotalBullets]);
 			TotalBullets++;
@@ -349,7 +349,7 @@ void PlayScene::handleEvents()
 							{
 								m_pEnemyTank[i]->seek=true;
 								m_pEnemyTank[i]->cd = 0;
-								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
 							}
@@ -357,7 +357,7 @@ void PlayScene::handleEvents()
 							if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
 							{
 								m_pEnemyTank[i]->cd = 0;
-								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true));
+								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
 							}
