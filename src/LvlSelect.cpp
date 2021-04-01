@@ -88,7 +88,7 @@ void LvlSelect::start()
 	m_pLvl2Button->addEventListener(CLICK, [&]()-> void
 		{
 			m_pLvl2Button->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE);
+			TheGame::Instance()->changeSceneState(PLAY_SCENE2);
 		});
 
 	m_pLvl2Button->addEventListener(MOUSE_OVER, [&]()->void

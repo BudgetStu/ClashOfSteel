@@ -162,6 +162,9 @@
     <ClCompile Include="..\src\PlayScene2.cpp">
       <Filter>Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="..\src\LvlSelect.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\src\StartScene.h">
@@ -336,6 +339,9 @@
       <Filter>Core</Filter>
     </ClInclude>
     <ClInclude Include="..\src\PlayScene2.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\LvlSelect.h">
       <Filter>Scenes</Filter>
     </ClInclude>
   </ItemGroup>

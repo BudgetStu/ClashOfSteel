@@ -67,7 +67,7 @@ void StartScene::start()
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 	{
 		m_pStartButton->setActive(false);
-		TheGame::Instance()->changeSceneState(PLAY_SCENE);
+		TheGame::Instance()->changeSceneState(LVL_SELECT);
 	});
 
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void
