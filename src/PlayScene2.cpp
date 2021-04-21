@@ -26,6 +26,7 @@ PlayScene2::PlayScene2()
 	SoundManager::Instance().load("../Assets/audio/sE.mp3", "se", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/cE.mp3", "ce", SOUND_SFX);
 	SoundManager::Instance().playMusic("Bgm", -1, 0);
+	Game::Instance()->currentStage = 2;
 }
 
 PlayScene2::~PlayScene2()
@@ -409,7 +410,7 @@ void PlayScene2::update()
 	}
 
 	//Avoidance TODO
-	for (int EnemyTanks = 0; EnemyTanks < 8; EnemyTanks++)
+	for (int EnemyTanks = 0; EnemyTanks < totalEnemies; EnemyTanks++)
 	{
 		if (m_pEnemyTank[EnemyTanks]->seek == true)
 		{
@@ -593,7 +594,7 @@ void PlayScene2::handleEvents()
 			}
 		}
 	}
-
+	
 	//Win Condition
 	if (m_pPlayerTank->isEnabled() == false)
 	{

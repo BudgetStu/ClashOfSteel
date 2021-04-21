@@ -19,7 +19,16 @@ PlayScene::PlayScene()
 	SoundManager::Instance().load("../Assets/audio/Exp.wav", "Expl", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Goal.ogg", "Goal", SOUND_SFX);
 	SoundManager::Instance().load("../Assets/audio/Ff.mp3", "ff", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Ff.mp3", "ff", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/Ef.mp3", "ef", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/eE.mp3", "ee", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/fE.mp3", "fe", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sS.mp3", "ss", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/sE.mp3", "se", SOUND_SFX);
+	SoundManager::Instance().load("../Assets/audio/cE.mp3", "ce", SOUND_SFX);
 	SoundManager::Instance().playMusic("Bgm", -1, 0);
+	SoundManager::Instance().playMusic("Bgm", -1, 0);
+	Game::Instance()->currentStage = 1;
 }
 
 PlayScene::~PlayScene()
@@ -27,7 +36,6 @@ PlayScene::~PlayScene()
 
 void PlayScene::draw()
 {
-
 	if (EventManager::Instance().isIMGUIActive())
 	{
 		GUI_Function();
@@ -55,7 +63,7 @@ void PlayScene::update()
 		//Timer for Cooldowns
 		GameTimer += 1 * deltaTime;
 		GunCD += 1 * deltaTime;
-		for (auto i = 0; i < 8; i++)
+		for (auto i = 0; i < totalEnemies; i++)
 		{
 			m_pEnemyTank[i]->cd += 1 * deltaTime;
 			m_pEnemyTank[i]->avocd += 1 * deltaTime;
@@ -67,14 +75,14 @@ void PlayScene::update()
 		//std::cout << GameTimer << std::endl;
 
 		//Set Enemy turret destination
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < totalEnemies; i++)
 		{
 			//TODO Probably Needs to add an offset
 			m_pETurret[i]->setDestination(m_pPlayerTurret->getTransform()->position);
 		}
 
 		//Enemies turret bind
-		for (int i = 0; i < 8; i++)
+		for (int i = 0; i < totalEnemies; i++)
 		{
 			m_pETurret[i]->getTransform()->position = m_pEnemyTank[i]->getTransform()->position;
 		}
@@ -102,22 +110,109 @@ void PlayScene::update()
 
 		//Collisions
 
-		//Player and stage Collision
+	//Player and stage Collision
 
-		//TODO Manage to set speed back after collision. Properly
 		if (m_pPlayerTank->isEnabled())
 		{
-			for (int i = 0; i < 12; i++)
+			for (int i = 0; i < totalStages; i++)
 			{
 				if (CollisionManager::CircleAABBTanks(m_pPlayerTank, m_field[i]))
 				{
-					m_pPlayerTank->wCollision();
+					float xLess = m_field[i]->getTransform()->position.x - m_pPlayerTank->getTransform()->position.x;//collision right
+					float xLess2 = m_pPlayerTank->getTransform()->position.x - m_field[i]->getTransform()->position.x;//collision left
+					float yLess = m_field[i]->getTransform()->position.y - m_pPlayerTank->getTransform()->position.y;//collision down
+					float yLess2 = m_pPlayerTank->getTransform()->position.y - m_field[i]->getTransform()->position.y;//collision up
+
+					//RightCollision
+					if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+						m_pPlayerTank->getTransform()->position.x = m_pPlayerTank->getTransform()->position.x - 2.0f;
+					//LeftCollision
+					else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+						m_pPlayerTank->getTransform()->position.x = m_pPlayerTank->getTransform()->position.x + 2.0f;
+					//DownCollision
+					else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+						m_pPlayerTank->getTransform()->position.y = m_pPlayerTank->getTransform()->position.y - 2.0f;
+					//UpCollision
+					else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+						m_pPlayerTank->getTransform()->position.y = m_pPlayerTank->getTransform()->position.y + 2.0f;
 				}
 			}
 		}
 
+		//Enemy and stage Collision
+		for (int e = 0; e < totalEnemies; e++)
+		{
+			if (m_pEnemyTank[e]->isEnabled())
+			{
+				if (m_pEnemyTank[e]->seek == true)
+				{
+					for (int i = 0; i < totalStages; i++)
+					{
+						if (CollisionManager::CircleAABBTanks(m_pEnemyTank[e], m_field[i]))
+						{
+							float xLess = m_field[i]->getTransform()->position.x - m_pEnemyTank[e]->getTransform()->position.x;//collision right
+							float xLess2 = m_pEnemyTank[e]->getTransform()->position.x - m_field[i]->getTransform()->position.x;//collision left
+							float yLess = m_field[i]->getTransform()->position.y - m_pEnemyTank[e]->getTransform()->position.y;//collision down
+							float yLess2 = m_pEnemyTank[e]->getTransform()->position.y - m_field[i]->getTransform()->position.y;//collision up
+
+							//RightCollision
+							if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x - 2.0f;
+							//LeftCollision
+							else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x + 2.0f;
+							//DownCollision
+							else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+								m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y - 2.0f;
+							//UpCollision
+							else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+								m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y + 2.0f;
+						}
+					}
+				}
+			}
+		}
+
+		//Enemy and enemy //TODO could improve
+		for (int e = 0; e < totalEnemies; e++)
+		{
+			if (m_pEnemyTank[e]->isEnabled())
+			{
+				if (m_pEnemyTank[e]->seek == true)
+				{
+					for (int i = 0; i < totalEnemies; i++)
+					{
+						if (m_pEnemyTank[i]->seek == true)
+						{
+							if (CollisionManager::CircleAABBTanks(m_pEnemyTank[e], m_field[i]))
+							{
+								float xLess = m_pEnemyTank[i]->getTransform()->position.x - m_pEnemyTank[e]->getTransform()->position.x;//collision right
+								float xLess2 = m_pEnemyTank[e]->getTransform()->position.x - m_pEnemyTank[i]->getTransform()->position.x;//collision left
+								float yLess = m_pEnemyTank[i]->getTransform()->position.y - m_pEnemyTank[e]->getTransform()->position.y;//collision down
+								float yLess2 = m_pEnemyTank[e]->getTransform()->position.y - m_pEnemyTank[i]->getTransform()->position.y;//collision up
+
+								//RightCollision
+								if ((xLess > xLess2) && (xLess > yLess) && (xLess > yLess2))
+									m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x - 2.0f;
+								//LeftCollision
+								else if ((xLess2 > xLess) && (xLess2 > yLess) && (xLess2 > yLess2))
+									m_pEnemyTank[e]->getTransform()->position.x = m_pEnemyTank[e]->getTransform()->position.x + 2.0f;
+								//DownCollision
+								else if ((yLess > xLess) && (yLess > xLess2) && (yLess > yLess2))
+									m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y - 2.0f;
+								//UpCollision
+								else if ((yLess2 > xLess) && (yLess2 > xLess2) && (yLess2 > yLess))
+									m_pEnemyTank[e]->getTransform()->position.y = m_pEnemyTank[e]->getTransform()->position.y + 2.0f;
+
+							}
+						}
+					}
+				}
+			}
+		}
+	
 		//Player and enemy Collision
-		for (int EnemyTanks = 0; EnemyTanks < 8; EnemyTanks++)
+		for (int EnemyTanks = 0; EnemyTanks < totalEnemies; EnemyTanks++)
 		{
 			if (m_pEnemyTank[EnemyTanks]->isEnabled() == true)
 			{
@@ -129,7 +224,7 @@ void PlayScene::update()
 						m_pPlayerTurret->setEnabled(false);
 						m_pEnemyTank[EnemyTanks]->setEnabled(false);
 						m_pETurret[EnemyTanks]->setEnabled(false);
-						SoundManager::Instance().playSound("Expl", 0, -1);
+						SoundManager::Instance().playSound("fe", 0, -1);
 					}
 				}
 			}
@@ -138,7 +233,7 @@ void PlayScene::update()
 		//Player bullet and enemy tank collision
 		for (int i = 0; i < m_pBullet.size(); i++)
 		{
-			for (int y = 0; y < 8; y++)
+			for (int y = 0; y < totalEnemies; y++)
 			{
 				if (m_pBullet[i]->isEnabled())
 				{
@@ -154,7 +249,7 @@ void PlayScene::update()
 									m_pEnemyTank[y]->setEnabled(false);
 									m_pETurret[y]->setEnabled(false);
 									EnemiesDestroyed++;
-									SoundManager::Instance().playSound("Expl", 0, -1);
+									SoundManager::Instance().playSound("ee", 0, -1);//TODO Change
 								}
 							}
 						}
@@ -166,14 +261,14 @@ void PlayScene::update()
 		//Player bullet and Stage collision
 		for (int i = 0; i < m_pBullet.size(); i++)
 		{
-			for (int y = 0; y < 12; y++)
+			for (int y = 0; y < totalStages; y++)
 			{
 				if (m_pBullet[i]->isEnabled())
 				{
 					if (CollisionManager::CircleAABBTanks(m_pBullet[i], m_field[y]))
 					{
 						m_pBullet[i]->setEnabled(false);
-						SoundManager::Instance().playSound("Expl", 0, -1);
+						SoundManager::Instance().playSound("ce", 0, -1);//TODO Change
 					}
 				}
 			}
@@ -192,7 +287,7 @@ void PlayScene::update()
 						m_pEnemyBullet[i]->setEnabled(false);
 						m_pPlayerTank->setEnabled(false);
 						m_pPlayerTurret->setEnabled(false);
-						SoundManager::Instance().playSound("Expl", 0, -1);
+						SoundManager::Instance().playSound("fe", 0, -1);//TODO CHANGE
 					}
 				}
 			}
@@ -204,13 +299,13 @@ void PlayScene::update()
 		{
 			if (m_pEnemyBullet[i]->isEnabled() == true)
 			{
-				for (int u = 0; u < 12; u++)
+				for (int u = 0; u < totalStages; u++)
 				{
 					if (CollisionManager::CircleAABBTanks(m_pEnemyBullet[i], m_field[u]))
 					{
 						m_pEnemyBullet[i]->setEnabled(false);
 
-						SoundManager::Instance().playSound("Expl", 0, -1);
+						SoundManager::Instance().playSound("ce", 0, -1);//TODO Change
 					}
 				}
 			}
@@ -221,7 +316,7 @@ void PlayScene::update()
 		{
 			if (m_pEnemyTank[EnemyTanks]->seek == true)
 			{
-				for (int y = 0; y < 12; y++)
+				for (int y = 0; y < totalStages; y++)
 				{
 					//Left whishker
 					if (CollisionManager::lineRectCheck(m_pEnemyTank[EnemyTanks]->m_LWhishker.Start(),
@@ -306,14 +401,6 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
-	
-	//for Pausing
-	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_P) && isRunning == true) {
-		isRunning = false;
-	}
-	else if (EventManager::Instance().isKeyDown(SDL_SCANCODE_O) && isRunning == false) {
-		isRunning = true;
-	}*/
 
 	//Player BulletShooting
 
@@ -349,6 +436,7 @@ void PlayScene::handleEvents()
 							{
 								m_pEnemyTank[i]->seek=true;
 								m_pEnemyTank[i]->cd = 0;
+								SoundManager::Instance().playSound("ef", 0, -1);
 								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
@@ -357,6 +445,7 @@ void PlayScene::handleEvents()
 							if (Util::distance(m_pEnemyTank[i]->getTransform()->position, m_pPlayerTank->getTransform()->position) < 150)
 							{
 								m_pEnemyTank[i]->cd = 0;
+								SoundManager::Instance().playSound("ef", 0, -1);
 								m_pEnemyBullet.push_back(new Bullet(m_pETurret[i]->getRotation(), m_pETurret[i]->getTransform()->position, true, "../Assets/textures/Blt.png", "bL"));
 								addChild(m_pEnemyBullet[TotalEBullets]);
 								TotalEBullets++;
@@ -368,19 +457,22 @@ void PlayScene::handleEvents()
 		}
 	}
 	
-	//Win Condition
+	//Lose Condition
 	if(m_pPlayerTank->isEnabled()==false)
 	{
-		if(StageEndCD>1)
+		if(StageEndCD>4)
 		{
-			TheGame::Instance()->changeSceneState(LVL_SELECT);
+			TheGame::Instance()->changeSceneState(LOSE_SCENE);
 		}
 	}
+	//Win Con
 	else if(EnemiesDestroyed==8)
 	{
 		if (StageEndCD > 1)
 		{
-			TheGame::Instance()->changeSceneState(LVL_SELECT);
+			if (Game::Instance()->stageUnlocked == 0)
+				Game::Instance()->stageUnlocked++;
+			TheGame::Instance()->changeSceneState(WIN_SCENE);
 		}
 	}
 }
@@ -427,65 +519,85 @@ void PlayScene::start()
 
 	//Obstacles
 	
-	m_field[0] = new TileC("../Assets/grid/wide.png","w");
-	m_field[0]->getTransform()->position = m_getTile(2, 1)->getTransform()->position+offsetTiles2;
+	m_field[0] = new TileC("../Assets/grid/Hs.png","hs");
+	m_field[0]->getTransform()->position = m_getTile(4, 1)->getTransform()->position+offsetTiles1;
 	addChild(m_field[0],1);
 	m_pMap.push_back(m_field[0]);
 
-	m_field[2] = new TileC("../Assets/grid/wide.png", "w");
-	m_field[2]->getTransform()->position = m_getTile(10, 1)->getTransform()->position + offsetTiles2;
+	m_field[2] = new TileC("../Assets/grid/Hs.png", "hs");
+	m_field[2]->getTransform()->position = m_getTile(12, 1)->getTransform()->position + offsetTiles1;
 	addChild(m_field[2], 1);
 	m_pMap.push_back(m_field[2]);
 
-	m_field[3] = new TileC("../Assets/grid/wide.png", "w");
-	m_field[3]->getTransform()->position = m_getTile(2, 13)->getTransform()->position + offsetTiles2;
+	m_field[3] = new TileC("../Assets/grid/Hs.png", "hs");
+	m_field[3]->getTransform()->position = m_getTile(4, 13)->getTransform()->position + offsetTiles1;
 	addChild(m_field[3], 1);
 	m_pMap.push_back(m_field[3]);
 
-	m_field[4] = new TileC("../Assets/grid/wide.png", "w");
-	m_field[4]->getTransform()->position = m_getTile(10, 13)->getTransform()->position + offsetTiles2;
+	m_field[4] = new TileC("../Assets/grid/Hs.png", "hs");
+	m_field[4]->getTransform()->position = m_getTile(12, 13)->getTransform()->position + offsetTiles1;
 	addChild(m_field[4], 1);
 	m_pMap.push_back(m_field[4]);
 
-	m_field[1] = new TileC("../Assets/grid/120.png", "120");
+	m_field[1] = new TileC("../Assets/grid/Hs.png", "hs");
 	m_field[1]->getTransform()->position = m_getTile(1, 4)->getTransform()->position+offsetTiles1;
 	addChild(m_field[1], 1);
 	m_pMap.push_back(m_field[1]);
 
-	m_field[5] = new TileC("../Assets/grid/120.png", "120");
+	m_field[5] = new TileC("../Assets/grid/Bb.png", "bb");
 	m_field[5]->getTransform()->position = m_getTile(7, 7)->getTransform()->position + offsetTiles1;
 	addChild(m_field[5], 1);
 	m_pMap.push_back(m_field[5]);
 
-	m_field[6] = new TileC("../Assets/grid/120.png", "120");
+	m_field[6] = new TileC("../Assets/grid/Bb.png", "bb");
 	m_field[6]->getTransform()->position = m_getTile(13, 7)->getTransform()->position + offsetTiles1;
 	addChild(m_field[6], 1);
 	m_pMap.push_back(m_field[6]);
 
-	m_field[7] = new TileC("../Assets/grid/120.png", "120");
+	m_field[7] = new TileC("../Assets/grid/Bl.png", "bld");
 	m_field[7]->getTransform()->position = m_getTile(18, 13)->getTransform()->position + offsetTiles1;
 	addChild(m_field[7], 1);
 	m_pMap.push_back(m_field[7]);
 
-	m_field[8] = new TileC("/Assets/grid/120.png", "120");
+	m_field[8] = new TileC("/Assets/grid/Hs.png", "hs");
 	m_field[8]->getTransform()->position = m_getTile(18, 10)->getTransform()->position + offsetTiles1;
 	addChild(m_field[8], 1);
 	m_pMap.push_back(m_field[8]);
 
-	m_field[9] = new TileC("../Assets/grid/120.png", "120");
+	m_field[9] = new TileC("../Assets/grid/Hs.png", "hs");
 	m_field[9]->getTransform()->position = m_getTile(1, 10)->getTransform()->position + offsetTiles1;
 	addChild(m_field[9], 1);
 	m_pMap.push_back(m_field[9]);
 
-	m_field[10] = new TileC("../Assets/grid/120.png", "120");
+	m_field[10] = new TileC("../Assets/grid/Bl.png", "bld");
 	m_field[10]->getTransform()->position = m_getTile(18, 1)->getTransform()->position + offsetTiles1;
 	addChild(m_field[10], 1);
 	m_pMap.push_back(m_field[10]);
 
-	m_field[11] = new TileC("../Assets/grid/120.png", "120");
+	m_field[11] = new TileC("../Assets/grid/Hs.png", "hs");
 	m_field[11]->getTransform()->position = m_getTile(18, 4)->getTransform()->position + offsetTiles1;
 	addChild(m_field[11], 1);
-		m_pMap.push_back(m_field[11]);
+	m_pMap.push_back(m_field[11]);
+
+	m_field[12] = new TileC("../Assets/grid/Bl.png", "bld");
+	m_field[12]->getTransform()->position = m_getTile(1, 1)->getTransform()->position + offsetTiles1;
+	addChild(m_field[12], 1);
+	m_pMap.push_back(m_field[12]);
+
+	m_field[13] = new TileC("../Assets/grid/Bl.png", "bld");
+	m_field[13]->getTransform()->position = m_getTile(1, 13)->getTransform()->position + offsetTiles1;
+	addChild(m_field[13], 1);
+	m_pMap.push_back(m_field[13]);
+
+	m_field[14] = new TileC("../Assets/grid/Hs.png", "hs");
+	m_field[14]->getTransform()->position = m_getTile(9, 1)->getTransform()->position + offsetTiles1;
+	addChild(m_field[14], 1);
+	m_pMap.push_back(m_field[14]);
+
+	m_field[15] = new TileC("../Assets/grid/Hs.png", "hs");
+	m_field[15]->getTransform()->position = m_getTile(9, 13)->getTransform()->position + offsetTiles1;
+	addChild(m_field[15], 1);
+	m_pMap.push_back(m_field[15]);
 	
 	//Enemy ETank //
 	m_pEnemyTank[0] = new ETank();
@@ -568,12 +680,12 @@ void PlayScene::start()
 	
 
 	//Player Turret
-	m_pPlayerTurret = new pTurret("../Assets/textures/TigerT.png", "TigerT");
+	m_pPlayerTurret = new pTurret("../Assets/textures/pTurret.png", "pT");
 	m_pPlayerTurret->getTransform()->position == glm::vec2(100.0f, 300.0f);
 	m_pPlayerTurret->getTransform()->position = m_pPlayerTank->getTransform()->position;
 	addChild(m_pPlayerTurret, 3);
 
-	TextureManager::Instance()->load("../Assets/textures/Pause.png", "pause");
+	//TextureManager::Instance()->load("../Assets/textures/Pause.png", "pause");
 
 }
 

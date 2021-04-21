@@ -40,6 +40,12 @@ void LvlSelect::handleEvents()
 	{
 		TheGame::Instance()->quit();
 	}
+	//lvlUnlock
+	if (EventManager::Instance().isKeyDown(SDL_SCANCODE_U))
+	{
+		Game::Instance()->stageUnlocked = 1;
+	}
+	
 
 	/*if (EventManager::Instance().isKeyDown(SDL_SCANCODE_1))
 	{
@@ -60,7 +66,6 @@ void LvlSelect::start()
 	m_pInstructionsLabel->setParent(this);
 	addChild(m_pInstructionsLabel);*/
 
-	//TODO Change button sprite to "Restart", Same use
 	// Start Button
 	m_pLvl1Button = new Button("../Assets/textures/LVL1Button.png", "Lvl1");
 	m_pLvl1Button->getTransform()->position = glm::vec2(175.0f, 272.0f);
@@ -87,8 +92,15 @@ void LvlSelect::start()
 
 	m_pLvl2Button->addEventListener(CLICK, [&]()-> void
 		{
-			m_pLvl2Button->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE2);
+			if(Game::Instance()->stageUnlocked>=1)
+			{
+				m_pLvl2Button->setActive(false);
+				TheGame::Instance()->changeSceneState(PLAY_SCENE2);
+			}
+			else
+			{
+				
+			}
 		});
 
 	m_pLvl2Button->addEventListener(MOUSE_OVER, [&]()->void

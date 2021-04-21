@@ -38,6 +38,8 @@ public:
 	int EnemiesDestroyed = 0;
 	int TotalBullets = 0;
 	int TotalEBullets = 0;
+	int totalEnemies = 8;
+	int totalStages = 12;
 private:
 	// IMGUI Function
 	void GUI_Function() const;
@@ -55,7 +57,7 @@ private:
 	void m_buildGrid();
 	//Map
 	TileC* Bg;
-	TileC* m_field[12];
+	TileC* m_field[16];
 	//convenience functions
 	Tile* m_getTile(int col, int row) const;
 	Tile* m_getTile(glm::vec2 grid_position) const;

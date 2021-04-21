@@ -67,9 +67,18 @@ void WinScene::start()
 
 	m_pStartButton->addEventListener(CLICK, [&]()-> void
 		{
-			m_pStartButton->setActive(false);
-			TheGame::Instance()->changeSceneState(PLAY_SCENE);
-		});
+			if (Game::Instance()->currentStage == 1)
+			{
+				m_pStartButton->setActive(false);
+				TheGame::Instance()->changeSceneState(PLAY_SCENE);
+			}
+			else if (Game::Instance()->currentStage == 2)
+			{
+				m_pStartButton->setActive(false);
+				TheGame::Instance()->changeSceneState(PLAY_SCENE2);
+			}
+		}
+	);
 
 	m_pStartButton->addEventListener(MOUSE_OVER, [&]()->void
 		{

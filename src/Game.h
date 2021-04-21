@@ -59,6 +59,9 @@ public:
 	
 	bool isRunning() const;
 	void changeSceneState(SceneState new_state);
+
+	int currentStage = 0;
+	int stageUnlocked = 0;
 	
 private:
 	Game();
